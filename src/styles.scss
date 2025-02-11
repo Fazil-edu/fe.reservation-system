@@ -1,13 +1,93 @@
 /* You can add global styles to this file, and also import other style files */
 @import "custom";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@layer tailwind-base, primeng, tailwind-utilities;
+// Custom PrimeNG Theme Override
+.p-calendar {
+  .p-datepicker {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
 
-@layer tailwind-base {
-  @tailwind base;
+    .p-datepicker-header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 0.75rem;
+
+      .p-datepicker-title {
+        .p-datepicker-month,
+        .p-datepicker-year {
+          color: #1a1a1a;
+          font-weight: 600;
+        }
+      }
+
+      .p-datepicker-prev,
+      .p-datepicker-next {
+        color: #1a1a1a;
+
+        &:hover {
+          background: #f3f4f6;
+        }
+
+        &:focus {
+          box-shadow: none;
+        }
+      }
+    }
+
+    table {
+      th {
+        color: #4b5563;
+      }
+
+      td {
+        .p-highlight {
+          background: #1a1a1a !important;
+          color: #ffffff !important;
+        }
+
+        .p-ripple {
+          &:hover {
+            background: #f3f4f6;
+          }
+        }
+
+        > span {
+          width: 2.5rem;
+          height: 2.5rem;
+          border-radius: 9999px;
+
+          &.p-disabled {
+            opacity: 0.4;
+          }
+        }
+
+        &.p-datepicker-today {
+          > span {
+            border-color: #1a1a1a;
+          }
+        }
+      }
+    }
+  }
 }
 
-@layer tailwind-utilities {
-  @tailwind components;
-  @tailwind utilities;
+// Additional modern styling for the mobile container
+.mobile-container {
+  background: linear-gradient(to bottom, #ffffff, #f8f9fa);
+
+  @media (min-width: 768px) {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+}
+
+// Style the selected date section
+.selected-date-section {
+  .bg-blue-50 {
+    @apply bg-primary-50;
+    border: 1px solid #e5e7eb;
+  }
 }

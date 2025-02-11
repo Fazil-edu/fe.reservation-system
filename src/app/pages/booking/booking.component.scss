@@ -1,0 +1,145 @@
+.mobile-container {
+  @apply max-w-md mx-auto min-h-screen bg-gradient-to-b from-white to-gray-50;
+  @apply shadow-lg;
+
+  // For desktop view, add some spacing
+  @media (min-width: 768px) {
+    @apply my-8 min-h-[800px] rounded-3xl;
+  }
+}
+
+.safe-area {
+  @apply px-4 py-6;
+}
+
+.header {
+  @apply mb-6 text-center;
+
+  h1 {
+    @apply text-primary-500 font-bold;
+  }
+}
+
+.calendar-section {
+  @apply mb-6 mt-2;
+
+  ::ng-deep {
+    // Customize PrimeNG calendar
+    .p-calendar {
+      @apply w-full;
+
+      .p-datepicker {
+        @apply w-full border-none shadow-none;
+
+        table {
+          @apply w-full;
+        }
+
+        th {
+          @apply p-2 text-sm font-medium text-gray-600;
+        }
+
+        td {
+          @apply p-2;
+
+          .p-highlight {
+            @apply bg-primary-500 text-white rounded-full;
+          }
+
+          &:not(.p-disabled):hover {
+            span:not(.p-highlight) {
+              @apply bg-primary-50 transition-colors;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.selected-date-section {
+  @apply mt-6;
+
+  .bg-blue-50 {
+    @apply bg-primary-50 border border-primary-200;
+
+    .text-gray-600 {
+      @apply text-primary-400;
+    }
+
+    .text-gray-800 {
+      @apply text-primary-500;
+    }
+  }
+}
+
+.appointments-counter {
+  @apply mb-6;
+
+  .stats-card {
+    @apply bg-white rounded-xl p-4 shadow-sm border border-primary-100;
+    @apply transition-all duration-300;
+
+    &:hover {
+      @apply shadow-md;
+    }
+  }
+
+  .counter-content {
+    @apply mb-3;
+  }
+
+  .counter-info {
+    @apply flex justify-between items-center mb-2;
+
+    .label {
+      @apply text-sm text-primary-400 font-medium;
+    }
+
+    .numbers {
+      @apply flex items-center gap-2 font-mono;
+
+      .current {
+        @apply text-xl font-bold text-primary-500;
+      }
+
+      .separator {
+        @apply text-primary-300;
+      }
+
+      .max {
+        @apply text-sm text-primary-400;
+      }
+    }
+  }
+
+  .progress-bar {
+    @apply h-1.5 bg-primary-100 rounded-full overflow-hidden;
+
+    .progress {
+      @apply h-full bg-primary-500 rounded-full transition-all duration-300;
+    }
+  }
+
+  .status-indicator {
+    @apply flex items-center justify-end gap-2;
+
+    .status-text {
+      @apply text-xs font-medium text-green-600;
+    }
+
+    .status-dot {
+      @apply w-2 h-2 rounded-full bg-green-500;
+      @apply animate-pulse;
+    }
+
+    &.almost-full {
+      .status-text {
+        @apply text-amber-600;
+      }
+      .status-dot {
+        @apply bg-amber-500;
+      }
+    }
+  }
+}
