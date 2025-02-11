@@ -4,7 +4,7 @@
     <div class="safe-area">
       <!-- Header -->
       <div class="header">
-        <h1 class="text-2xl font-bold">Book Appointment</h1>
+        <h1 class="text-2xl font-bold">Növbə sistemi</h1>
       </div>
 
       <!-- Appointments Counter -->
@@ -12,7 +12,7 @@
         <div class="stats-card">
           <div class="counter-content">
             <div class="counter-info">
-              <span class="label">Today's Appointments</span>
+              <span class="label">Cari növbə</span>
               <div class="numbers">
                 <span class="current">{{ currentAppointments }}</span>
                 <span class="separator">/</span>
@@ -28,19 +28,6 @@
               ></div>
             </div>
           </div>
-          <div
-            class="status-indicator"
-            [class.almost-full]="
-              currentAppointments >= maxDailyAppointments * 0.75
-            "
-          >
-            <span class="status-text">{{
-              currentAppointments >= maxDailyAppointments * 0.75
-                ? "Almost Full"
-                : "Available"
-            }}</span>
-            <div class="status-dot"></div>
-          </div>
         </div>
       </div>
 
@@ -49,39 +36,17 @@
         <p-calendar
           [(ngModel)]="date"
           [inline]="true"
-          [showWeek]="true"
+          [showWeek]="false"
           [numberOfMonths]="1"
           [showOtherMonths]="false"
           styleClass="w-full modern-calendar"
           [minDate]="minDate"
           [maxDate]="maxDate"
           (onSelect)="onDateSelect($event)"
+          dateFormat="dd.mm.yy"
+          [disabledDays]="disabledDays"
         >
         </p-calendar>
-      </div>
-
-      <!-- Selected DateTime Display -->
-      <div class="selected-date-section" *ngIf="date">
-        <div class="p-4 rounded-lg bg-primary-50">
-          <p class="text-sm text-primary-400">Selected DateTime:</p>
-          <p class="text-lg font-semibold text-primary-500">
-            {{ date | date : "fullDate" }}
-            <span *ngIf="selectedTimeSlot">at {{ selectedTimeSlot.time }}</span>
-          </p>
-        </div>
-      </div>
-
-      <!-- Language Selector -->
-      <div class="language-selector">
-        <p-dropdown
-          [options]="languages"
-          [(ngModel)]="selectedLanguage"
-          (onChange)="onLanguageChange($event)"
-          optionLabel="label"
-          optionValue="value"
-          styleClass="language-dropdown"
-        >
-        </p-dropdown>
       </div>
     </div>
   </div>
@@ -93,7 +58,7 @@
         <div class="close-button" (click)="closeTimeSlots()">
           <i class="pi pi-times"></i>
         </div>
-        <h2 class="text-lg font-semibold text-primary-500">Available Times</h2>
+        <h2 class="text-lg font-semibold text-primary-500">Mümkün vaxtlar</h2>
         <div class="handle"></div>
       </div>
       <div class="time-slots-grid">
@@ -115,66 +80,98 @@
   <p-dialog
     [(visible)]="showBookingDialog"
     [modal]="true"
-    header="Complete Your Booking"
+    header="Növbəni təsdiqlə"
     [closeOnEscape]="true"
     [dismissableMask]="true"
     styleClass="booking-dialog"
+    [draggable]="false"
   >
-    <div class="booking-form">
-      <div class="form-field">
-        <label for="firstName">First Name</label>
+    <div class="booking-form p-3 overflow-y-auto max-h-[60vh]">
+      <div class="form-field mb-2">
+        <label for="firstName" class="mb-0.5 text-xs">Ad *</label>
         <input
           id="firstName"
           type="text"
           pInputText
           [(ngModel)]="bookingForm.firstName"
-          class="w-full"
+          required
+          #firstName="ngModel"
+          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
         />
+        <small
+          class="text-red-500 text-xs"
+          *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+        >
+          Ad daxil edilməlidir
+        </small>
       </div>
 
-      <div class="form-field">
-        <label for="lastName">Last Name</label>
+      <div class="form-field mb-2">
+        <label for="lastName" class="mb-0.5 text-xs">Soyad *</label>
         <input
           id="lastName"
           type="text"
           pInputText
           [(ngModel)]="bookingForm.lastName"
-          class="w-full"
+          required
+          #lastName="ngModel"
+          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
         />
+        <small
+          class="text-red-500 text-xs"
+          *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
+        >
+          Soyad daxil edilməlidir
+        </small>
       </div>
 
-      <div class="form-field">
-        <label for="phoneNumber">Phone Number</label>
-        <input
-          id="phoneNumber"
-          type="tel"
-          pInputText
-          [(ngModel)]="bookingForm.phoneNumber"
-          class="w-full"
-        />
+      <div class="form-field mb-2">
+        <label for="phoneNumber" class="mb-0.5 text-xs">Əlaqə nömrəsi *</label>
+        <div class="flex items-center">
+          <span class="!p-1.5 text-sm text-gray-500 bg-gray-50">+994</span>
+          <input
+            id="phoneNumber"
+            type="text"
+            pInputText
+            [(ngModel)]="bookingForm.phoneNumber"
+            required
+            #phone="ngModel"
+            class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+            pattern="[0-9]*"
+            maxlength="9"
+            (keypress)="onlyNumbers($event)"
+            placeholder="XXXXXXX"
+          />
+        </div>
+        <small
+          class="text-red-500 text-xs"
+          *ngIf="phone.invalid && (phone.dirty || phone.touched)"
+        >
+          Əlaqə nömrəsi daxil edilməlidir
+        </small>
       </div>
 
-      <div class="form-field">
-        <label for="comment">Comment</label>
+      <div class="form-field mb-2">
+        <label for="comment" class="mb-0.5 text-xs">Qeyd</label>
         <textarea
           id="comment"
           pInputTextarea
           [(ngModel)]="bookingForm.comment"
-          [rows]="3"
-          class="w-full"
+          [rows]="2"
+          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500 resize-none"
         ></textarea>
       </div>
     </div>
 
-    <ng-template pTemplate="footer">
-      <div class="flex justify-end gap-2">
-        <p-button
-          label="Cancel"
-          styleClass="p-button-text"
-          (click)="showBookingDialog = false"
-        ></p-button>
-        <p-button label="Confirm Booking" (click)="submitBooking()"></p-button>
-      </div>
-    </ng-template>
+    <div class="flex justify-end gap-4 px-4 pb-4">
+      <p-button
+        label="Təsdiqlə"
+        styleClass="!bg-green-700 hover:!bg-green-800 !border-green-700 hover:!border-green-800 !text-white !px-6 !py-2 !rounded-lg"
+        (click)="submitBooking()"
+        [disabled]="firstName.invalid || lastName.invalid || phone.invalid"
+      ></p-button>
+    </div>
   </p-dialog>
 </div>
+
+<p-toast position="top-center"></p-toast>

@@ -10,7 +10,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { BookingService, Booking } from '../../core/services/booking.service';
-import { SelectItem } from 'primeng/api';
+import { PrimeNG } from 'primeng/config';
 
 interface TimeSlot {
   time: string;
@@ -47,7 +47,7 @@ export class BookingComponent implements OnInit {
   minDate: Date;
   maxDate: Date;
 
-  currentAppointments: number = 5; // This would normally come from a service
+  currentAppointments: number = 3; // This would normally come from a service
   maxDailyAppointments: number = 8; // Maximum appointments per day
 
   selectedTimeSlot: TimeSlot | null = null;
@@ -63,27 +63,55 @@ export class BookingComponent implements OnInit {
 
   bookings: Booking[] = [];
 
-  languages: SelectItem[] = [
-    { label: 'English', value: 'en' },
-    { label: 'Русский', value: 'ru' },
-    { label: 'Azərbaycan', value: 'az' },
+  disabledDays: number[] = [0, 6];
+
+  private monthNames = [
+    'Yanvar',
+    'Fevral',
+    'Mart',
+    'Aprel',
+    'May',
+    'İyun',
+    'İyul',
+    'Avqust',
+    'Sentyabr',
+    'Oktyabr',
+    'Noyabr',
+    'Dekabr',
   ];
-  selectedLanguage: string = 'en';
 
   constructor(
     private messageService: MessageService,
-    private bookingService: BookingService
+    private bookingService: BookingService,
+    private primengConfig: PrimeNG
   ) {
     // Set min date to today
     this.minDate = new Date();
 
-    // Set max date to 3 months from now
+    // Set max date to 7 days from now
     this.maxDate = new Date();
-    this.maxDate.setMonth(this.maxDate.getMonth() + 3);
+    this.maxDate.setDate(this.maxDate.getDate() + 7);
   }
 
   ngOnInit(): void {
     this.loadBookings();
+    this.primengConfig.setTranslation({
+      firstDayOfWeek: 1,
+      dayNames: [
+        'Bazar',
+        'Bazar ertəsi',
+        'Çərşənbə axşamı',
+        'Çərşənbə',
+        'Cümə axşamı',
+        'Cümə',
+        'Şənbə',
+      ],
+      dayNamesMin: ['Baz', 'B.e', 'Ç.a', 'Çər', 'C.a', 'Cüm', 'Şən'],
+      monthNamesShort: this.monthNames,
+      monthNames: this.monthNames,
+      today: 'Bu gün',
+      clear: 'Təmizlə',
+    });
   }
 
   private generateTimeSlots(date: Date) {
@@ -137,13 +165,16 @@ export class BookingComponent implements OnInit {
       ...this.bookingForm,
     });
 
+    this.maxDailyAppointments++;
+
     // Show success message
     this.messageService.add({
       severity: 'success',
-      summary: 'Booking Confirmed',
-      detail: `Your appointment has been scheduled for ${this.date?.toLocaleDateString()} at ${
+      summary: 'Uğurlu!',
+      detail: `Növbəniz ${this.date?.toLocaleDateString()} tarixində saat ${
         this.selectedTimeSlot?.time
-      }`,
+      }-də təsdiqləndi`,
+      life: 3000,
     });
 
     // Close dialog and reset form
@@ -214,8 +245,11 @@ export class BookingComponent implements OnInit {
     });
   }
 
-  onLanguageChange(event: any) {
-    this.selectedLanguage = event.value;
-    // Here you can add logic to update the page text based on selected language
+  onlyNumbers(event: KeyboardEvent): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+      return false;
+    }
+    return true;
   }
 }
