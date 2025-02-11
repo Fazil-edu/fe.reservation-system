@@ -9,6 +9,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { BookingService, Booking } from '../../core/services/booking.service';
+import { SelectItem } from 'primeng/api';
 
 interface TimeSlot {
   time: string;
@@ -59,7 +61,19 @@ export class BookingComponent implements OnInit {
     comment: '',
   };
 
-  constructor(private messageService: MessageService) {
+  bookings: Booking[] = [];
+
+  languages: SelectItem[] = [
+    { label: 'English', value: 'en' },
+    { label: 'Русский', value: 'ru' },
+    { label: 'Azərbaycan', value: 'az' },
+  ];
+  selectedLanguage: string = 'en';
+
+  constructor(
+    private messageService: MessageService,
+    private bookingService: BookingService
+  ) {
     // Set min date to today
     this.minDate = new Date();
 
@@ -68,7 +82,9 @@ export class BookingComponent implements OnInit {
     this.maxDate.setMonth(this.maxDate.getMonth() + 3);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.loadBookings();
+  }
 
   private generateTimeSlots(date: Date) {
     const slots: TimeSlot[] = [];
@@ -149,5 +165,57 @@ export class BookingComponent implements OnInit {
     this.date = null;
     this.selectedTimeSlot = null;
     this.timeSlots = [];
+  }
+
+  loadBookings() {
+    this.bookingService.getAll().subscribe({
+      next: (data) => {
+        this.bookings = data;
+      },
+      error: (error) => {
+        console.error('Error loading bookings:', error);
+      },
+    });
+  }
+
+  createBooking(booking: Booking) {
+    this.bookingService.create(booking).subscribe({
+      next: (newBooking) => {
+        this.bookings.push(newBooking);
+      },
+      error: (error) => {
+        console.error('Error creating booking:', error);
+      },
+    });
+  }
+
+  updateBooking(id: number, booking: Booking) {
+    this.bookingService.update(id, booking).subscribe({
+      next: (updatedBooking) => {
+        const index = this.bookings.findIndex((b) => b.id === id);
+        if (index !== -1) {
+          this.bookings[index] = updatedBooking;
+        }
+      },
+      error: (error) => {
+        console.error('Error updating booking:', error);
+      },
+    });
+  }
+
+  deleteBooking(id: number) {
+    this.bookingService.delete(id).subscribe({
+      next: () => {
+        this.bookings = this.bookings.filter((b) => b.id !== id);
+      },
+      error: (error) => {
+        console.error('Error deleting booking:', error);
+      },
+    });
+  }
+
+  onLanguageChange(event: any) {
+    this.selectedLanguage = event.value;
+    // Here you can add logic to update the page text based on selected language
   }
 }

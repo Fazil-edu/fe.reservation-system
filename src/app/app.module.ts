@@ -5,11 +5,11 @@ import { RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 
 @NgModule({
-  declarations: [],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(routes),
   ],
+  providers: [],
 })
 export class AppModule {}

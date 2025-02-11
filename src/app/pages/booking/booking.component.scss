@@ -295,3 +295,14 @@
     }
   }
 }
+
+.language-selector {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+
+  .language-dropdown {
+    min-width: 150px;
+  }
+}

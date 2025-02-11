@@ -70,6 +70,19 @@
           </p>
         </div>
       </div>
+
+      <!-- Language Selector -->
+      <div class="language-selector">
+        <p-dropdown
+          [options]="languages"
+          [(ngModel)]="selectedLanguage"
+          (onChange)="onLanguageChange($event)"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="language-dropdown"
+        >
+        </p-dropdown>
+      </div>
     </div>
   </div>
 
@@ -78,7 +91,7 @@
     <div class="time-slots-container">
       <div class="time-slots-header">
         <div class="close-button" (click)="closeTimeSlots()">
-          <i class="pi pi-times"></i> x
+          <i class="pi pi-times"></i>
         </div>
         <h2 class="text-lg font-semibold text-primary-500">Available Times</h2>
         <div class="handle"></div>
