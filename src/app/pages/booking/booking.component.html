@@ -1,71 +1,167 @@
-<div class="mobile-container">
-  <div class="safe-area">
-    <!-- Header -->
-    <div class="header">
-      <h1 class="text-2xl font-bold">Book Appointment</h1>
-    </div>
+<div class="page-container">
+  <!-- Main Content -->
+  <div class="mobile-container">
+    <div class="safe-area">
+      <!-- Header -->
+      <div class="header">
+        <h1 class="text-2xl font-bold">Book Appointment</h1>
+      </div>
 
-    <!-- Appointments Counter -->
-    <div class="appointments-counter">
-      <div class="stats-card">
-        <div class="counter-content">
-          <div class="counter-info">
-            <span class="label">Today's Appointments</span>
-            <div class="numbers">
-              <span class="current">{{ currentAppointments }}</span>
-              <span class="separator">/</span>
-              <span class="max">{{ maxDailyAppointments }}</span>
+      <!-- Appointments Counter -->
+      <div class="appointments-counter">
+        <div class="stats-card">
+          <div class="counter-content">
+            <div class="counter-info">
+              <span class="label">Today's Appointments</span>
+              <div class="numbers">
+                <span class="current">{{ currentAppointments }}</span>
+                <span class="separator">/</span>
+                <span class="max">{{ maxDailyAppointments }}</span>
+              </div>
+            </div>
+            <div class="progress-bar">
+              <div
+                class="progress"
+                [style.width.%]="
+                  (currentAppointments / maxDailyAppointments) * 100
+                "
+              ></div>
             </div>
           </div>
-          <div class="progress-bar">
-            <div
-              class="progress"
-              [style.width.%]="
-                (currentAppointments / maxDailyAppointments) * 100
-              "
-            ></div>
+          <div
+            class="status-indicator"
+            [class.almost-full]="
+              currentAppointments >= maxDailyAppointments * 0.75
+            "
+          >
+            <span class="status-text">{{
+              currentAppointments >= maxDailyAppointments * 0.75
+                ? "Almost Full"
+                : "Available"
+            }}</span>
+            <div class="status-dot"></div>
           </div>
         </div>
-        <div
-          class="status-indicator"
-          [class.almost-full]="
-            currentAppointments >= maxDailyAppointments * 0.75
-          "
-        >
-          <span class="status-text">{{
-            currentAppointments >= maxDailyAppointments * 0.75
-              ? "Almost Full"
-              : "Available"
-          }}</span>
-          <div class="status-dot"></div>
-        </div>
       </div>
-    </div>
 
-    <!-- Calendar Section -->
-    <div class="calendar-section">
-      <p-calendar
-        [(ngModel)]="date"
-        [inline]="true"
-        [showWeek]="true"
-        [numberOfMonths]="1"
-        [showOtherMonths]="false"
-        styleClass="w-full modern-calendar"
-        [minDate]="minDate"
-        [maxDate]="maxDate"
-        (onSelect)="onDateSelect($event)"
-      >
-      </p-calendar>
-    </div>
+      <!-- Calendar Section -->
+      <div class="calendar-section">
+        <p-calendar
+          [(ngModel)]="date"
+          [inline]="true"
+          [showWeek]="true"
+          [numberOfMonths]="1"
+          [showOtherMonths]="false"
+          styleClass="w-full modern-calendar"
+          [minDate]="minDate"
+          [maxDate]="maxDate"
+          (onSelect)="onDateSelect($event)"
+        >
+        </p-calendar>
+      </div>
 
-    <!-- Selected Date Display -->
-    <div class="selected-date-section">
-      <div class="p-4 rounded-lg bg-primary-50">
-        <p class="text-sm text-primary-400">Selected Date:</p>
-        <p class="text-lg font-semibold text-primary-500">
-          {{ date | date : "fullDate" }}
-        </p>
+      <!-- Selected DateTime Display -->
+      <div class="selected-date-section" *ngIf="date">
+        <div class="p-4 rounded-lg bg-primary-50">
+          <p class="text-sm text-primary-400">Selected DateTime:</p>
+          <p class="text-lg font-semibold text-primary-500">
+            {{ date | date : "fullDate" }}
+            <span *ngIf="selectedTimeSlot">at {{ selectedTimeSlot.time }}</span>
+          </p>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Time Slots Bottom Sheet -->
+  <div class="time-slots-bottom-sheet" *ngIf="date">
+    <div class="time-slots-container">
+      <div class="time-slots-header">
+        <div class="close-button" (click)="closeTimeSlots()">
+          <i class="pi pi-times"></i> x
+        </div>
+        <h2 class="text-lg font-semibold text-primary-500">Available Times</h2>
+        <div class="handle"></div>
+      </div>
+      <div class="time-slots-grid">
+        <button
+          *ngFor="let slot of timeSlots"
+          class="time-slot"
+          [class.available]="slot.available"
+          [class.selected]="selectedTimeSlot?.time === slot.time"
+          [disabled]="!slot.available"
+          (click)="selectTimeSlot(slot)"
+        >
+          {{ slot.time }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add this after the time slots bottom sheet -->
+  <p-dialog
+    [(visible)]="showBookingDialog"
+    [modal]="true"
+    header="Complete Your Booking"
+    [closeOnEscape]="true"
+    [dismissableMask]="true"
+    styleClass="booking-dialog"
+  >
+    <div class="booking-form">
+      <div class="form-field">
+        <label for="firstName">First Name</label>
+        <input
+          id="firstName"
+          type="text"
+          pInputText
+          [(ngModel)]="bookingForm.firstName"
+          class="w-full"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="lastName">Last Name</label>
+        <input
+          id="lastName"
+          type="text"
+          pInputText
+          [(ngModel)]="bookingForm.lastName"
+          class="w-full"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="phoneNumber">Phone Number</label>
+        <input
+          id="phoneNumber"
+          type="tel"
+          pInputText
+          [(ngModel)]="bookingForm.phoneNumber"
+          class="w-full"
+        />
+      </div>
+
+      <div class="form-field">
+        <label for="comment">Comment</label>
+        <textarea
+          id="comment"
+          pInputTextarea
+          [(ngModel)]="bookingForm.comment"
+          [rows]="3"
+          class="w-full"
+        ></textarea>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex justify-end gap-2">
+        <p-button
+          label="Cancel"
+          styleClass="p-button-text"
+          (click)="showBookingDialog = false"
+        ></p-button>
+        <p-button label="Confirm Booking" (click)="submitBooking()"></p-button>
+      </div>
+    </ng-template>
+  </p-dialog>
 </div>
