@@ -130,8 +130,8 @@ export class BookingComponent implements OnInit {
     this.bookingService
       .getTimeSlots(this.date.toISOString().split('T')[0])
       .subscribe({
-        next: (slots) => {
-          this.timeSlots = slots;
+        next: (slots: any) => {
+          this.timeSlots = slots.availableTimeSlots;
           this.isLoadingTimeSlots = false;
         },
         error: (error) => {
