@@ -9,6 +9,8 @@ import { routes } from './app.routes';
 import Aura from '@primeng/themes/aura';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
+import { API_URL } from './tokens';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,5 +30,6 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideHttpClient(),
+    { provide: API_URL, useValue: environment.apiUrl },
   ],
 };

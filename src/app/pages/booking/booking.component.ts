@@ -9,12 +9,17 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
-import { BookingService, Booking } from '../../core/services/booking.service';
 import { PrimeNG } from 'primeng/config';
+import { BookingService } from '../../core/services/booking.service';
 
 interface TimeSlot {
-  time: string;
-  available: boolean;
+  appointmentHour: string;
+  uid: string;
+  orderNumber: number;
+}
+
+interface Booking {
+  id: number;
 }
 
 interface BookingForm {
@@ -52,6 +57,7 @@ export class BookingComponent implements OnInit {
 
   selectedTimeSlot: TimeSlot | null = null;
   timeSlots: TimeSlot[] = [];
+  isLoadingTimeSlots = false;
 
   showBookingDialog: boolean = false;
   bookingForm: BookingForm = {
@@ -114,47 +120,42 @@ export class BookingComponent implements OnInit {
     });
   }
 
-  private generateTimeSlots(date: Date) {
-    const slots: TimeSlot[] = [];
-    let currentTime = new Date(date);
-    currentTime.setHours(11, 0, 0); // Start at 11:00
-
-    while (currentTime.getHours() < 19) {
-      // Until 19:00
-      const hour = currentTime.getHours();
-      const minutes = currentTime.getMinutes();
-      const timeString = `${hour.toString().padStart(2, '0')}:${minutes
-        .toString()
-        .padStart(2, '0')}`;
-
-      // Random availability (you would replace this with actual availability check)
-      const available = Math.random() > 0.3;
-
-      slots.push({ time: timeString, available });
-
-      // Add either 15 or 10 minutes based on time
-      if (hour < 13) {
-        currentTime.setMinutes(currentTime.getMinutes() + 15); // 15-minute slots before 13:00
-      } else {
-        currentTime.setMinutes(currentTime.getMinutes() + 10); // 10-minute slots after 13:00
-      }
+  loadTimeSlots() {
+    if (!this.date) {
+      this.timeSlots = [];
+      return;
     }
 
-    return slots;
+    this.isLoadingTimeSlots = true;
+    this.bookingService
+      .getTimeSlots(this.date.toISOString().split('T')[0])
+      .subscribe({
+        next: (slots) => {
+          this.timeSlots = slots;
+          this.isLoadingTimeSlots = false;
+        },
+        error: (error) => {
+          this.isLoadingTimeSlots = false;
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Xəta',
+            detail: 'Vaxt slotlarını yükləmək mümkün olmadı',
+            life: 3000,
+          });
+        },
+      });
   }
 
   onDateSelect(event: Date): void {
     console.log('Selected date:', event);
     this.date = event;
-    this.timeSlots = this.generateTimeSlots(event);
-    this.selectedTimeSlot = null; // Reset selected time when date changes
+    this.selectedTimeSlot = null;
+    this.loadTimeSlots();
   }
 
   selectTimeSlot(slot: TimeSlot) {
-    if (slot.available) {
-      this.selectedTimeSlot = slot;
-      this.showBookingDialog = true;
-    }
+    this.selectedTimeSlot = slot;
+    this.showBookingDialog = true;
   }
 
   submitBooking() {
@@ -172,7 +173,7 @@ export class BookingComponent implements OnInit {
       severity: 'success',
       summary: 'Uğurlu!',
       detail: `Növbəniz ${this.date?.toLocaleDateString()} tarixində saat ${
-        this.selectedTimeSlot?.time
+        this.selectedTimeSlot?.appointmentHour || ''
       }-də təsdiqləndi`,
       life: 3000,
     });
@@ -199,50 +200,50 @@ export class BookingComponent implements OnInit {
   }
 
   loadBookings() {
-    this.bookingService.getAll().subscribe({
-      next: (data) => {
-        this.bookings = data;
-      },
-      error: (error) => {
-        console.error('Error loading bookings:', error);
-      },
-    });
+    // this.bookingService.getAll().subscribe({
+    //   next: (data) => {
+    //     this.bookings = data;
+    //   },
+    //   error: (error) => {
+    //     console.error('Error loading bookings:', error);
+    //   },
+    // });
   }
 
   createBooking(booking: Booking) {
-    this.bookingService.create(booking).subscribe({
-      next: (newBooking) => {
-        this.bookings.push(newBooking);
-      },
-      error: (error) => {
-        console.error('Error creating booking:', error);
-      },
-    });
+    // this.bookingService.create(booking).subscribe({
+    //   next: (newBooking) => {
+    //     this.bookings.push(newBooking);
+    //   },
+    //   error: (error) => {
+    //     console.error('Error creating booking:', error);
+    //   },
+    // });
   }
 
   updateBooking(id: number, booking: Booking) {
-    this.bookingService.update(id, booking).subscribe({
-      next: (updatedBooking) => {
-        const index = this.bookings.findIndex((b) => b.id === id);
-        if (index !== -1) {
-          this.bookings[index] = updatedBooking;
-        }
-      },
-      error: (error) => {
-        console.error('Error updating booking:', error);
-      },
-    });
+    // this.bookingService.update(id, booking).subscribe({
+    //   next: (updatedBooking) => {
+    //     const index = this.bookings.findIndex((b) => b.id === id);
+    //     if (index !== -1) {
+    //       this.bookings[index] = updatedBooking;
+    //     }
+    //   },
+    //   error: (error) => {
+    //     console.error('Error updating booking:', error);
+    //   },
+    // });
   }
 
   deleteBooking(id: number) {
-    this.bookingService.delete(id).subscribe({
-      next: () => {
-        this.bookings = this.bookings.filter((b) => b.id !== id);
-      },
-      error: (error) => {
-        console.error('Error deleting booking:', error);
-      },
-    });
+    // this.bookingService.delete(id).subscribe({
+    //   next: () => {
+    //     this.bookings = this.bookings.filter((b) => b.id !== id);
+    //   },
+    //   error: (error) => {
+    //     console.error('Error deleting booking:', error);
+    //   },
+    // });
   }
 
   onlyNumbers(event: KeyboardEvent): boolean {

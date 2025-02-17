@@ -65,12 +65,12 @@
         <button
           *ngFor="let slot of timeSlots"
           class="time-slot"
-          [class.available]="slot.available"
-          [class.selected]="selectedTimeSlot?.time === slot.time"
-          [disabled]="!slot.available"
+          [class.selected]="
+            selectedTimeSlot?.appointmentHour === slot.appointmentHour
+          "
           (click)="selectTimeSlot(slot)"
         >
-          {{ slot.time }}
+          {{ slot.appointmentHour }}
         </button>
       </div>
     </div>

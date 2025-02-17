@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://your-api-base-url/api',
+  apiUrl: 'https://api-registration-systems.rahimli.net',
 };
