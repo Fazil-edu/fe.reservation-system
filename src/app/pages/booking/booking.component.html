@@ -61,18 +61,33 @@
         <h2 class="text-lg font-semibold text-primary-500">Mümkün vaxtlar</h2>
         <div class="handle"></div>
       </div>
-      <div class="time-slots-grid">
-        <button
-          *ngFor="let slot of timeSlots"
-          class="time-slot"
-          [class.selected]="
-            selectedTimeSlot?.appointmentHour === slot.appointmentHour
-          "
-          (click)="selectTimeSlot(slot)"
-        >
-          {{ slot.appointmentHour }}
-        </button>
-      </div>
+      <ng-container *ngIf="!isLoadingTimeSlots; else loadingSlots">
+        <ng-container *ngIf="timeSlots.length > 0; else nothingAvailable">
+          <div class="time-slots-grid">
+            <button
+              *ngFor="let slot of timeSlots"
+              class="time-slot"
+              [class.selected]="
+                selectedTimeSlot?.appointmentHour === slot.appointmentHour
+              "
+              (click)="selectTimeSlot(slot)"
+            >
+              {{ slot.appointmentHour }}
+            </button>
+          </div>
+        </ng-container>
+        <ng-template #nothingAvailable>
+          <div class="flex justify-center items-center p-4">
+            <p class="text-red-500">Bu gün üçün vaxt seçimi yoxdur</p>
+          </div>
+        </ng-template>
+      </ng-container>
+
+      <ng-template #loadingSlots>
+        <div class="flex justify-center items-center p-4">
+          <i class="pi pi-spin pi-spinner text-primary-500 text-2xl"></i>
+        </div>
+      </ng-template>
     </div>
   </div>
 
@@ -151,6 +166,20 @@
         </small>
       </div>
 
+      <div class="field">
+        <label for="sex">Cins</label>
+        <select
+          id="sex"
+          [(ngModel)]="bookingForm.sex"
+          class="w-full p-2 border border-gray-300 rounded-md focus:border-primary-500 focus:ring-2 focus:ring-primary-500"
+        >
+          <option value="">Seçin</option>
+          <option *ngFor="let option of sexOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+
       <div class="form-field mb-2">
         <label for="comment" class="mb-0.5 text-xs">Qeyd</label>
         <textarea
@@ -168,7 +197,10 @@
         label="Təsdiqlə"
         styleClass="!bg-green-700 hover:!bg-green-800 !border-green-700 hover:!border-green-800 !text-white !px-6 !py-2 !rounded-lg"
         (click)="submitBooking()"
-        [disabled]="firstName.invalid || lastName.invalid || phone.invalid"
+        [loading]="isSubmitting"
+        [disabled]="
+          firstName.invalid || lastName.invalid || phone.invalid || isSubmitting
+        "
       ></p-button>
     </div>
   </p-dialog>

@@ -13,4 +13,15 @@ export class BookingService {
       'appointments/get-available-time-slots?date=' + date
     );
   }
+
+  createBooking(data: {
+    appointmentDate: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+    sex: string;
+    appointmentTimeSlotUid: string;
+  }) {
+    return this.crud.createOne('appointments/create', data);
+  }
 }
