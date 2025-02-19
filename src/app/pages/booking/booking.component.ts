@@ -15,7 +15,7 @@ import { BookingService } from '../../core/services/booking.service';
 interface TimeSlot {
   appointmentHour: string;
   uid: string;
-  orderNumber: number;
+  appointmentOrder: number;
 }
 
 interface Booking {
@@ -27,6 +27,12 @@ interface BookingForm {
   lastName: string;
   phoneNumber: string;
   comment: string;
+  sex: string;
+}
+
+interface SexOption {
+  label: string;
+  value: string;
 }
 
 @Component({
@@ -60,16 +66,24 @@ export class BookingComponent implements OnInit {
   isLoadingTimeSlots = false;
 
   showBookingDialog: boolean = false;
+  sexOptions: SexOption[] = [
+    { label: 'Kişi', value: 'male' },
+    { label: 'Qadın', value: 'female' },
+  ];
+
+  isSelectOpen = false;
+
   bookingForm: BookingForm = {
     firstName: '',
     lastName: '',
     phoneNumber: '',
     comment: '',
+    sex: '',
   };
 
   bookings: Booking[] = [];
 
-  disabledDays: number[] = [0, 6];
+  disabledDays: number[] = [0];
 
   private monthNames = [
     'Yanvar',
@@ -85,6 +99,8 @@ export class BookingComponent implements OnInit {
     'Noyabr',
     'Dekabr',
   ];
+
+  isSubmitting = false;
 
   constructor(
     private messageService: MessageService,
@@ -128,10 +144,13 @@ export class BookingComponent implements OnInit {
 
     this.isLoadingTimeSlots = true;
     this.bookingService
-      .getTimeSlots(this.date.toISOString().split('T')[0])
+      .getTimeSlots(this.date.toLocaleDateString('az-AZ').split('T')[0])
       .subscribe({
         next: (slots: any) => {
-          this.timeSlots = slots.availableTimeSlots;
+          this.timeSlots = slots.availableTimeSlots.sort(
+            (a: TimeSlot, b: TimeSlot) =>
+              a.appointmentOrder - b.appointmentOrder
+          );
           this.isLoadingTimeSlots = false;
         },
         error: (error) => {
@@ -147,7 +166,6 @@ export class BookingComponent implements OnInit {
   }
 
   onDateSelect(event: Date): void {
-    console.log('Selected date:', event);
     this.date = event;
     this.selectedTimeSlot = null;
     this.loadTimeSlots();
@@ -159,29 +177,43 @@ export class BookingComponent implements OnInit {
   }
 
   submitBooking() {
-    // Here you would normally make an API call
-    console.log('Booking submitted:', {
-      date: this.date,
-      time: this.selectedTimeSlot,
-      ...this.bookingForm,
-    });
+    if (!this.selectedTimeSlot?.uid || !this.date) return;
 
-    this.maxDailyAppointments++;
-
-    // Show success message
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Uğurlu!',
-      detail: `Növbəniz ${this.date?.toLocaleDateString()} tarixində saat ${
-        this.selectedTimeSlot?.appointmentHour || ''
-      }-də təsdiqləndi`,
-      life: 3000,
-    });
-
-    // Close dialog and reset form
-    this.showBookingDialog = false;
-    this.closeTimeSlots();
-    this.resetForm();
+    this.isSubmitting = true;
+    this.bookingService
+      .createBooking({
+        ...this.bookingForm,
+        appointmentDate: this.date.toLocaleDateString('az-AZ').split('T')[0],
+        appointmentTimeSlotUid: this.selectedTimeSlot.uid,
+      })
+      .subscribe({
+        next: (response: any) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: 'Uğurlu!',
+            detail: `Növbəniz ${
+              this.date?.toLocaleDateString('az-AZ').split('T')[0]
+            } tarixində saat ${
+              this.selectedTimeSlot?.appointmentHour || ''
+            }-də təsdiqləndi \n Növbə nömrəniz: ${response.appointmentNumber}`,
+            life: 3000,
+          });
+          this.showBookingDialog = false;
+          this.closeTimeSlots();
+          this.resetForm();
+        },
+        error: (error) => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Xəta',
+            detail: 'Növbə yaratmaq mümkün olmadı',
+            life: 3000,
+          });
+        },
+        complete: () => {
+          this.isSubmitting = false;
+        },
+      });
   }
 
   private resetForm() {
@@ -190,6 +222,7 @@ export class BookingComponent implements OnInit {
       lastName: '',
       phoneNumber: '',
       comment: '',
+      sex: '',
     };
   }
 
@@ -252,5 +285,14 @@ export class BookingComponent implements OnInit {
       return false;
     }
     return true;
+  }
+
+  toggleSelect() {
+    this.isSelectOpen = !this.isSelectOpen;
+  }
+
+  selectSex(option: SexOption) {
+    this.bookingForm.sex = option.value;
+    this.isSelectOpen = false;
   }
 }
