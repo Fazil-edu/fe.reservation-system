@@ -28,6 +28,7 @@ interface BookingForm {
   phoneNumber: string;
   comment: string;
   sex: string;
+  isNewPatient: boolean;
 }
 
 interface SexOption {
@@ -79,6 +80,7 @@ export class BookingComponent implements OnInit {
     phoneNumber: '',
     comment: '',
     sex: '',
+    isNewPatient: true,
   };
 
   bookings: Booking[] = [];
@@ -101,6 +103,8 @@ export class BookingComponent implements OnInit {
   ];
 
   isSubmitting = false;
+
+  isNewPatient: boolean = true; // Default to new patient
 
   constructor(
     private messageService: MessageService,
@@ -147,7 +151,20 @@ export class BookingComponent implements OnInit {
       .getTimeSlots(this.date.toLocaleDateString('az-AZ').split('T')[0])
       .subscribe({
         next: (slots: any) => {
-          this.timeSlots = slots.availableTimeSlots.sort(
+          let filteredSlots = slots.availableTimeSlots;
+
+          // Filter slots based on appointment order
+          if (this.isNewPatient) {
+            filteredSlots = filteredSlots.filter(
+              (slot: TimeSlot) => slot.appointmentOrder <= 15
+            );
+          } else {
+            filteredSlots = filteredSlots.filter(
+              (slot: TimeSlot) => slot.appointmentOrder > 15
+            );
+          }
+
+          this.timeSlots = filteredSlots.sort(
             (a: TimeSlot, b: TimeSlot) =>
               a.appointmentOrder - b.appointmentOrder
           );
@@ -223,6 +240,7 @@ export class BookingComponent implements OnInit {
       phoneNumber: '',
       comment: '',
       sex: '',
+      isNewPatient: true,
     };
   }
 
@@ -294,5 +312,10 @@ export class BookingComponent implements OnInit {
   selectSex(option: SexOption) {
     this.bookingForm.sex = option.value;
     this.isSelectOpen = false;
+  }
+
+  onPatientTypeChange() {
+    this.selectedTimeSlot = null;
+    this.loadTimeSlots();
   }
 }

@@ -39,6 +39,32 @@ Fix: Refine phone number validation pattern and placeholder
         </div>
       </div>
 
+      <!-- Patient Type Selector -->
+      <div class="patient-type-selector mb-6">
+        <div class="flex items-center gap-4 justify-center">
+          <label class="patient-type-option">
+            <input
+              type="radio"
+              [(ngModel)]="isNewPatient"
+              [value]="true"
+              (change)="onPatientTypeChange()"
+              name="patientType"
+            />
+            <span class="radio-label">Yeni pasiyent</span>
+          </label>
+          <label class="patient-type-option">
+            <input
+              type="radio"
+              [(ngModel)]="isNewPatient"
+              [value]="false"
+              (change)="onPatientTypeChange()"
+              name="patientType"
+            />
+            <span class="radio-label">Mövcud pasiyent</span>
+          </label>
+        </div>
+      </div>
+
       <!-- Calendar Section -->
       <div class="calendar-section">
         <p-calendar

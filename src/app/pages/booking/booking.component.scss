@@ -331,3 +331,25 @@
     min-width: 150px;
   }
 }
+
+.patient-type-selector {
+  @apply bg-white rounded-xl p-4 shadow-sm border border-primary-100;
+
+  .patient-type-option {
+    @apply flex items-center gap-2 cursor-pointer;
+    @apply transition-all duration-200;
+
+    input[type="radio"] {
+      @apply w-4 h-4 text-primary-500;
+      @apply focus:ring-primary-500;
+    }
+
+    .radio-label {
+      @apply text-sm font-medium text-gray-700;
+    }
+
+    &:hover {
+      @apply text-primary-600;
+    }
+  }
+}
