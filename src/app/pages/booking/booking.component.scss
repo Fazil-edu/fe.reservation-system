@@ -282,6 +282,28 @@
       }
     }
   }
+
+  .cancel-dialog {
+    max-width: 90vw;
+    width: 500px;
+
+    .p-dialog-content {
+      min-height: 300px;
+    }
+
+    .p-dialog-header {
+      cursor: default;
+      @apply bg-primary-50 py-4 px-6 rounded-t-lg;
+
+      .p-dialog-title {
+        @apply text-xl font-semibold text-primary-700;
+      }
+    }
+
+    .p-dialog-content {
+      @apply p-0; // Remove default padding as we're handling it in the form
+    }
+  }
 }
 
 .booking-form {
@@ -294,6 +316,10 @@
       @apply text-sm font-medium text-primary-600;
     }
   }
+}
+
+.cancel-form {
+  @apply flex flex-col gap-4 overflow-y-auto max-h-[60vh];
 }
 
 // Style PrimeNG input components

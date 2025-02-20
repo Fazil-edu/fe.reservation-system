@@ -15,6 +15,18 @@ Fix: Refine phone number validation pattern and placeholder
         <h1 class="text-2xl font-bold">Növbə sistemi</h1>
       </div>
 
+      <!-- Add this after your header -->
+      <div class="flex justify-end mb-4">
+        <button
+          pButton
+          type="button"
+          class="p-button-text !text-red-500 hover:!bg-red-50"
+          icon="pi pi-times-circle"
+          label="Növbəni ləğv et"
+          (click)="showCancelDialog = true"
+        ></button>
+      </div>
+
       <!-- Appointments Counter -->
       <div class="appointments-counter">
         <div class="stats-card">
@@ -261,6 +273,82 @@ Fix: Refine phone number validation pattern and placeholder
           phone.invalid ||
           !bookingForm.sex ||
           isSubmitting
+        "
+      ></p-button>
+    </div>
+  </p-dialog>
+
+  <!-- Add this at the bottom of the page, next to the other dialog -->
+  <p-dialog
+    [(visible)]="showCancelDialog"
+    [modal]="true"
+    header="Növbəni ləğv et"
+    [closeOnEscape]="true"
+    [dismissableMask]="true"
+    styleClass="cancel-dialog"
+    [draggable]="false"
+  >
+    <div class="cancel-form p-3">
+      <div class="form-field mb-2">
+        <label for="cancelFirstName" class="mb-0.5 text-xs">Ad *</label>
+        <input
+          id="cancelFirstName"
+          type="text"
+          pInputText
+          [(ngModel)]="cancelForm.firstName"
+          required
+          #cancelFirstName="ngModel"
+          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+        />
+      </div>
+
+      <div class="form-field mb-2">
+        <label for="cancelLastName" class="mb-0.5 text-xs">Soyad *</label>
+        <input
+          id="cancelLastName"
+          type="text"
+          pInputText
+          [(ngModel)]="cancelForm.lastName"
+          required
+          #cancelLastName="ngModel"
+          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+        />
+      </div>
+
+      <div class="form-field mb-2">
+        <label for="cancelPhoneNumber" class="mb-0.5 text-xs"
+          >Əlaqə nömrəsi *</label
+        >
+        <div class="flex items-center">
+          <span class="!p-1.5 text-sm text-gray-500 bg-gray-50">+994</span>
+          <input
+            id="cancelPhoneNumber"
+            type="text"
+            pInputText
+            [(ngModel)]="cancelForm.phoneNumber"
+            required
+            #cancelPhone="ngModel"
+            class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+            pattern="(?:50|51|55|70|77)[0-9]{7}"
+            maxlength="9"
+            (keypress)="onlyNumbers($event)"
+            placeholder="XXXXXXXXX"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-4 px-4 pb-4">
+      <p-button
+        label="Ləğv et"
+        styleClass="!bg-red-600 hover:!bg-red-700 !border-red-600 hover:!border-red-700 !text-white !px-6 !py-2 !rounded-lg"
+        (click)="submitCancellation()"
+        [loading]="isCancelling"
+        [disabled]="
+          cancelFirstName.invalid ||
+          cancelLastName.invalid ||
+          cancelPhone.invalid ||
+          isCancelling
         "
       ></p-button>
     </div>

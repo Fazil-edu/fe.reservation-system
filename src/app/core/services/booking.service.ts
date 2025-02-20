@@ -33,4 +33,12 @@ export class BookingService {
       currentAppointmentOrder: number;
     }>('appointments/count-for-today', '');
   }
+
+  cancelAppointment(data: {
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+  }) {
+    return this.crud.createOne('appointments/cancel', data);
+  }
 }

@@ -110,6 +110,15 @@ export class BookingComponent implements OnInit {
 
   isNewPatient: boolean = true; // Default to new patient
 
+  showCancelDialog = false;
+  isCancelling = false;
+
+  cancelForm = {
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+  };
+
   constructor(
     private messageService: MessageService,
     private bookingService: BookingService,
@@ -343,5 +352,41 @@ export class BookingComponent implements OnInit {
         });
       },
     });
+  }
+
+  submitCancellation() {
+    this.isCancelling = true;
+    this.bookingService.cancelAppointment(this.cancelForm).subscribe({
+      next: (response) => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Uğurlu!',
+          detail: 'Növbəniz ləğv edildi',
+          life: 3000,
+        });
+        this.showCancelDialog = false;
+        this.resetCancelForm();
+        this.loadAppointmentCount();
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Xəta',
+          detail: 'Növbəni ləğv etmək mümkün olmadı',
+          life: 3000,
+        });
+      },
+      complete: () => {
+        this.isCancelling = false;
+      },
+    });
+  }
+
+  private resetCancelForm() {
+    this.cancelForm = {
+      firstName: '',
+      lastName: '',
+      phoneNumber: '',
+    };
   }
 }
