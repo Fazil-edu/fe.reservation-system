@@ -122,6 +122,8 @@ export class BookingComponent implements OnInit, OnDestroy {
   currentTime: string = '';
   private timeInterval: any;
 
+  showWelcomeDialog = true;
+
   constructor(
     private messageService: MessageService,
     private bookingService: BookingService,
@@ -157,6 +159,7 @@ export class BookingComponent implements OnInit, OnDestroy {
     });
     this.updateTime();
     this.timeInterval = setInterval(() => this.updateTime(), 1000);
+    this.showWelcomeDialog = true;
   }
 
   ngOnDestroy(): void {

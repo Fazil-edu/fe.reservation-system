@@ -317,6 +317,24 @@
       @apply p-0; // Remove default padding as we're handling it in the form
     }
   }
+
+  .welcome-dialog {
+    max-width: 90vw;
+    width: 400px;
+
+    .p-dialog-header {
+      cursor: default;
+      @apply bg-primary-50 py-4 px-6 rounded-t-lg;
+
+      .p-dialog-title {
+        @apply text-xl font-semibold text-primary-700;
+      }
+    }
+
+    .welcome-content {
+      @apply animate-fadeIn;
+    }
+  }
 }
 
 .booking-form {
