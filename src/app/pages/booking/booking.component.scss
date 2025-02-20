@@ -26,6 +26,19 @@
   }
 }
 
+.live-clock {
+  @apply flex items-center justify-center;
+  @apply text-primary-600 text-base font-mono;
+
+  .time {
+    @apply font-semibold ml-2;
+  }
+
+  i {
+    @apply text-primary-400;
+  }
+}
+
 .calendar-section {
   @apply mb-4;
 

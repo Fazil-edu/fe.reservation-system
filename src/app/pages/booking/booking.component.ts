@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
@@ -54,7 +54,7 @@ interface SexOption {
   templateUrl: './booking.component.html',
   styleUrls: ['./booking.component.scss'],
 })
-export class BookingComponent implements OnInit {
+export class BookingComponent implements OnInit, OnDestroy {
   date: Date | null = null;
   minDate: Date;
   maxDate: Date;
@@ -119,6 +119,9 @@ export class BookingComponent implements OnInit {
     phoneNumber: '',
   };
 
+  currentTime: string = '';
+  private timeInterval: any;
+
   constructor(
     private messageService: MessageService,
     private bookingService: BookingService,
@@ -151,6 +154,24 @@ export class BookingComponent implements OnInit {
       monthNames: this.monthNames,
       today: 'Bu gün',
       clear: 'Təmizlə',
+    });
+    this.updateTime();
+    this.timeInterval = setInterval(() => this.updateTime(), 1000);
+  }
+
+  ngOnDestroy(): void {
+    if (this.timeInterval) {
+      clearInterval(this.timeInterval);
+    }
+  }
+
+  private updateTime() {
+    const now = new Date();
+
+    this.currentTime = now.toLocaleTimeString('az-AZ', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
     });
   }
 
