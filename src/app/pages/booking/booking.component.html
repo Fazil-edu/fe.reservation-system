@@ -22,19 +22,34 @@ Fix: Refine phone number validation pattern and placeholder
             <div class="counter-info">
               <span class="label">Cari növbə</span>
               <div class="numbers">
-                <span class="current">{{ currentAppointments }}</span>
+                <span class="current">{{ currentAppointmentOrder }}</span>
                 <span class="separator">/</span>
-                <span class="max">{{ maxDailyAppointments }}</span>
+                <span class="max">{{ totalAppointments }}</span>
               </div>
             </div>
             <div class="progress-bar">
               <div
                 class="progress"
                 [style.width.%]="
-                  (currentAppointments / maxDailyAppointments) * 100
+                  (completedAppointments / totalAppointments) * 100
                 "
               ></div>
             </div>
+          </div>
+          <div
+            class="status-indicator"
+            [class.almost-full]="
+              completedAppointments >= totalAppointments * 0.75
+            "
+          >
+            <span class="status-text">
+              {{
+                completedAppointments >= totalAppointments * 0.75
+                  ? "Tamamlanmaq üzrə"
+                  : "Davam edir"
+              }}
+            </span>
+            <div class="status-dot"></div>
           </div>
         </div>
       </div>

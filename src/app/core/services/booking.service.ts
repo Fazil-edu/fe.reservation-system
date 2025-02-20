@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import { CrudService } from './crud.service';
 
@@ -6,7 +7,7 @@ import { CrudService } from './crud.service';
   providedIn: 'root',
 })
 export class BookingService {
-  constructor(private crud: CrudService) {}
+  constructor(private crud: CrudService, private http: HttpClient) {}
 
   getTimeSlots(date: string) {
     return this.crud.readMany(
@@ -23,5 +24,13 @@ export class BookingService {
     appointmentTimeSlotUid: string;
   }) {
     return this.crud.createOne('appointments/create', data);
+  }
+
+  getAppointmentCount() {
+    return this.crud.readOne<{
+      totalAppointments: number;
+      completedAppointments: number;
+      currentAppointmentOrder: number;
+    }>('appointments/count-for-today', '');
   }
 }

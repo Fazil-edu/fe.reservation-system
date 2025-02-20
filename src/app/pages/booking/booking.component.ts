@@ -59,7 +59,11 @@ export class BookingComponent implements OnInit {
   minDate: Date;
   maxDate: Date;
 
-  currentAppointments: number = 3; // This would normally come from a service
+  currentAppointments: number = 0;
+  totalAppointments: number = 0;
+  completedAppointments: number = 0;
+  currentAppointmentOrder: number = 0;
+
   maxDailyAppointments: number = 8; // Maximum appointments per day
 
   selectedTimeSlot: TimeSlot | null = null;
@@ -121,6 +125,7 @@ export class BookingComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadBookings();
+    this.loadAppointmentCount();
     this.primengConfig.setTranslation({
       firstDayOfWeek: 1,
       dayNames: [
@@ -228,6 +233,7 @@ export class BookingComponent implements OnInit {
           });
         },
         complete: () => {
+          this.loadAppointmentCount();
           this.isSubmitting = false;
         },
       });
@@ -317,5 +323,25 @@ export class BookingComponent implements OnInit {
   onPatientTypeChange() {
     this.selectedTimeSlot = null;
     this.loadTimeSlots();
+  }
+
+  loadAppointmentCount() {
+    this.bookingService.getAppointmentCount().subscribe({
+      next: (data) => {
+        if (data) {
+          this.totalAppointments = data.totalAppointments;
+          this.completedAppointments = data.completedAppointments;
+          this.currentAppointmentOrder = data.currentAppointmentOrder;
+        }
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Xəta',
+          detail: 'Növbə məlumatlarını yükləmək mümkün olmadı',
+          life: 3000,
+        });
+      },
+    });
   }
 }
