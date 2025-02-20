@@ -1,4 +1,3 @@
-
 <!-- 
  Issue: The connection number should be formed into regular expression for local phone provider.
 
@@ -176,10 +175,12 @@ Fix: Refine phone number validation pattern and placeholder
       </div>
 
       <div class="field">
-        <label for="sex">Cins</label>
+        <label for="sex" class="mb-0.5 text-xs">Cins *</label>
         <select
           id="sex"
           [(ngModel)]="bookingForm.sex"
+          required
+          #sex="ngModel"
           class="w-full p-2 border border-gray-300 rounded-md focus:border-primary-500 focus:ring-2 focus:ring-primary-500"
         >
           <option value="">Seçin</option>
@@ -187,6 +188,12 @@ Fix: Refine phone number validation pattern and placeholder
             {{ option.label }}
           </option>
         </select>
+        <small
+          class="text-red-500 text-xs"
+          *ngIf="sex.invalid && (sex.dirty || sex.touched)"
+        >
+          Cins seçilməlidir
+        </small>
       </div>
 
       <div class="form-field mb-2">
@@ -208,7 +215,11 @@ Fix: Refine phone number validation pattern and placeholder
         (click)="submitBooking()"
         [loading]="isSubmitting"
         [disabled]="
-          firstName.invalid || lastName.invalid || phone.invalid || isSubmitting
+          firstName.invalid ||
+          lastName.invalid ||
+          phone.invalid ||
+          !bookingForm.sex ||
+          isSubmitting
         "
       ></p-button>
     </div>
