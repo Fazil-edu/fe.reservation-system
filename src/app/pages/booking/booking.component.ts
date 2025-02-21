@@ -185,39 +185,42 @@ export class BookingComponent implements OnInit, OnDestroy {
     }
 
     this.isLoadingTimeSlots = true;
-    this.bookingService
-      .getTimeSlots(this.date.toLocaleDateString('az-AZ').split('T')[0])
-      .subscribe({
-        next: (slots: any) => {
-          let filteredSlots = slots.availableTimeSlots;
 
-          // Filter slots based on appointment order
-          if (this.isNewPatient) {
-            filteredSlots = filteredSlots.filter(
-              (slot: TimeSlot) => slot.appointmentOrder <= 15
-            );
-          } else {
-            filteredSlots = filteredSlots.filter(
-              (slot: TimeSlot) => slot.appointmentOrder > 15
-            );
-          }
+    // Format date as YYYY-MM-DD while preserving local date
+    const formattedDate = `${this.date.getFullYear()}-${String(
+      this.date.getMonth() + 1
+    ).padStart(2, '0')}-${String(this.date.getDate()).padStart(2, '0')}`;
 
-          this.timeSlots = filteredSlots.sort(
-            (a: TimeSlot, b: TimeSlot) =>
-              a.appointmentOrder - b.appointmentOrder
+    this.bookingService.getTimeSlots(formattedDate).subscribe({
+      next: (slots: any) => {
+        let filteredSlots = slots.availableTimeSlots;
+
+        // Filter slots based on appointment order
+        if (this.isNewPatient) {
+          filteredSlots = filteredSlots.filter(
+            (slot: TimeSlot) => slot.appointmentOrder <= 15
           );
-          this.isLoadingTimeSlots = false;
-        },
-        error: (error) => {
-          this.isLoadingTimeSlots = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Xəta',
-            detail: 'Vaxt slotlarını yükləmək mümkün olmadı',
-            life: 3000,
-          });
-        },
-      });
+        } else {
+          filteredSlots = filteredSlots.filter(
+            (slot: TimeSlot) => slot.appointmentOrder > 15
+          );
+        }
+
+        this.timeSlots = filteredSlots.sort(
+          (a: TimeSlot, b: TimeSlot) => a.appointmentOrder - b.appointmentOrder
+        );
+        this.isLoadingTimeSlots = false;
+      },
+      error: (error) => {
+        this.isLoadingTimeSlots = false;
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Xəta',
+          detail: 'Vaxt slotlarını yükləmək mümkün olmadı',
+          life: 3000,
+        });
+      },
+    });
   }
 
   onDateSelect(event: Date): void {

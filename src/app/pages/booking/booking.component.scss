@@ -335,6 +335,16 @@
       @apply animate-fadeIn;
     }
   }
+
+  .p-calendar {
+    margin-bottom: 12rem; // Increased to 12rem for even more padding on mobile
+  }
+
+  @media screen and (min-width: 768px) {
+    .p-calendar {
+      margin-bottom: 4rem; // Increased to 4rem for desktop
+    }
+  }
 }
 
 .booking-form {
