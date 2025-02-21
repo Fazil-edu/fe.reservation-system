@@ -146,10 +146,7 @@ Fix: Refine phone number validation pattern and placeholder
               [class.selected]="
                 selectedTimeSlot?.appointmentHour === slot.appointmentHour
               "
-              [class.available]="
-                !selectedTimeSlot ||
-                selectedTimeSlot?.appointmentHour !== slot.appointmentHour
-              "
+              [class.available]="true"
               (click)="selectTimeSlot(slot)"
             >
               {{ slot.appointmentHour }}

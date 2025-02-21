@@ -197,57 +197,60 @@
 }
 
 .time-slots-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 12px;
-  padding: 16px;
+  @apply grid gap-3 p-4;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  max-height: 300px;
+  overflow-y: auto;
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    @apply w-1.5;
+  }
+
+  &::-webkit-scrollbar-track {
+    @apply bg-gray-100 rounded-full;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+
+    &:hover {
+      @apply bg-gray-400;
+    }
+  }
 }
 
 .time-slot {
-  position: relative;
-  padding: 12px 8px;
-  border-radius: 12px;
-  border: 2px solid #e2e8f0;
-  background: white;
-  color: #1e293b;
-  font-weight: 500;
-  transition: all 0.2s ease-in-out;
-  overflow: hidden;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: currentColor;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-  }
+  @apply relative py-3 px-2 rounded-xl text-sm font-medium;
+  @apply border-2 border-gray-200 bg-white;
+  @apply transition-all duration-200 ease-in-out;
+  @apply flex items-center justify-center;
+  @apply cursor-pointer;
 
   &:hover:not(.selected) {
-    border-color: #94a3b8;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    @apply border-primary-200 shadow-md;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 
   &.available {
-    &:active {
-      transform: scale(0.98);
-    }
+    @apply hover:bg-primary-50;
   }
 
   &.selected {
-    background: #2563eb;
-    border-color: #2563eb;
-    color: white;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    @apply bg-primary-500 border-primary-500 text-white shadow-md;
 
     &:hover {
-      background: #1d4ed8;
-      border-color: #1d4ed8;
+      @apply bg-primary-600 border-primary-600;
     }
+  }
+
+  &:disabled {
+    @apply opacity-50 cursor-not-allowed;
+    @apply bg-gray-50;
   }
 }
 
