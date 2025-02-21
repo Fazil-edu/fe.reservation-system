@@ -197,50 +197,57 @@
 }
 
 .time-slots-grid {
-  @apply grid grid-cols-4 gap-2;
-  @apply max-h-[240px] overflow-y-auto;
-
-  @media (min-width: 480px) {
-    @apply grid-cols-5;
-  }
-
-  // Custom scrollbar
-  &::-webkit-scrollbar {
-    @apply w-1.5;
-  }
-
-  &::-webkit-scrollbar-track {
-    @apply bg-primary-50 rounded-full;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    @apply bg-primary-200 rounded-full;
-
-    &:hover {
-      @apply bg-primary-300;
-    }
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 12px;
+  padding: 16px;
 }
 
 .time-slot {
-  @apply px-3 py-2 rounded-lg text-sm font-medium;
-  @apply border border-primary-100 bg-white;
-  @apply transition-all duration-200;
-  @apply flex items-center justify-center;
+  position: relative;
+  padding: 12px 8px;
+  border-radius: 12px;
+  border: 2px solid #e2e8f0;
+  background: white;
+  color: #1e293b;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+
+  &:hover:not(.selected) {
+    border-color: #94a3b8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
 
   &.available {
-    @apply hover:bg-primary-50 hover:border-primary-200;
-    @apply active:bg-primary-100;
-
-    &.selected {
-      @apply bg-primary-500 text-white border-primary-500;
-      @apply hover:bg-primary-600;
+    &:active {
+      transform: scale(0.98);
     }
   }
 
-  &:disabled {
-    @apply opacity-50 cursor-not-allowed;
-    @apply bg-gray-50;
+  &.selected {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+
+    &:hover {
+      background: #1d4ed8;
+      border-color: #1d4ed8;
+    }
   }
 }
 
