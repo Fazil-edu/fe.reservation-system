@@ -243,7 +243,7 @@ Fix: Refine phone number validation pattern and placeholder
       </div>
 
       <div class="field">
-        <label for="sex" class="mb-0.5 text-xs">Cins *</label>
+        <label for="sex" class="mb-0.5 text-xs">Cins*</label>
         <select
           id="sex"
           [(ngModel)]="bookingForm.sex"
@@ -251,7 +251,7 @@ Fix: Refine phone number validation pattern and placeholder
           #sex="ngModel"
           class="w-full p-2 border border-gray-300 rounded-md focus:border-primary-500 focus:ring-2 focus:ring-primary-500"
         >
-          <option value="">Seçin</option>
+          <option value="">.-.-.-.</option>
           <option *ngFor="let option of sexOptions" [value]="option.value">
             {{ option.label }}
           </option>
