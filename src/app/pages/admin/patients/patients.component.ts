@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { FileUploadModule } from 'primeng/fileupload';
+import { DropdownModule } from 'primeng/dropdown';
 
 interface Patient {
   id: number;
@@ -30,9 +31,17 @@ interface Patient {
     FormsModule,
     ToastModule,
     FileUploadModule,
+    DropdownModule,
   ],
   providers: [MessageService],
   templateUrl: './patients.component.html',
+  styles: [
+    `
+      ::ng-deep .custom-upload-btn .p-button {
+        @apply px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow;
+      }
+    `,
+  ],
 })
 export class PatientsComponent implements OnInit {
   patientDialog: boolean = false;

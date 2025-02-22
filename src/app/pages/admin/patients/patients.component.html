@@ -1,240 +1,270 @@
-<div class="pb-20 px-4 max-w-7xl mx-auto">
-  <!-- Header with gradient background -->
-  <div
-    class="bg-gradient-to-r from-white to-blue-50 rounded-xl shadow-sm p-6 mb-6"
-  >
-    <div class="flex justify-between items-center">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-800">Patients</h1>
-        <p class="text-gray-500 text-sm mt-1">Manage your patient records</p>
-      </div>
-      <div class="flex gap-2">
-        <p-fileUpload
-          mode="basic"
-          chooseIcon="pi pi-upload"
-          chooseLabel="Import"
-          [auto]="true"
-          accept=".csv"
-          [maxFileSize]="1000000"
-          styleClass="p-button-secondary"
-          (onUpload)="importFile($event)"
-        ></p-fileUpload>
-        <button
-          pButton
-          icon="pi pi-trash"
-          label="Delete"
-          class="p-button-danger"
-          (click)="deleteSelectedPatients()"
-          [disabled]="!selectedPatients || !selectedPatients.length"
-        ></button>
-        <button
-          pButton
-          icon="pi pi-plus"
-          label="New Patient"
-          class="p-button-primary shadow-md hover:shadow-lg transition-shadow"
-          (click)="openNew()"
-        ></button>
+<div class="min-h-screen bg-gray-50 pb-20 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6 py-8">
+    <!-- Header with gradient background -->
+    <div
+      class="bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl shadow-lg p-8"
+    >
+      <div
+        class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+      >
+        <div class="text-white">
+          <h1 class="text-3xl font-bold">Patients</h1>
+          <p class="text-blue-50 mt-2">
+            Manage your patient records efficiently
+          </p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <p-fileUpload
+            mode="basic"
+            chooseIcon="pi pi-upload"
+            chooseLabel="Import"
+            [auto]="true"
+            accept=".csv"
+            [maxFileSize]="1000000"
+            styleClass="custom-upload-btn"
+            (onUpload)="importFile($event)"
+          ></p-fileUpload>
+          <button
+            pButton
+            icon="pi pi-trash"
+            label="Delete"
+            class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow disabled:opacity-60 disabled:cursor-not-allowed"
+            (click)="deleteSelectedPatients()"
+            [disabled]="!selectedPatients || !selectedPatients.length"
+          ></button>
+          <button
+            pButton
+            icon="pi pi-plus"
+            label="New Patient"
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow"
+            (click)="openNew()"
+          ></button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Table Container -->
-  <div class="bg-white rounded-xl shadow-sm p-6">
-    <p-table
-      #dt
-      [value]="patients"
-      [columns]="cols"
-      [loading]="loading"
-      [rows]="10"
-      [paginator]="true"
-      [globalFilterFields]="['name', 'condition', 'status']"
-      [(selection)]="selectedPatients"
-      [rowHover]="true"
-      dataKey="id"
-      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-      [showCurrentPageReport]="true"
-    >
-      <ng-template pTemplate="caption">
-        <div class="flex justify-between items-center gap-4 mb-4">
-          <span class="p-input-icon-left flex-1">
-            <i class="pi pi-search"></i>
-            <input
-              pInputText
-              type="text"
-              #filter
-              (input)="dt.filterGlobal(filter.value, 'contains')"
-              placeholder="Search patients..."
-              class="w-full"
-            />
-          </span>
-          <div class="flex gap-2">
-            <button
-              pButton
-              label="Clear"
-              class="p-button-outlined"
-              icon="pi pi-filter-slash"
-              (click)="clear(dt)"
-            ></button>
-            <button
-              type="button"
-              pButton
-              icon="pi pi-file"
-              (click)="exportCSV(dt)"
-              class="p-button-secondary"
-              label="Export"
-            ></button>
-          </div>
-        </div>
-      </ng-template>
-
-      <ng-template pTemplate="header">
-        <tr class="bg-gray-50">
-          <th style="width: 4rem">
-            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-          </th>
-          <th class="font-semibold" pSortableColumn="name">
-            Name <p-sortIcon field="name"></p-sortIcon>
-          </th>
-          <th class="font-semibold" pSortableColumn="age">
-            Age <p-sortIcon field="age"></p-sortIcon>
-          </th>
-          <th class="font-semibold" pSortableColumn="condition">
-            Condition <p-sortIcon field="condition"></p-sortIcon>
-          </th>
-          <th class="font-semibold" pSortableColumn="date">
-            Date <p-sortIcon field="date"></p-sortIcon>
-          </th>
-          <th class="font-semibold" pSortableColumn="status">
-            Status <p-sortIcon field="status"></p-sortIcon>
-          </th>
-          <th class="font-semibold">Actions</th>
-        </tr>
-      </ng-template>
-
-      <ng-template pTemplate="body" let-patient>
-        <tr class="hover:bg-gray-50 transition-colors">
-          <td>
-            <p-tableCheckbox [value]="patient"></p-tableCheckbox>
-          </td>
-          <td class="font-medium">{{ patient.name }}</td>
-          <td>{{ patient.age }}</td>
-          <td>{{ patient.condition }}</td>
-          <td>{{ patient.date | date : "mediumDate" }}</td>
-          <td>
-            <span
-              [ngClass]="{
-                'px-3 py-1.5 rounded-full text-sm font-medium inline-flex items-center': true,
-                'bg-blue-50 text-blue-700': patient.status === 'Scheduled',
-                'bg-green-50 text-green-700': patient.status === 'Completed',
-                'bg-orange-50 text-orange-700': patient.status === 'Pending'
-              }"
-            >
-              <span
-                class="w-1.5 h-1.5 rounded-full mr-2"
-                [ngClass]="{
-                  'bg-blue-500': patient.status === 'Scheduled',
-                  'bg-green-500': patient.status === 'Completed',
-                  'bg-orange-500': patient.status === 'Pending'
-                }"
-              ></span>
-              {{ patient.status }}
+    <!-- Table Container -->
+    <div class="bg-white rounded-2xl shadow-lg p-6">
+      <p-table
+        #dt
+        [value]="patients"
+        [columns]="cols"
+        [loading]="loading"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['name', 'condition', 'status']"
+        [(selection)]="selectedPatients"
+        [rowHover]="true"
+        dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+        styleClass="p-datatable-gridlines"
+      >
+        <ng-template pTemplate="caption">
+          <div
+            class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-4"
+          >
+            <span class="p-input-icon-left flex-1">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                #filter
+                (input)="dt.filterGlobal(filter.value, 'contains')"
+                placeholder="Search patients..."
+                class="w-full p-3"
+              />
             </span>
-          </td>
-          <td>
-            <div class="flex gap-2">
+            <div class="flex gap-3">
               <button
                 pButton
-                icon="pi pi-pencil"
-                class="p-button-rounded p-button-text p-button-sm hover:bg-gray-100"
-                (click)="editPatient(patient)"
+                label="Clear"
+                class="px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg transition-all duration-200 flex items-center gap-2"
+                icon="pi pi-filter-slash"
+                (click)="clear(dt)"
               ></button>
               <button
+                type="button"
                 pButton
-                icon="pi pi-trash"
-                class="p-button-rounded p-button-text p-button-danger p-button-sm hover:bg-red-50"
-                (click)="deletePatient(patient)"
+                icon="pi pi-file"
+                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center gap-2"
+                (click)="exportCSV(dt)"
+                label="Export"
               ></button>
             </div>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr class="bg-gray-50">
+            <th style="width: 4rem" class="text-center">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th class="font-semibold text-gray-700" pSortableColumn="name">
+              Name <p-sortIcon field="name"></p-sortIcon>
+            </th>
+            <th class="font-semibold text-gray-700" pSortableColumn="age">
+              Age <p-sortIcon field="age"></p-sortIcon>
+            </th>
+            <th class="font-semibold text-gray-700" pSortableColumn="condition">
+              Condition <p-sortIcon field="condition"></p-sortIcon>
+            </th>
+            <th class="font-semibold text-gray-700" pSortableColumn="date">
+              Date <p-sortIcon field="date"></p-sortIcon>
+            </th>
+            <th class="font-semibold text-gray-700" pSortableColumn="status">
+              Status <p-sortIcon field="status"></p-sortIcon>
+            </th>
+            <th class="font-semibold text-gray-700">Actions</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-patient>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="text-center">
+              <p-tableCheckbox [value]="patient"></p-tableCheckbox>
+            </td>
+            <td class="font-medium text-gray-900">{{ patient.name }}</td>
+            <td class="text-gray-600">{{ patient.age }}</td>
+            <td class="text-gray-600">{{ patient.condition }}</td>
+            <td class="text-gray-600">
+              {{ patient.date | date : "mediumDate" }}
+            </td>
+            <td>
+              <span
+                [ngClass]="{
+                  'px-4 py-2 rounded-full text-sm font-semibold inline-flex items-center': true,
+                  'bg-blue-50 text-blue-700': patient.status === 'Scheduled',
+                  'bg-green-50 text-green-700': patient.status === 'Completed',
+                  'bg-orange-50 text-orange-700': patient.status === 'Pending'
+                }"
+              >
+                <span
+                  class="w-2 h-2 rounded-full mr-2"
+                  [ngClass]="{
+                    'bg-blue-500': patient.status === 'Scheduled',
+                    'bg-green-500': patient.status === 'Completed',
+                    'bg-orange-500': patient.status === 'Pending'
+                  }"
+                ></span>
+                {{ patient.status }}
+              </span>
+            </td>
+            <td>
+              <div class="flex gap-2">
+                <button
+                  pButton
+                  icon="pi pi-pencil"
+                  class="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-200"
+                  (click)="editPatient(patient)"
+                ></button>
+                <button
+                  pButton
+                  icon="pi pi-trash"
+                  class="p-2 text-red-600 hover:bg-red-50 rounded-full transition-all duration-200"
+                  (click)="deletePatient(patient)"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
   </div>
 </div>
 
+<!-- Patient Dialog -->
 <p-dialog
   [(visible)]="patientDialog"
-  [style]="{ width: '450px' }"
+  [style]="{ width: '500px' }"
   header="Patient Details"
   [modal]="true"
-  class="p-fluid"
+  styleClass="p-fluid"
+  [contentStyle]="{ padding: '2rem' }"
 >
   <ng-template pTemplate="content">
-    <div class="field mt-4">
-      <label for="name" class="font-medium mb-2 block">Name</label>
-      <input
-        type="text"
-        pInputText
-        id="name"
-        [(ngModel)]="patient.name"
-        required
-        autofocus
-        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !patient.name }"
-      />
-      <small class="text-red-500" *ngIf="submitted && !patient.name"
-        >Name is required.</small
-      >
-    </div>
+    <div class="space-y-6">
+      <div class="field">
+        <label for="name" class="text-gray-700 font-medium mb-2 block"
+          >Name</label
+        >
+        <input
+          type="text"
+          pInputText
+          id="name"
+          [(ngModel)]="patient.name"
+          required
+          autofocus
+          class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+          [ngClass]="{ 'ng-invalid ng-dirty': submitted && !patient.name }"
+        />
+        <small
+          class="text-red-500 mt-1 block"
+          *ngIf="submitted && !patient.name"
+          >Name is required.</small
+        >
+      </div>
 
-    <div class="field mt-4">
-      <label for="age" class="font-medium mb-2 block">Age</label>
-      <input
-        type="number"
-        pInputText
-        id="age"
-        [(ngModel)]="patient.age"
-        required
-      />
-    </div>
+      <div class="field">
+        <label for="age" class="text-gray-700 font-medium mb-2 block"
+          >Age</label
+        >
+        <input
+          type="number"
+          pInputText
+          id="age"
+          [(ngModel)]="patient.age"
+          required
+          class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+        />
+      </div>
 
-    <div class="field mt-4">
-      <label for="condition" class="font-medium mb-2 block">Condition</label>
-      <input
-        type="text"
-        pInputText
-        id="condition"
-        [(ngModel)]="patient.condition"
-        required
-      />
-    </div>
+      <div class="field">
+        <label for="condition" class="text-gray-700 font-medium mb-2 block"
+          >Condition</label
+        >
+        <input
+          type="text"
+          pInputText
+          id="condition"
+          [(ngModel)]="patient.condition"
+          required
+          class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+        />
+      </div>
 
-    <div class="field mt-4">
-      <label for="status" class="font-medium mb-2 block">Status</label>
-      <input
-        type="text"
-        pInputText
-        id="status"
-        [(ngModel)]="patient.status"
-        required
-      />
+      <div class="field">
+        <label for="status" class="text-gray-700 font-medium mb-2 block"
+          >Status</label
+        >
+        <p-dropdown
+          [options]="['Scheduled', 'Completed', 'Pending']"
+          [(ngModel)]="patient.status"
+          [style]="{ width: '100%' }"
+          placeholder="Select Status"
+          class="w-full"
+        ></p-dropdown>
+      </div>
     </div>
   </ng-template>
 
   <ng-template pTemplate="footer">
-    <button
-      pButton
-      label="Cancel"
-      icon="pi pi-times"
-      class="p-button-text"
-      (click)="hideDialog()"
-    ></button>
-    <button
-      pButton
-      label="Save"
-      icon="pi pi-check"
-      class="p-button-text"
-      (click)="savePatient()"
-    ></button>
+    <div class="flex justify-end gap-3">
+      <button
+        pButton
+        label="Cancel"
+        icon="pi pi-times"
+        class="px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg transition-all duration-200 flex items-center gap-2"
+        (click)="hideDialog()"
+      ></button>
+      <button
+        pButton
+        label="Save"
+        icon="pi pi-check"
+        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center gap-2"
+        (click)="savePatient()"
+      ></button>
+    </div>
   </ng-template>
 </p-dialog>
 
