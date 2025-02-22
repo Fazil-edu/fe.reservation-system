@@ -450,3 +450,23 @@
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-in-out;
 }
+
+.appointments-list {
+  .appointment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    .appointment-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+}

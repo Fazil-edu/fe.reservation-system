@@ -36,6 +36,13 @@ interface SexOption {
   value: string;
 }
 
+interface AppointmentInfo {
+  id: string;
+  appointmentDate: string;
+  appointmentTimeSlot: string;
+  patientName: string;
+}
+
 @Component({
   selector: 'app-booking',
   standalone: true,
@@ -124,6 +131,9 @@ export class BookingComponent implements OnInit, OnDestroy {
 
   showWelcomeDialog = true;
 
+  userAppointments: AppointmentInfo[] = [];
+  isLoadingAppointments = false;
+
   constructor(
     private messageService: MessageService,
     private bookingService: BookingService,
@@ -138,7 +148,6 @@ export class BookingComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.loadBookings();
     this.loadAppointmentCount();
     this.primengConfig.setTranslation({
       firstDayOfWeek: 1,
@@ -292,53 +301,6 @@ export class BookingComponent implements OnInit, OnDestroy {
     this.timeSlots = [];
   }
 
-  loadBookings() {
-    // this.bookingService.getAll().subscribe({
-    //   next: (data) => {
-    //     this.bookings = data;
-    //   },
-    //   error: (error) => {
-    //     console.error('Error loading bookings:', error);
-    //   },
-    // });
-  }
-
-  createBooking(booking: Booking) {
-    // this.bookingService.create(booking).subscribe({
-    //   next: (newBooking) => {
-    //     this.bookings.push(newBooking);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error creating booking:', error);
-    //   },
-    // });
-  }
-
-  updateBooking(id: number, booking: Booking) {
-    // this.bookingService.update(id, booking).subscribe({
-    //   next: (updatedBooking) => {
-    //     const index = this.bookings.findIndex((b) => b.id === id);
-    //     if (index !== -1) {
-    //       this.bookings[index] = updatedBooking;
-    //     }
-    //   },
-    //   error: (error) => {
-    //     console.error('Error updating booking:', error);
-    //   },
-    // });
-  }
-
-  deleteBooking(id: number) {
-    // this.bookingService.delete(id).subscribe({
-    //   next: () => {
-    //     this.bookings = this.bookings.filter((b) => b.id !== id);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error deleting booking:', error);
-    //   },
-    // });
-  }
-
   onlyNumbers(event: KeyboardEvent): boolean {
     const charCode = event.which ? event.which : event.keyCode;
     if (charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -382,17 +344,47 @@ export class BookingComponent implements OnInit, OnDestroy {
   }
 
   submitCancellation() {
+    this.isLoadingAppointments = true;
+    this.bookingService.getAppointments(this.cancelForm).subscribe({
+      next: (response: any) => {
+        if (response) {
+          this.userAppointments = response;
+        }
+        this.isLoadingAppointments = false;
+      },
+      error: (error) => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Xəta',
+          detail: 'Növbələri yükləmək mümkün olmadı',
+          life: 3000,
+        });
+        this.isLoadingAppointments = false;
+      },
+    });
+  }
+
+  cancelAppointment(appointmentId: string) {
     this.isCancelling = true;
-    this.bookingService.cancelAppointment(this.cancelForm).subscribe({
-      next: (response) => {
+    this.bookingService.cancelAppointment({ appointmentId }).subscribe({
+      next: () => {
+        // Remove the cancelled appointment from the list
+        this.userAppointments = this.userAppointments.filter(
+          (app) => app.id !== appointmentId
+        );
+
         this.messageService.add({
           severity: 'success',
           summary: 'Uğurlu!',
-          detail: 'Növbəniz ləğv edildi',
+          detail: 'Növbə ləğv edildi',
           life: 3000,
         });
-        this.showCancelDialog = false;
-        this.resetCancelForm();
+
+        if (this.userAppointments.length === 0) {
+          this.showCancelDialog = false;
+          this.resetCancelForm();
+        }
+
         this.loadAppointmentCount();
       },
       error: (error) => {
@@ -409,11 +401,12 @@ export class BookingComponent implements OnInit, OnDestroy {
     });
   }
 
-  private resetCancelForm() {
+  resetCancelForm() {
     this.cancelForm = {
       firstName: '',
       lastName: '',
       phoneNumber: '',
     };
+    this.userAppointments = [];
   }
 }

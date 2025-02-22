@@ -34,11 +34,15 @@ export class BookingService {
     }>('appointments/count-for-today', '');
   }
 
-  cancelAppointment(data: {
+  getAppointments(searchParams: {
     firstName: string;
     lastName: string;
     phoneNumber: string;
   }) {
-    return this.crud.createOne('appointments/cancel', data);
+    return this.crud.createOne(`appointments/by-patient`, searchParams);
+  }
+
+  cancelAppointment(params: { appointmentId: string }) {
+    return this.crud.deleteOne('appointments/delete', params.appointmentId);
   }
 }

@@ -297,76 +297,90 @@ Fix: Refine phone number validation pattern and placeholder
   <!-- Add this at the bottom of the page, next to the other dialog -->
   <p-dialog
     [(visible)]="showCancelDialog"
-    [modal]="true"
+    [style]="{ width: '450px' }"
     header="Növbəni ləğv et"
-    [closeOnEscape]="true"
-    [dismissableMask]="true"
-    styleClass="cancel-dialog"
-    [draggable]="false"
+    [modal]="true"
   >
-    <div class="cancel-form p-3">
-      <div class="form-field mb-2">
-        <label for="cancelFirstName" class="mb-0.5 text-xs">Ad *</label>
+    <div class="cancel-form" *ngIf="!userAppointments.length">
+      <div class="form-group mb-3">
+        <label for="firstName" class="block mb-1">Ad</label>
         <input
-          id="cancelFirstName"
-          type="text"
           pInputText
+          id="firstName"
           [(ngModel)]="cancelForm.firstName"
-          required
-          #cancelFirstName="ngModel"
-          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+          class="w-full"
         />
       </div>
-
-      <div class="form-field mb-2">
-        <label for="cancelLastName" class="mb-0.5 text-xs">Soyad *</label>
+      <div class="form-group mb-3">
+        <label for="lastName" class="block mb-1">Soyad</label>
         <input
-          id="cancelLastName"
-          type="text"
           pInputText
+          id="lastName"
           [(ngModel)]="cancelForm.lastName"
-          required
-          #cancelLastName="ngModel"
-          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+          class="w-full"
         />
       </div>
-
-      <div class="form-field mb-2">
-        <label for="cancelPhoneNumber" class="mb-0.5 text-xs"
-          >Əlaqə nömrəsi *</label
-        >
+      <div class="form-group mb-4">
+        <label for="phoneNumber" class="block mb-1">Telefon</label>
         <div class="flex items-center">
           <span class="!p-1.5 text-sm text-gray-500 bg-gray-50">+994</span>
           <input
-            id="cancelPhoneNumber"
-            type="text"
             pInputText
+            id="phoneNumber"
             [(ngModel)]="cancelForm.phoneNumber"
-            required
-            #cancelPhone="ngModel"
-            class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+            class="w-full"
             pattern="(?:50|51|55|70|77)[0-9]{7}"
             maxlength="9"
-            (keypress)="onlyNumbers($event)"
             placeholder="XXXXXXXXX"
           />
         </div>
       </div>
+      <button
+        pButton
+        label="Növbələri axtar"
+        class="w-full"
+        [loading]="isLoadingAppointments"
+        (click)="submitCancellation()"
+      ></button>
     </div>
 
-    <div class="flex justify-end gap-4 px-4 pb-4">
-      <p-button
-        label="Ləğv et"
-        styleClass="!bg-red-600 hover:!bg-red-700 !border-red-600 hover:!border-red-700 !text-white !px-6 !py-2 !rounded-lg"
-        (click)="submitCancellation()"
-        [loading]="isCancelling"
-        [disabled]="
-          cancelFirstName.invalid ||
-          cancelLastName.invalid ||
-          cancelPhone.invalid ||
-          isCancelling
-        "
-      ></p-button>
+    <div class="appointments-list p-3" *ngIf="userAppointments.length">
+      <div class="mb-4">
+        <h3 class="text-lg font-semibold mb-2">Tapılan növbələr:</h3>
+        <p class="text-sm text-gray-600">
+          {{ cancelForm.firstName }} {{ cancelForm.lastName }} adına olan
+          növbələr
+        </p>
+      </div>
+      <div class="flex flex-col gap-3">
+        <div
+          class="appointment-item flex justify-between items-center p-3 border rounded-lg"
+          *ngFor="let appointment of userAppointments"
+        >
+          <div class="appointment-info">
+            <div class="font-medium">{{ appointment.patientName }}</div>
+            <div class="text-sm text-gray-600">
+              {{ appointment.appointmentDate | date : "dd.MM.yyyy" }} -
+              {{ appointment.appointmentTimeSlot }}
+            </div>
+          </div>
+          <button
+            pButton
+            icon="pi pi-trash"
+            class="p-button-danger p-button-rounded"
+            [loading]="isCancelling"
+            (click)="cancelAppointment(appointment.id)"
+          ></button>
+        </div>
+      </div>
+      <div class="mt-4 flex justify-end">
+        <button
+          pButton
+          label="Yeni axtarış"
+          class="p-button-outlined"
+          (click)="resetCancelForm()"
+        ></button>
+      </div>
     </div>
   </p-dialog>
 
