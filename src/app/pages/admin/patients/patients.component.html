@@ -8,12 +8,33 @@
         <h1 class="text-2xl font-bold text-gray-800">Patients</h1>
         <p class="text-gray-500 text-sm mt-1">Manage your patient records</p>
       </div>
-      <button
-        pButton
-        icon="pi pi-plus"
-        label="New Patient"
-        class="p-button-primary shadow-md hover:shadow-lg transition-shadow"
-      ></button>
+      <div class="flex gap-2">
+        <p-fileUpload
+          mode="basic"
+          chooseIcon="pi pi-upload"
+          chooseLabel="Import"
+          [auto]="true"
+          accept=".csv"
+          [maxFileSize]="1000000"
+          styleClass="p-button-secondary"
+          (onUpload)="importFile($event)"
+        ></p-fileUpload>
+        <button
+          pButton
+          icon="pi pi-trash"
+          label="Delete"
+          class="p-button-danger"
+          (click)="deleteSelectedPatients()"
+          [disabled]="!selectedPatients || !selectedPatients.length"
+        ></button>
+        <button
+          pButton
+          icon="pi pi-plus"
+          label="New Patient"
+          class="p-button-primary shadow-md hover:shadow-lg transition-shadow"
+          (click)="openNew()"
+        ></button>
+      </div>
     </div>
   </div>
 
@@ -22,14 +43,16 @@
     <p-table
       #dt
       [value]="patients"
+      [columns]="cols"
       [loading]="loading"
-      [paginator]="true"
       [rows]="10"
-      [showCurrentPageReport]="true"
-      [rowsPerPageOptions]="[10, 25, 50]"
+      [paginator]="true"
       [globalFilterFields]="['name', 'condition', 'status']"
-      styleClass="p-datatable-sm"
+      [(selection)]="selectedPatients"
+      [rowHover]="true"
+      dataKey="id"
       currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+      [showCurrentPageReport]="true"
     >
       <ng-template pTemplate="caption">
         <div class="flex justify-between items-center gap-4 mb-4">
@@ -44,18 +67,31 @@
               class="w-full"
             />
           </span>
-          <button
-            pButton
-            label="Clear"
-            class="p-button-outlined"
-            icon="pi pi-filter-slash"
-            (click)="clear(dt)"
-          ></button>
+          <div class="flex gap-2">
+            <button
+              pButton
+              label="Clear"
+              class="p-button-outlined"
+              icon="pi pi-filter-slash"
+              (click)="clear(dt)"
+            ></button>
+            <button
+              type="button"
+              pButton
+              icon="pi pi-file"
+              (click)="exportCSV(dt)"
+              class="p-button-secondary"
+              label="Export"
+            ></button>
+          </div>
         </div>
       </ng-template>
 
       <ng-template pTemplate="header">
         <tr class="bg-gray-50">
+          <th style="width: 4rem">
+            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+          </th>
           <th class="font-semibold" pSortableColumn="name">
             Name <p-sortIcon field="name"></p-sortIcon>
           </th>
@@ -77,6 +113,9 @@
 
       <ng-template pTemplate="body" let-patient>
         <tr class="hover:bg-gray-50 transition-colors">
+          <td>
+            <p-tableCheckbox [value]="patient"></p-tableCheckbox>
+          </td>
           <td class="font-medium">{{ patient.name }}</td>
           <td>{{ patient.age }}</td>
           <td>{{ patient.condition }}</td>
@@ -107,11 +146,13 @@
                 pButton
                 icon="pi pi-pencil"
                 class="p-button-rounded p-button-text p-button-sm hover:bg-gray-100"
+                (click)="editPatient(patient)"
               ></button>
               <button
                 pButton
                 icon="pi pi-trash"
                 class="p-button-rounded p-button-text p-button-danger p-button-sm hover:bg-red-50"
+                (click)="deletePatient(patient)"
               ></button>
             </div>
           </td>
@@ -120,3 +161,81 @@
     </p-table>
   </div>
 </div>
+
+<p-dialog
+  [(visible)]="patientDialog"
+  [style]="{ width: '450px' }"
+  header="Patient Details"
+  [modal]="true"
+  class="p-fluid"
+>
+  <ng-template pTemplate="content">
+    <div class="field mt-4">
+      <label for="name" class="font-medium mb-2 block">Name</label>
+      <input
+        type="text"
+        pInputText
+        id="name"
+        [(ngModel)]="patient.name"
+        required
+        autofocus
+        [ngClass]="{ 'ng-invalid ng-dirty': submitted && !patient.name }"
+      />
+      <small class="text-red-500" *ngIf="submitted && !patient.name"
+        >Name is required.</small
+      >
+    </div>
+
+    <div class="field mt-4">
+      <label for="age" class="font-medium mb-2 block">Age</label>
+      <input
+        type="number"
+        pInputText
+        id="age"
+        [(ngModel)]="patient.age"
+        required
+      />
+    </div>
+
+    <div class="field mt-4">
+      <label for="condition" class="font-medium mb-2 block">Condition</label>
+      <input
+        type="text"
+        pInputText
+        id="condition"
+        [(ngModel)]="patient.condition"
+        required
+      />
+    </div>
+
+    <div class="field mt-4">
+      <label for="status" class="font-medium mb-2 block">Status</label>
+      <input
+        type="text"
+        pInputText
+        id="status"
+        [(ngModel)]="patient.status"
+        required
+      />
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="Cancel"
+      icon="pi pi-times"
+      class="p-button-text"
+      (click)="hideDialog()"
+    ></button>
+    <button
+      pButton
+      label="Save"
+      icon="pi pi-check"
+      class="p-button-text"
+      (click)="savePatient()"
+    ></button>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>
