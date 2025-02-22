@@ -1,14 +1,122 @@
-<div class="pb-20 px-4">
-  <h1 class="text-2xl font-bold my-4">Patients</h1>
-
-  <div class="grid gap-4">
-    <div
-      *ngFor="let patient of patients"
-      class="bg-white p-4 rounded-lg shadow"
-    >
-      <h3 class="font-semibold">{{ patient.name }}</h3>
-      <p class="text-gray-600">Age: {{ patient.age }}</p>
-      <p class="text-gray-600">Condition: {{ patient.condition }}</p>
+<div class="pb-20 px-4 max-w-7xl mx-auto">
+  <!-- Header with gradient background -->
+  <div
+    class="bg-gradient-to-r from-white to-blue-50 rounded-xl shadow-sm p-6 mb-6"
+  >
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">Patients</h1>
+        <p class="text-gray-500 text-sm mt-1">Manage your patient records</p>
+      </div>
+      <button
+        pButton
+        icon="pi pi-plus"
+        label="New Patient"
+        class="p-button-primary shadow-md hover:shadow-lg transition-shadow"
+      ></button>
     </div>
+  </div>
+
+  <!-- Table Container -->
+  <div class="bg-white rounded-xl shadow-sm p-6">
+    <p-table
+      #dt
+      [value]="patients"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="10"
+      [showCurrentPageReport]="true"
+      [rowsPerPageOptions]="[10, 25, 50]"
+      [globalFilterFields]="['name', 'condition', 'status']"
+      styleClass="p-datatable-sm"
+      currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex justify-between items-center gap-4 mb-4">
+          <span class="p-input-icon-left flex-1">
+            <i class="pi pi-search"></i>
+            <input
+              pInputText
+              type="text"
+              #filter
+              (input)="dt.filterGlobal(filter.value, 'contains')"
+              placeholder="Search patients..."
+              class="w-full"
+            />
+          </span>
+          <button
+            pButton
+            label="Clear"
+            class="p-button-outlined"
+            icon="pi pi-filter-slash"
+            (click)="clear(dt)"
+          ></button>
+        </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+        <tr class="bg-gray-50">
+          <th class="font-semibold" pSortableColumn="name">
+            Name <p-sortIcon field="name"></p-sortIcon>
+          </th>
+          <th class="font-semibold" pSortableColumn="age">
+            Age <p-sortIcon field="age"></p-sortIcon>
+          </th>
+          <th class="font-semibold" pSortableColumn="condition">
+            Condition <p-sortIcon field="condition"></p-sortIcon>
+          </th>
+          <th class="font-semibold" pSortableColumn="date">
+            Date <p-sortIcon field="date"></p-sortIcon>
+          </th>
+          <th class="font-semibold" pSortableColumn="status">
+            Status <p-sortIcon field="status"></p-sortIcon>
+          </th>
+          <th class="font-semibold">Actions</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-patient>
+        <tr class="hover:bg-gray-50 transition-colors">
+          <td class="font-medium">{{ patient.name }}</td>
+          <td>{{ patient.age }}</td>
+          <td>{{ patient.condition }}</td>
+          <td>{{ patient.date | date : "mediumDate" }}</td>
+          <td>
+            <span
+              [ngClass]="{
+                'px-3 py-1.5 rounded-full text-sm font-medium inline-flex items-center': true,
+                'bg-blue-50 text-blue-700': patient.status === 'Scheduled',
+                'bg-green-50 text-green-700': patient.status === 'Completed',
+                'bg-orange-50 text-orange-700': patient.status === 'Pending'
+              }"
+            >
+              <span
+                class="w-1.5 h-1.5 rounded-full mr-2"
+                [ngClass]="{
+                  'bg-blue-500': patient.status === 'Scheduled',
+                  'bg-green-500': patient.status === 'Completed',
+                  'bg-orange-500': patient.status === 'Pending'
+                }"
+              ></span>
+              {{ patient.status }}
+            </span>
+          </td>
+          <td>
+            <div class="flex gap-2">
+              <button
+                pButton
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-text p-button-sm hover:bg-gray-100"
+              ></button>
+              <button
+                pButton
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-text p-button-danger p-button-sm hover:bg-red-50"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
   </div>
 </div>
