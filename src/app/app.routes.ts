@@ -46,4 +46,15 @@ export const routes: Routes = [
       { path: '', redirectTo: 'patients', pathMatch: 'full' },
     ],
   },
+  {
+    path: '404',
+    loadComponent: () =>
+      import('./pages/not-found/not-found.component').then(
+        (m) => m.NotFoundComponent
+      ),
+  },
+  {
+    path: '**',
+    redirectTo: '404',
+  },
 ];

@@ -1,4 +1,7 @@
-<nav class="fixed bottom-0 left-0 right-0 bg-white shadow-lg">
+<nav
+  *ngIf="shouldShowNav()"
+  class="fixed bottom-0 left-0 right-0 bg-white shadow-lg"
+>
   <div class="flex justify-around items-center h-16">
     <a
       routerLink="/admin/patients"

@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { Router } from '@angular/router';
 
 interface Appointment {
   id: number;
@@ -53,7 +54,7 @@ export class CabinetComponent implements OnInit {
   upcomingAppointments: Appointment[] = [];
   loading: boolean = true;
 
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService, private router: Router) {}
 
   ngOnInit() {
     // Mock data - replace with actual service call
@@ -94,5 +95,10 @@ export class CabinetComponent implements OnInit {
       detail: `Appointment status changed to ${status}`,
       life: 3000,
     });
+  }
+
+  logout() {
+    // Add any logout logic here (clear tokens, etc.)
+    this.router.navigate(['/login']);
   }
 }
