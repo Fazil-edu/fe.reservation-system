@@ -197,12 +197,10 @@
 }
 
 .time-slots-grid {
-  @apply grid grid-cols-4 gap-2;
-  @apply max-h-[240px] overflow-y-auto;
-
-  @media (min-width: 480px) {
-    @apply grid-cols-5;
-  }
+  @apply grid gap-3 p-4;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  max-height: 300px;
+  overflow-y: auto;
 
   // Custom scrollbar
   &::-webkit-scrollbar {
@@ -210,31 +208,43 @@
   }
 
   &::-webkit-scrollbar-track {
-    @apply bg-primary-50 rounded-full;
+    @apply bg-gray-100 rounded-full;
   }
 
   &::-webkit-scrollbar-thumb {
-    @apply bg-primary-200 rounded-full;
+    @apply bg-gray-300 rounded-full;
 
     &:hover {
-      @apply bg-primary-300;
+      @apply bg-gray-400;
     }
   }
 }
 
 .time-slot {
-  @apply px-3 py-2 rounded-lg text-sm font-medium;
-  @apply border border-primary-100 bg-white;
-  @apply transition-all duration-200;
+  @apply relative py-3 px-2 rounded-xl text-sm font-medium;
+  @apply border-2 border-gray-200 bg-white;
+  @apply transition-all duration-200 ease-in-out;
   @apply flex items-center justify-center;
+  @apply cursor-pointer;
+
+  &:hover:not(.selected) {
+    @apply border-primary-200 shadow-md;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 
   &.available {
-    @apply hover:bg-primary-50 hover:border-primary-200;
-    @apply active:bg-primary-100;
+    @apply hover:bg-primary-50;
+  }
 
-    &.selected {
-      @apply bg-primary-500 text-white border-primary-500;
-      @apply hover:bg-primary-600;
+  &.selected {
+    @apply bg-primary-500 border-primary-500 text-white shadow-md;
+
+    &:hover {
+      @apply bg-primary-600 border-primary-600;
     }
   }
 
@@ -333,6 +343,16 @@
 
     .welcome-content {
       @apply animate-fadeIn;
+    }
+  }
+
+  .p-calendar {
+    margin-bottom: 12rem; // Increased to 12rem for even more padding on mobile
+  }
+
+  @media screen and (min-width: 768px) {
+    .p-calendar {
+      margin-bottom: 4rem; // Increased to 4rem for desktop
     }
   }
 }
