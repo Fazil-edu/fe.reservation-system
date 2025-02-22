@@ -1,0 +1,87 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo-container mb-6">
+        <i class="pi pi-calendar text-5xl text-primary-500 mb-4"></i>
+      </div>
+      <h1 class="text-2xl font-bold text-primary-700 mb-3">Daxil ol</h1>
+      <p class="text-gray-600 text-sm">
+        Növbə sistemini idarə etmək üçün daxil olun
+      </p>
+    </div>
+
+    <form class="login-form" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label
+          for="username"
+          class="block text-sm font-medium text-gray-700 mb-2"
+        >
+          İstifadəçi adı <span class="text-red-500">*</span>
+        </label>
+        <div class="input-container">
+          <i class="pi pi-user input-icon"></i>
+          <input
+            id="username"
+            type="text"
+            pInputText
+            [(ngModel)]="loginForm.username"
+            name="username"
+            class="w-full p-inputtext-lg"
+            placeholder="İstifadəçi adınızı daxil edin"
+            [disabled]="isLoading"
+            required
+            #username="ngModel"
+          />
+        </div>
+        <small
+          class="text-red-500"
+          *ngIf="username.invalid && username.touched"
+        >
+          İstifadəçi adı tələb olunur
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label
+          for="password"
+          class="block text-sm font-medium text-gray-700 mb-2"
+        >
+          Şifrə <span class="text-red-500">*</span>
+        </label>
+        <div class="input-container">
+          <i class="pi pi-lock input-icon"></i>
+          <p-password
+            id="password"
+            [(ngModel)]="loginForm.password"
+            name="password"
+            [toggleMask]="true"
+            [feedback]="false"
+            styleClass="w-full p-inputtext-lg custom-password"
+            inputStyleClass="w-full p-inputtext-lg"
+            placeholder="Şifrənizi daxil edin"
+            [disabled]="isLoading"
+            required
+            #password="ngModel"
+          ></p-password>
+        </div>
+        <small
+          class="text-red-500"
+          *ngIf="password.invalid && password.touched"
+        >
+          Şifrə tələb olunur
+        </small>
+      </div>
+
+      <button
+        pButton
+        type="submit"
+        label="Daxil ol"
+        class="w-full p-button-lg mt-6 custom-button"
+        [loading]="isLoading"
+        [disabled]="username.invalid || password.invalid"
+      ></button>
+    </form>
+  </div>
+</div>
+
+<p-toast position="top-center"></p-toast>

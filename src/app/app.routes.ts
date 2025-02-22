@@ -1,14 +1,22 @@
 import { Routes } from '@angular/router';
-import { BookingComponent } from './pages/booking/booking.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'login',
     loadComponent: () =>
-      import('./pages/booking').then((m) => m.BookingComponent),
+      import('./pages/login/login.component').then((m) => m.LoginComponent),
   },
   {
     path: 'booking',
-    component: BookingComponent,
+    loadComponent: () =>
+      import('./pages/booking/booking.component').then(
+        (m) => m.BookingComponent
+      ),
+  },
+  {
+    path: '',
+    redirectTo: 'booking',
+    pathMatch: 'full',
   },
 ];
