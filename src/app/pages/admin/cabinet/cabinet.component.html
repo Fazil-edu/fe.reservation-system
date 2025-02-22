@@ -32,19 +32,19 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
             <div>
-              <p class="text-blue-100">Experience</p>
+              <p class="text-blue-100">Təcrübə</p>
               <p class="text-white font-medium">{{ doctorInfo.experience }}</p>
             </div>
             <div>
-              <p class="text-blue-100">Schedule</p>
+              <p class="text-blue-100">İş Qrafiki</p>
               <p class="text-white font-medium">{{ doctorInfo.schedule }}</p>
             </div>
             <div>
-              <p class="text-blue-100">Email</p>
+              <p class="text-blue-100">E-poçt</p>
               <p class="text-white font-medium">{{ doctorInfo.email }}</p>
             </div>
             <div>
-              <p class="text-blue-100">Phone</p>
+              <p class="text-blue-100">Telefon</p>
               <p class="text-white font-medium">{{ doctorInfo.phone }}</p>
             </div>
           </div>
@@ -54,9 +54,7 @@
 
     <!-- Upcoming Appointments -->
     <div class="bg-white rounded-2xl shadow-lg p-6">
-      <h2 class="text-2xl font-bold text-gray-800 mb-6">
-        Upcoming Appointments
-      </h2>
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Gələcək Görüşlər</h2>
 
       <p-table
         [value]="upcomingAppointments"
@@ -67,12 +65,12 @@
       >
         <ng-template pTemplate="header">
           <tr class="bg-gray-50">
-            <th class="font-semibold text-gray-700">Patient Name</th>
-            <th class="font-semibold text-gray-700">Date</th>
-            <th class="font-semibold text-gray-700">Time</th>
-            <th class="font-semibold text-gray-700">Type</th>
+            <th class="font-semibold text-gray-700">Xəstənin Adı</th>
+            <th class="font-semibold text-gray-700">Tarix</th>
+            <th class="font-semibold text-gray-700">Vaxt</th>
+            <th class="font-semibold text-gray-700">Növ</th>
             <th class="font-semibold text-gray-700">Status</th>
-            <th class="font-semibold text-gray-700">Actions</th>
+            <th class="font-semibold text-gray-700">Əməliyyatlar</th>
           </tr>
         </ng-template>
 

@@ -27,8 +27,8 @@ export class SettingsComponent {
     notifications: true,
     emailNotifications: false,
     darkMode: false,
-    language: 'English',
-    timeZone: 'UTC+02:00',
+    language: 'Azərbaycan',
+    timeZone: 'UTC+04:00',
     autoLogout: 30,
   };
 
@@ -37,8 +37,8 @@ export class SettingsComponent {
   saveSettings() {
     this.messageService.add({
       severity: 'success',
-      summary: 'Success',
-      detail: 'Settings saved successfully',
+      summary: 'Uğurlu',
+      detail: 'Tənzimləmələr yadda saxlanıldı',
       life: 3000,
     });
   }

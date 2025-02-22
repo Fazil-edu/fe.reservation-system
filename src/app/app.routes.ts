@@ -24,10 +24,22 @@ export const routes: Routes = [
     children: [
       {
         path: 'patients',
-        loadComponent: () =>
-          import('./pages/admin/patients/patients.component').then(
-            (m) => m.PatientsComponent
-          ),
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./pages/admin/patients/patients.component').then(
+                (m) => m.PatientsComponent
+              ),
+          },
+          {
+            path: ':id',
+            loadComponent: () =>
+              import(
+                './pages/admin/patients/patient-details/patient-details.component'
+              ).then((m) => m.PatientDetailsComponent),
+          },
+        ],
       },
       {
         path: 'cabinet',

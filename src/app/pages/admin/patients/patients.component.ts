@@ -9,6 +9,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { FileUploadModule } from 'primeng/fileupload';
 import { DropdownModule } from 'primeng/dropdown';
+import { Router } from '@angular/router';
 
 interface Patient {
   id: number;
@@ -65,7 +66,7 @@ export class PatientsComponent implements OnInit {
     dataKey: col.field,
   }));
 
-  constructor(private messageService: MessageService) {}
+  constructor(private messageService: MessageService, private router: Router) {}
 
   ngOnInit() {
     // Mock data - replace with actual service call
@@ -111,8 +112,8 @@ export class PatientsComponent implements OnInit {
     this.selectedPatients = [];
     this.messageService.add({
       severity: 'success',
-      summary: 'Successful',
-      detail: 'Patients Deleted',
+      summary: 'Uğurlu',
+      detail: 'Xəstələr Silindi',
       life: 3000,
     });
   }
@@ -126,8 +127,8 @@ export class PatientsComponent implements OnInit {
     this.patients = this.patients.filter((val) => val.id !== patient.id);
     this.messageService.add({
       severity: 'success',
-      summary: 'Successful',
-      detail: 'Patient Deleted',
+      summary: 'Uğurlu',
+      detail: 'Xəstə Silindi',
       life: 3000,
     });
   }
@@ -147,8 +148,8 @@ export class PatientsComponent implements OnInit {
         this.patients[index] = this.patient;
         this.messageService.add({
           severity: 'success',
-          summary: 'Successful',
-          detail: 'Patient Updated',
+          summary: 'Uğurlu',
+          detail: 'Xəstə Yeniləndi',
           life: 3000,
         });
       } else {
@@ -157,8 +158,8 @@ export class PatientsComponent implements OnInit {
         this.patients.push(this.patient);
         this.messageService.add({
           severity: 'success',
-          summary: 'Successful',
-          detail: 'Patient Created',
+          summary: 'Uğurlu',
+          detail: 'Xəstə Yaradıldı',
           life: 3000,
         });
       }
@@ -219,8 +220,8 @@ export class PatientsComponent implements OnInit {
       this.patients = [...this.patients, ...importedPatients];
       this.messageService.add({
         severity: 'success',
-        summary: 'Successful',
-        detail: 'Patients Imported',
+        summary: 'Uğurlu',
+        detail: 'Xəstələr İdxal Edildi',
         life: 3000,
       });
     };
@@ -237,5 +238,9 @@ export class PatientsComponent implements OnInit {
     table.value = customData;
     table.exportCSV();
     table.value = this.patients; // Restore original data
+  }
+
+  viewPatientDetails(patient: Patient) {
+    this.router.navigate(['/admin/patients', patient.id]);
   }
 }

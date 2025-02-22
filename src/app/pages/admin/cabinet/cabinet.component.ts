@@ -43,12 +43,12 @@ interface Appointment {
 export class CabinetComponent implements OnInit {
   doctorInfo = {
     name: 'Dr. John Smith',
-    specialty: 'Cardiologist',
-    experience: '15 years',
+    specialty: 'Kardioloq',
+    experience: '15 il',
     email: 'john.smith@hospital.com',
     phone: '+1 234 567 8900',
     address: '123 Medical Center, Healthcare Ave.',
-    schedule: 'Mon-Fri, 9:00 AM - 5:00 PM',
+    schedule: 'B.e-C, 9:00 - 17:00',
   };
 
   upcomingAppointments: Appointment[] = [];
@@ -91,8 +91,8 @@ export class CabinetComponent implements OnInit {
     appointment.status = status;
     this.messageService.add({
       severity: 'success',
-      summary: 'Status Updated',
-      detail: `Appointment status changed to ${status}`,
+      summary: 'Uğurlu',
+      detail: `Görüş statusu ${status} olaraq dəyişdirildi`,
       life: 3000,
     });
   }

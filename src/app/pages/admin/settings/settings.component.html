@@ -8,8 +8,8 @@
         class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
       >
         <div class="text-white">
-          <h1 class="text-3xl font-bold">Settings</h1>
-          <p class="text-blue-50 mt-2">Manage your application preferences</p>
+          <h1 class="text-3xl font-bold">Tənzimləmələr</h1>
+          <p class="text-blue-50 mt-2">Tətbiq parametrlərini idarə edin</p>
         </div>
       </div>
     </div>
@@ -19,15 +19,13 @@
       <div class="space-y-6">
         <!-- Notifications Section -->
         <div class="border-b border-gray-200 pb-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-4">
-            Notifications
-          </h2>
+          <h2 class="text-xl font-semibold text-gray-800 mb-4">Bildirişlər</h2>
           <div class="space-y-4">
             <div class="flex items-center justify-between">
               <div>
-                <h3 class="text-gray-700 font-medium">Push Notifications</h3>
+                <h3 class="text-gray-700 font-medium">Push Bildirişləri</h3>
                 <p class="text-gray-500 text-sm">
-                  Receive push notifications for important updates
+                  Vacib yeniləmələr üçün push bildirişləri alın
                 </p>
               </div>
               <p-inputSwitch
@@ -36,9 +34,9 @@
             </div>
             <div class="flex items-center justify-between">
               <div>
-                <h3 class="text-gray-700 font-medium">Email Notifications</h3>
+                <h3 class="text-gray-700 font-medium">E-poçt Bildirişləri</h3>
                 <p class="text-gray-500 text-sm">
-                  Receive email notifications for appointments
+                  Görüşlər üçün e-poçt bildirişləri alın
                 </p>
               </div>
               <p-inputSwitch
@@ -50,13 +48,13 @@
 
         <!-- Appearance Section -->
         <div class="border-b border-gray-200 pb-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-4">Appearance</h2>
+          <h2 class="text-xl font-semibold text-gray-800 mb-4">Görünüş</h2>
           <div class="space-y-4">
             <div class="flex items-center justify-between">
               <div>
-                <h3 class="text-gray-700 font-medium">Dark Mode</h3>
+                <h3 class="text-gray-700 font-medium">Qaranlıq Rejim</h3>
                 <p class="text-gray-500 text-sm">
-                  Enable dark mode for the application
+                  Tətbiq üçün qaranlıq rejimi aktivləşdirin
                 </p>
               </div>
               <p-inputSwitch [(ngModel)]="settings.darkMode"></p-inputSwitch>
@@ -66,10 +64,10 @@
 
         <!-- Preferences Section -->
         <div class="border-b border-gray-200 pb-6">
-          <h2 class="text-xl font-semibold text-gray-800 mb-4">Preferences</h2>
+          <h2 class="text-xl font-semibold text-gray-800 mb-4">Üstünlüklər</h2>
           <div class="space-y-4">
             <div class="flex flex-col">
-              <label class="text-gray-700 font-medium mb-2">Language</label>
+              <label class="text-gray-700 font-medium mb-2">Dil</label>
               <input
                 type="text"
                 pInputText
@@ -78,7 +76,7 @@
               />
             </div>
             <div class="flex flex-col">
-              <label class="text-gray-700 font-medium mb-2">Time Zone</label>
+              <label class="text-gray-700 font-medium mb-2">Saat Qurşağı</label>
               <input
                 type="text"
                 pInputText
@@ -88,7 +86,7 @@
             </div>
             <div class="flex flex-col">
               <label class="text-gray-700 font-medium mb-2"
-                >Auto Logout (minutes)</label
+                >Avtomatik Çıxış (dəqiqə)</label
               >
               <input
                 type="number"
@@ -104,7 +102,7 @@
         <div class="flex justify-end pt-4">
           <button
             pButton
-            label="Save Changes"
+            label="Dəyişiklikləri Yadda Saxla"
             icon="pi pi-check"
             class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow"
             (click)="saveSettings()"

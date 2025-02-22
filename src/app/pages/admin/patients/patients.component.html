@@ -8,16 +8,14 @@
         class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
       >
         <div class="text-white">
-          <h1 class="text-3xl font-bold">Patients</h1>
-          <p class="text-blue-50 mt-2">
-            Manage your patient records efficiently
-          </p>
+          <h1 class="text-3xl font-bold">Xəstələr</h1>
+          <p class="text-blue-50 mt-2">Xəstə qeydlərini idarə edin</p>
         </div>
         <div class="flex flex-wrap gap-3">
           <p-fileUpload
             mode="basic"
             chooseIcon="pi pi-upload"
-            chooseLabel="Import"
+            chooseLabel="İdxal"
             [auto]="true"
             accept=".csv"
             [maxFileSize]="1000000"
@@ -27,7 +25,7 @@
           <button
             pButton
             icon="pi pi-trash"
-            label="Delete"
+            label="Sil"
             class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow disabled:opacity-60 disabled:cursor-not-allowed"
             (click)="deleteSelectedPatients()"
             [disabled]="!selectedPatients || !selectedPatients.length"
@@ -35,7 +33,7 @@
           <button
             pButton
             icon="pi pi-plus"
-            label="New Patient"
+            label="Yeni Xəstə"
             class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow"
             (click)="openNew()"
           ></button>
@@ -71,14 +69,14 @@
                 type="text"
                 #filter
                 (input)="dt.filterGlobal(filter.value, 'contains')"
-                placeholder="Search patients..."
+                placeholder="Xəstələri axtar..."
                 class="w-full p-3"
               />
             </span>
             <div class="flex gap-3">
               <button
                 pButton
-                label="Clear"
+                label="Təmizlə"
                 class="px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg transition-all duration-200 flex items-center gap-2"
                 icon="pi pi-filter-slash"
                 (click)="clear(dt)"
@@ -89,7 +87,7 @@
                 icon="pi pi-file"
                 class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center gap-2"
                 (click)="exportCSV(dt)"
-                label="Export"
+                label="İxrac"
               ></button>
             </div>
           </div>
@@ -101,21 +99,21 @@
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
             <th class="font-semibold text-gray-700" pSortableColumn="name">
-              Name <p-sortIcon field="name"></p-sortIcon>
+              Ad <p-sortIcon field="name"></p-sortIcon>
             </th>
             <th class="font-semibold text-gray-700" pSortableColumn="age">
-              Age <p-sortIcon field="age"></p-sortIcon>
+              Yaş <p-sortIcon field="age"></p-sortIcon>
             </th>
             <th class="font-semibold text-gray-700" pSortableColumn="condition">
-              Condition <p-sortIcon field="condition"></p-sortIcon>
+              Vəziyyət <p-sortIcon field="condition"></p-sortIcon>
             </th>
             <th class="font-semibold text-gray-700" pSortableColumn="date">
-              Date <p-sortIcon field="date"></p-sortIcon>
+              Tarix <p-sortIcon field="date"></p-sortIcon>
             </th>
             <th class="font-semibold text-gray-700" pSortableColumn="status">
               Status <p-sortIcon field="status"></p-sortIcon>
             </th>
-            <th class="font-semibold text-gray-700">Actions</th>
+            <th class="font-semibold text-gray-700">Əməliyyatlar</th>
           </tr>
         </ng-template>
 
@@ -147,11 +145,23 @@
                     'bg-orange-500': patient.status === 'Pending'
                   }"
                 ></span>
-                {{ patient.status }}
+                {{
+                  patient.status === "Scheduled"
+                    ? "Planlaşdırılıb"
+                    : patient.status === "Completed"
+                    ? "Tamamlanıb"
+                    : "Gözləyir"
+                }}
               </span>
             </td>
             <td>
               <div class="flex gap-2">
+                <button
+                  pButton
+                  icon="pi pi-external-link"
+                  class="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-200"
+                  (click)="viewPatientDetails(patient)"
+                ></button>
                 <button
                   pButton
                   icon="pi pi-pencil"
@@ -177,7 +187,7 @@
 <p-dialog
   [(visible)]="patientDialog"
   [style]="{ width: '500px' }"
-  header="Patient Details"
+  header="Xəstə Məlumatları"
   [modal]="true"
   styleClass="p-fluid"
   [contentStyle]="{ padding: '2rem' }"
@@ -186,7 +196,7 @@
     <div class="space-y-6">
       <div class="field">
         <label for="name" class="text-gray-700 font-medium mb-2 block"
-          >Name</label
+          >Ad</label
         >
         <input
           type="text"
@@ -201,13 +211,13 @@
         <small
           class="text-red-500 mt-1 block"
           *ngIf="submitted && !patient.name"
-          >Name is required.</small
+          >Ad tələb olunur.</small
         >
       </div>
 
       <div class="field">
         <label for="age" class="text-gray-700 font-medium mb-2 block"
-          >Age</label
+          >Yaş</label
         >
         <input
           type="number"
@@ -221,7 +231,7 @@
 
       <div class="field">
         <label for="condition" class="text-gray-700 font-medium mb-2 block"
-          >Condition</label
+          >Vəziyyət</label
         >
         <input
           type="text"
@@ -252,14 +262,14 @@
     <div class="flex justify-end gap-3">
       <button
         pButton
-        label="Cancel"
+        label="Ləğv et"
         icon="pi pi-times"
         class="px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg transition-all duration-200 flex items-center gap-2"
         (click)="hideDialog()"
       ></button>
       <button
         pButton
-        label="Save"
+        label="Yadda saxla"
         icon="pi pi-check"
         class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center gap-2"
         (click)="savePatient()"
