@@ -36,6 +36,13 @@ export const routes: Routes = [
             (m) => m.CabinetComponent
           ),
       },
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('./pages/admin/settings/settings.component').then(
+            (m) => m.SettingsComponent
+          ),
+      },
       { path: '', redirectTo: 'patients', pathMatch: 'full' },
     ],
   },
