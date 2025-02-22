@@ -1,0 +1,125 @@
+<div class="min-h-screen bg-gray-50 pb-20 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6 py-8">
+    <!-- Profile Section -->
+    <div
+      class="bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl shadow-lg p-8"
+    >
+      <div class="flex flex-col md:flex-row gap-8 items-start">
+        <!-- Profile Image -->
+        <div class="flex-shrink-0">
+          <div
+            class="w-32 h-32 rounded-full bg-white shadow-lg flex items-center justify-center"
+          >
+            <i class="pi pi-user text-6xl text-blue-400"></i>
+          </div>
+        </div>
+
+        <!-- Profile Info -->
+        <div class="flex-grow text-white">
+          <h1 class="text-3xl font-bold">{{ doctorInfo.name }}</h1>
+          <p class="text-blue-50 mt-2">{{ doctorInfo.specialty }}</p>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+            <div>
+              <p class="text-blue-100">Experience</p>
+              <p class="text-white font-medium">{{ doctorInfo.experience }}</p>
+            </div>
+            <div>
+              <p class="text-blue-100">Schedule</p>
+              <p class="text-white font-medium">{{ doctorInfo.schedule }}</p>
+            </div>
+            <div>
+              <p class="text-blue-100">Email</p>
+              <p class="text-white font-medium">{{ doctorInfo.email }}</p>
+            </div>
+            <div>
+              <p class="text-blue-100">Phone</p>
+              <p class="text-white font-medium">{{ doctorInfo.phone }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upcoming Appointments -->
+    <div class="bg-white rounded-2xl shadow-lg p-6">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">
+        Upcoming Appointments
+      </h2>
+
+      <p-table
+        [value]="upcomingAppointments"
+        [loading]="loading"
+        [rows]="10"
+        [paginator]="true"
+        styleClass="p-datatable-gridlines"
+      >
+        <ng-template pTemplate="header">
+          <tr class="bg-gray-50">
+            <th class="font-semibold text-gray-700">Patient Name</th>
+            <th class="font-semibold text-gray-700">Date</th>
+            <th class="font-semibold text-gray-700">Time</th>
+            <th class="font-semibold text-gray-700">Type</th>
+            <th class="font-semibold text-gray-700">Status</th>
+            <th class="font-semibold text-gray-700">Actions</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-appointment>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="font-medium text-gray-900">
+              {{ appointment.patientName }}
+            </td>
+            <td class="text-gray-600">
+              {{ appointment.date | date : "mediumDate" }}
+            </td>
+            <td class="text-gray-600">{{ appointment.time }}</td>
+            <td class="text-gray-600">{{ appointment.type }}</td>
+            <td>
+              <span
+                [ngClass]="{
+                  'px-3 py-1.5 rounded-full text-sm font-medium inline-flex items-center': true,
+                  'bg-green-50 text-green-700':
+                    appointment.status === 'Confirmed',
+                  'bg-orange-50 text-orange-700':
+                    appointment.status === 'Pending',
+                  'bg-red-50 text-red-700': appointment.status === 'Cancelled'
+                }"
+              >
+                <span
+                  class="w-1.5 h-1.5 rounded-full mr-2"
+                  [ngClass]="{
+                    'bg-green-500': appointment.status === 'Confirmed',
+                    'bg-orange-500': appointment.status === 'Pending',
+                    'bg-red-500': appointment.status === 'Cancelled'
+                  }"
+                ></span>
+                {{ appointment.status }}
+              </span>
+            </td>
+            <td>
+              <div class="flex gap-2">
+                <button
+                  pButton
+                  icon="pi pi-check"
+                  class="p-2 text-green-600 hover:bg-green-50 rounded-full transition-all duration-200"
+                  (click)="updateStatus(appointment, 'Confirmed')"
+                  [disabled]="appointment.status === 'Confirmed'"
+                ></button>
+                <button
+                  pButton
+                  icon="pi pi-times"
+                  class="p-2 text-red-600 hover:bg-red-50 rounded-full transition-all duration-200"
+                  (click)="updateStatus(appointment, 'Cancelled')"
+                  [disabled]="appointment.status === 'Cancelled'"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<p-toast></p-toast>

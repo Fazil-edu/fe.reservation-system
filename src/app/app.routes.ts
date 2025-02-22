@@ -29,7 +29,13 @@ export const routes: Routes = [
             (m) => m.PatientsComponent
           ),
       },
-      // Add other admin routes as they are created
+      {
+        path: 'cabinet',
+        loadComponent: () =>
+          import('./pages/admin/cabinet/cabinet.component').then(
+            (m) => m.CabinetComponent
+          ),
+      },
       { path: '', redirectTo: 'patients', pathMatch: 'full' },
     ],
   },
