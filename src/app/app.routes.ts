@@ -19,4 +19,18 @@ export const routes: Routes = [
     redirectTo: 'booking',
     pathMatch: 'full',
   },
+  {
+    path: 'admin',
+    children: [
+      {
+        path: 'patients',
+        loadComponent: () =>
+          import('./pages/admin/patients/patients.component').then(
+            (m) => m.PatientsComponent
+          ),
+      },
+      // Add other admin routes as they are created
+      { path: '', redirectTo: 'patients', pathMatch: 'full' },
+    ],
+  },
 ];

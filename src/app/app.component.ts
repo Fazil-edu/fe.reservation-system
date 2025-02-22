@@ -1,13 +1,26 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
+import { BottomNavComponent } from './components/bottom-nav/bottom-nav.component';
 import { ScrollTop } from 'primeng/scrolltop';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, ScrollTop],
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, BottomNavComponent, ScrollTop],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'reservation-system';
+  showBottomNav = false;
+
+  constructor(private router: Router) {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event) => {
+        if (event instanceof NavigationEnd) {
+          this.showBottomNav = event.url.includes('/admin');
+        }
+      });
+  }
 }

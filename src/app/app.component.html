@@ -1,4 +1,7 @@
-<router-outlet />
+<div class="min-h-screen bg-gray-50">
+  <router-outlet></router-outlet>
+  <app-bottom-nav *ngIf="showBottomNav"></app-bottom-nav>
+</div>
 
 <p-scrolltop
   [threshold]="100"
