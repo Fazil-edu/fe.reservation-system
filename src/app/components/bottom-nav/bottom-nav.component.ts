@@ -9,6 +9,12 @@ import { RouterModule, Router } from '@angular/router';
   templateUrl: './bottom-nav.component.html',
 })
 export class BottomNavComponent {
+  navItems = [
+    { path: '/admin/patients', icon: 'fas fa-users', label: 'Xəstələr' },
+    { path: '/admin/cabinet', icon: 'fas fa-calendar-alt', label: 'Kabinet' },
+    { path: '/admin/settings', icon: 'fas fa-cog', label: 'Tənzimləmələr' },
+  ];
+
   constructor(private router: Router) {}
 
   shouldShowNav(): boolean {

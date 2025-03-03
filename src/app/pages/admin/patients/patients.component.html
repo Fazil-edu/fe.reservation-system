@@ -12,16 +12,6 @@
           <p class="text-blue-50 mt-2">Xəstə qeydlərini idarə edin</p>
         </div>
         <div class="flex flex-wrap gap-3">
-          <p-fileUpload
-            mode="basic"
-            chooseIcon="pi pi-upload"
-            chooseLabel="İdxal"
-            [auto]="true"
-            accept=".csv"
-            [maxFileSize]="1000000"
-            styleClass="custom-upload-btn"
-            (onUpload)="importFile($event)"
-          ></p-fileUpload>
           <button
             pButton
             icon="pi pi-trash"
@@ -45,17 +35,18 @@
     <div class="bg-white rounded-2xl shadow-lg p-6">
       <p-table
         #dt
+        id="dt"
         [value]="patients"
         [columns]="cols"
         [loading]="loading"
-        [rows]="10"
+        [rows]="20"
         [paginator]="true"
-        [globalFilterFields]="['name', 'condition', 'status']"
+        [globalFilterFields]="['firstName', 'lastName', 'birthday']"
         [(selection)]="selectedPatients"
         [rowHover]="true"
-        dataKey="id"
+        dataKey="uid"
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-        [showCurrentPageReport]="true"
+        [showCurrentPageReport]="false"
         styleClass="p-datatable-gridlines"
       >
         <ng-template pTemplate="caption">
@@ -81,13 +72,14 @@
                 icon="pi pi-filter-slash"
                 (click)="clear(dt)"
               ></button>
+
               <button
                 type="button"
                 pButton
                 icon="pi pi-file"
                 class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center gap-2"
-                (click)="exportCSV(dt)"
-                label="İxrac"
+                (click)="exportPDF()"
+                label="İxrac PDF"
               ></button>
             </div>
           </div>
@@ -98,20 +90,23 @@
             <th style="width: 4rem" class="text-center">
               <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
             </th>
-            <th class="font-semibold text-gray-700" pSortableColumn="name">
-              Ad <p-sortIcon field="name"></p-sortIcon>
+            <th class="font-semibold text-gray-700" pSortableColumn="firstName">
+              Ad <p-sortIcon field="firstName"></p-sortIcon>
             </th>
-            <th class="font-semibold text-gray-700" pSortableColumn="age">
-              Yaş <p-sortIcon field="age"></p-sortIcon>
+            <th class="font-semibold text-gray-700" pSortableColumn="lastName">
+              Soyad <p-sortIcon field="lastName"></p-sortIcon>
             </th>
-            <th class="font-semibold text-gray-700" pSortableColumn="condition">
-              Vəziyyət <p-sortIcon field="condition"></p-sortIcon>
+            <th class="font-semibold text-gray-700" pSortableColumn="birthday">
+              Doğum tarixi <p-sortIcon field="birthday"></p-sortIcon>
             </th>
-            <th class="font-semibold text-gray-700" pSortableColumn="date">
-              Tarix <p-sortIcon field="date"></p-sortIcon>
+            <th class="font-semibold text-gray-700" pSortableColumn="sex">
+              Cinsiyyət <p-sortIcon field="sex"></p-sortIcon>
             </th>
-            <th class="font-semibold text-gray-700" pSortableColumn="status">
-              Status <p-sortIcon field="status"></p-sortIcon>
+            <th
+              class="font-semibold text-gray-700"
+              pSortableColumn="phoneNumber"
+            >
+              Telfon <p-sortIcon field="phoneNumber"></p-sortIcon>
             </th>
             <th class="font-semibold text-gray-700">Əməliyyatlar</th>
           </tr>
@@ -122,38 +117,13 @@
             <td class="text-center">
               <p-tableCheckbox [value]="patient"></p-tableCheckbox>
             </td>
-            <td class="font-medium text-gray-900">{{ patient.name }}</td>
-            <td class="text-gray-600">{{ patient.age }}</td>
-            <td class="text-gray-600">{{ patient.condition }}</td>
+            <td class="font-medium text-gray-900">{{ patient.firstName }}</td>
+            <td class="text-gray-600">{{ patient.lastName }}</td>
+            <td class="text-gray-600">{{ patient.birthday }}</td>
             <td class="text-gray-600">
-              {{ patient.date | date : "mediumDate" }}
+              {{ patient.sex == "male" ? "Kişi" : "Qadın" }}
             </td>
-            <td>
-              <span
-                [ngClass]="{
-                  'px-4 py-2 rounded-full text-sm font-semibold inline-flex items-center': true,
-                  'bg-blue-50 text-blue-700': patient.status === 'Scheduled',
-                  'bg-green-50 text-green-700': patient.status === 'Completed',
-                  'bg-orange-50 text-orange-700': patient.status === 'Pending'
-                }"
-              >
-                <span
-                  class="w-2 h-2 rounded-full mr-2"
-                  [ngClass]="{
-                    'bg-blue-500': patient.status === 'Scheduled',
-                    'bg-green-500': patient.status === 'Completed',
-                    'bg-orange-500': patient.status === 'Pending'
-                  }"
-                ></span>
-                {{
-                  patient.status === "Scheduled"
-                    ? "Planlaşdırılıb"
-                    : patient.status === "Completed"
-                    ? "Tamamlanıb"
-                    : "Gözləyir"
-                }}
-              </span>
-            </td>
+            <td class="text-gray-600">{{ patient.phoneNumber }}</td>
             <td>
               <div class="flex gap-2">
                 <button
@@ -195,65 +165,66 @@
   <ng-template pTemplate="content">
     <div class="space-y-6">
       <div class="field">
-        <label for="name" class="text-gray-700 font-medium mb-2 block"
+        <label for="firstName" class="text-gray-700 font-medium mb-2 block"
           >Ad</label
         >
         <input
           type="text"
           pInputText
-          id="name"
-          [(ngModel)]="patient.name"
+          id="firstName"
+          [(ngModel)]="patient.firstName"
           required
           autofocus
           class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-          [ngClass]="{ 'ng-invalid ng-dirty': submitted && !patient.name }"
+          [ngClass]="{ 'ng-invalid ng-dirty': submitted && !patient.firstName }"
         />
         <small
           class="text-red-500 mt-1 block"
-          *ngIf="submitted && !patient.name"
+          *ngIf="submitted && !patient.firstName"
           >Ad tələb olunur.</small
         >
       </div>
 
       <div class="field">
-        <label for="age" class="text-gray-700 font-medium mb-2 block"
-          >Yaş</label
-        >
-        <input
-          type="number"
-          pInputText
-          id="age"
-          [(ngModel)]="patient.age"
-          required
-          class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
-        />
-      </div>
-
-      <div class="field">
-        <label for="condition" class="text-gray-700 font-medium mb-2 block"
-          >Vəziyyət</label
+        <label for="lastName" class="text-gray-700 font-medium mb-2 block"
+          >Soyad</label
         >
         <input
           type="text"
           pInputText
-          id="condition"
-          [(ngModel)]="patient.condition"
+          id="lastName"
+          [(ngModel)]="patient.lastName"
           required
           class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
         />
       </div>
 
       <div class="field">
-        <label for="status" class="text-gray-700 font-medium mb-2 block"
-          >Status</label
+        <label for="sex" class="text-gray-700 font-medium mb-2 block"
+          >Cinsiyyət</label
         >
+
         <p-dropdown
-          [options]="['Scheduled', 'Completed', 'Pending']"
-          [(ngModel)]="patient.status"
+          [options]="['Kişi', 'Qadın']"
+          [(ngModel)]="patient.sex"
           [style]="{ width: '100%' }"
-          placeholder="Select Status"
+          placeholder="Seçin"
           class="w-full"
         ></p-dropdown>
+      </div>
+
+      <div class="field">
+        <label for="phoneNumber" class="text-gray-700 font-medium mb-2 block"
+          >Telefon</label
+        >
+        <input
+          type="text"
+          pInputText
+          id="phoneNumber"
+          [(ngModel)]="patient.phoneNumber"
+          required
+          class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+        />
       </div>
     </div>
   </ng-template>

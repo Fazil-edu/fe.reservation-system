@@ -2,38 +2,46 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
+import { CrudService } from '../../../../core/services/crud.service';
+import { finalize } from 'rxjs';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 interface Patient {
-  id: number;
-  name: string;
-  age: number;
-  condition: string;
-  date: Date;
-  status: string;
+  uid: number;
+  firstName: string;
+  lastName: string;
+  birthday?: string;
+  sex: string;
+  phoneNumber: string;
 }
 
 @Component({
   selector: 'app-patient-details',
   standalone: true,
-  imports: [CommonModule, ButtonModule],
+  imports: [CommonModule, ButtonModule, ProgressBarModule],
   templateUrl: './patient-details.component.html',
 })
 export class PatientDetailsComponent implements OnInit {
   patient?: Patient;
+  loading: boolean = false;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private crudService: CrudService
+  ) {}
 
   ngOnInit() {
-    // In a real app, you would fetch patient details using an ID from the route
-    const mockPatient: Patient = {
-      id: 1,
-      name: 'John Doe',
-      age: 35,
-      condition: 'Checkup',
-      date: new Date('2024-03-15'),
-      status: 'Scheduled',
-    };
-    this.patient = mockPatient;
+    this.loading = true;
+
+    const patientId = this.route.snapshot.paramMap.get('id');
+
+    if (patientId) {
+      this.crudService
+        .readOne('patients', patientId)
+        .pipe(finalize(() => (this.loading = false)))
+        .subscribe((data) => (this.patient = data));
+    }
   }
 
   goBack() {

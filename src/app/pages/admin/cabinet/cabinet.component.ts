@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 interface Appointment {
   id: number;
@@ -53,6 +55,14 @@ export class CabinetComponent implements OnInit {
 
   upcomingAppointments: Appointment[] = [];
   loading: boolean = true;
+
+  cols = [
+    { field: 'patientName', header: 'Name' },
+    { field: 'time', header: 'Condition' },
+    { field: 'date', header: 'Age' },
+    { field: 'type', header: 'Date' },
+    { field: 'status', header: 'Status' },
+  ];
 
   constructor(private messageService: MessageService, private router: Router) {}
 
@@ -100,5 +110,28 @@ export class CabinetComponent implements OnInit {
   logout() {
     // Add any logout logic here (clear tokens, etc.)
     this.router.navigate(['/login']);
+  }
+
+  exportPDF() {
+    const doc = new jsPDF();
+
+    // Extract table headers
+    const tableHeaders = this.cols.map((col) => col.header);
+
+    // Extract table rows
+    const tableRows = this.upcomingAppointments.map((appointment) =>
+      this.cols.map((col) => appointment[col.field as keyof Appointment])
+    );
+
+    // Generate PDF with autoTable
+    autoTable(doc, {
+      head: [tableHeaders], // Set table headers
+      body: tableRows as any[], // Set table data
+      theme: 'striped', // Optional: Adds borders
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [58, 134, 255] }, // Optional: Blue header
+    });
+
+    doc.save('patients.pdf');
   }
 }
