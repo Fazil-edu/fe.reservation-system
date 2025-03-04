@@ -1,57 +1,5 @@
 <div class="min-h-screen bg-gray-50 pb-20 px-4 sm:px-6 lg:px-8">
   <div class="max-w-7xl mx-auto space-y-6 py-8">
-    <!-- Profile Section -->
-    <div
-      class="bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl shadow-lg p-8"
-    >
-      <div class="flex flex-col md:flex-row gap-8 items-start">
-        <!-- Profile Image -->
-        <div class="flex-shrink-0">
-          <div
-            class="w-32 h-32 rounded-full bg-white shadow-lg flex items-center justify-center"
-          >
-            <i class="pi pi-user text-6xl text-blue-400"></i>
-          </div>
-        </div>
-
-        <!-- Profile Info -->
-        <div class="flex-grow text-white">
-          <div class="flex justify-between items-start">
-            <div>
-              <h1 class="text-3xl font-bold">{{ doctorInfo.name }}</h1>
-              <p class="text-blue-50 mt-2">{{ doctorInfo.specialty }}</p>
-            </div>
-            <button
-              pButton
-              icon="pi pi-sign-out"
-              label="Logout"
-              class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all duration-200 flex items-center gap-2 border border-white/20 hover:border-white/30 shadow-sm hover:shadow backdrop-blur-sm"
-              (click)="logout()"
-            ></button>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-            <div>
-              <p class="text-blue-100">Təcrübə</p>
-              <p class="text-white font-medium">{{ doctorInfo.experience }}</p>
-            </div>
-            <div>
-              <p class="text-blue-100">İş Qrafiki</p>
-              <p class="text-white font-medium">{{ doctorInfo.schedule }}</p>
-            </div>
-            <div>
-              <p class="text-blue-100">E-poçt</p>
-              <p class="text-white font-medium">{{ doctorInfo.email }}</p>
-            </div>
-            <div>
-              <p class="text-blue-100">Telefon</p>
-              <p class="text-white font-medium">{{ doctorInfo.phone }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Upcoming Appointments -->
     <div class="bg-white rounded-2xl shadow-lg p-6">
       <h2 class="text-2xl font-bold text-gray-800 mb-6">Gələcək Görüşlər</h2>
@@ -72,10 +20,13 @@
       >
         <ng-template pTemplate="header">
           <tr class="bg-gray-50">
-            <th class="font-semibold text-gray-700">Xəstənin Adı</th>
+            <th class="font-semibold text-gray-700">Sıra nömrəsi</th>
+            <th class="font-semibold text-gray-700">Saat</th>
             <th class="font-semibold text-gray-700">Tarix</th>
-            <th class="font-semibold text-gray-700">Vaxt</th>
-            <th class="font-semibold text-gray-700">Növ</th>
+            <th class="font-semibold text-gray-700">Xəstə Adı</th>
+            <th class="font-semibold text-gray-700">Soyad</th>
+            <th class="font-semibold text-gray-700">Cinsiyyət</th>
+            <th class="font-semibold text-gray-700">Telefon</th>
             <th class="font-semibold text-gray-700">Status</th>
             <th class="font-semibold text-gray-700">Əməliyyatlar</th>
           </tr>
@@ -84,13 +35,27 @@
         <ng-template pTemplate="body" let-appointment>
           <tr class="hover:bg-gray-50 transition-colors">
             <td class="font-medium text-gray-900">
-              {{ appointment.patientName }}
+              {{ appointment.order }}
             </td>
             <td class="text-gray-600">
-              {{ appointment.date | date : "mediumDate" }}
+              {{ appointment.time }}
             </td>
-            <td class="text-gray-600">{{ appointment.time }}</td>
-            <td class="text-gray-600">{{ appointment.type }}</td>
+            <td class="text-gray-600">
+              {{ appointment.date | date : "dd.MM.yyyy" }}
+            </td>
+            <td class="font-medium text-gray-900">
+              {{ appointment.firstName }}
+            </td>
+            <td class="font-medium text-gray-900">
+              {{ appointment.lastName }}
+            </td>
+            <td class="text-gray-600">
+              {{ appointment.sex == "male" ? "kişi" : "qadın" }}
+            </td>
+            <td class="text-gray-600">
+              {{ appointment.phoneNumber }}
+            </td>
+
             <td>
               <span
                 [ngClass]="{
