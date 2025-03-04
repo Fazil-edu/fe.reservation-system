@@ -14,15 +14,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { CrudService } from '../../../core/services/crud.service';
 import { finalize } from 'rxjs';
-
-interface Patient {
-  uid: number;
-  firstName: string;
-  lastName: number;
-  birthday?: string;
-  sex: Date;
-  phoneNumber: string;
-}
+import { Patient } from '../../../interfaces';
 
 @Component({
   selector: 'app-patients',

@@ -5,15 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { CrudService } from '../../../../core/services/crud.service';
 import { finalize } from 'rxjs';
 import { ProgressBarModule } from 'primeng/progressbar';
-
-interface Patient {
-  uid: number;
-  firstName: string;
-  lastName: string;
-  birthday?: string;
-  sex: string;
-  phoneNumber: string;
-}
+import { FullPatient } from '../../../../interfaces';
 
 @Component({
   selector: 'app-patient-details',
@@ -22,7 +14,7 @@ interface Patient {
   templateUrl: './patient-details.component.html',
 })
 export class PatientDetailsComponent implements OnInit {
-  patient?: Patient;
+  patient?: FullPatient;
   loading: boolean = false;
 
   constructor(
