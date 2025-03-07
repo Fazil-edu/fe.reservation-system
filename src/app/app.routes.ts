@@ -22,25 +22,25 @@ export const routes: Routes = [
   {
     path: 'admin',
     children: [
-      {
-        path: 'patients',
-        children: [
-          {
-            path: '',
-            loadComponent: () =>
-              import('./pages/admin/patients/patients.component').then(
-                (m) => m.PatientsComponent
-              ),
-          },
-          {
-            path: ':id',
-            loadComponent: () =>
-              import(
-                './pages/admin/patients/patient-details/patient-details.component'
-              ).then((m) => m.PatientDetailsComponent),
-          },
-        ],
-      },
+      // {
+      //   path: 'patients',
+      //   children: [
+      //     {
+      //       path: '',
+      //       loadComponent: () =>
+      //         import('./pages/admin/patients/patients.component').then(
+      //           (m) => m.PatientsComponent
+      //         ),
+      //     },
+      //     {
+      //       path: ':id',
+      //       loadComponent: () =>
+      //         import(
+      //           './pages/admin/patients/patient-details/patient-details.component'
+      //         ).then((m) => m.PatientDetailsComponent),
+      //     },
+      //   ],
+      // },
       {
         path: 'cabinet',
         loadComponent: () =>
@@ -48,14 +48,14 @@ export const routes: Routes = [
             (m) => m.CabinetComponent
           ),
       },
-      {
-        path: 'settings',
-        loadComponent: () =>
-          import('./pages/admin/settings/settings.component').then(
-            (m) => m.SettingsComponent
-          ),
-      },
-      { path: '', redirectTo: 'patients', pathMatch: 'full' },
+      // {
+      //   path: 'settings',
+      //   loadComponent: () =>
+      //     import('./pages/admin/settings/settings.component').then(
+      //       (m) => m.SettingsComponent
+      //     ),
+      // },
+      { path: '', redirectTo: 'cabinet', pathMatch: 'full' },
     ],
   },
   {

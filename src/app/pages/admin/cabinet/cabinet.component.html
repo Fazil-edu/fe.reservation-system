@@ -27,6 +27,7 @@
             <th class="font-semibold text-gray-700">Soyad</th>
             <th class="font-semibold text-gray-700">Cinsiyyət</th>
             <th class="font-semibold text-gray-700">Telefon</th>
+            <th class="font-semibold text-gray-700">Qeyd</th>
             <th class="font-semibold text-gray-700">Status</th>
             <th class="font-semibold text-gray-700">Əməliyyatlar</th>
           </tr>
@@ -55,24 +56,26 @@
             <td class="text-gray-600">
               {{ appointment.phoneNumber }}
             </td>
+            <td class="text-gray-600">
+              {{ appointment.comment }}
+            </td>
 
             <td>
               <span
                 [ngClass]="{
                   'px-3 py-1.5 rounded-full text-sm font-medium inline-flex items-center': true,
-                  'bg-green-50 text-green-700':
-                    appointment.status === 'Confirmed',
+                  'bg-green-50 text-green-700': appointment.status === 'Bitti',
                   'bg-orange-50 text-orange-700':
-                    appointment.status === 'Pending',
-                  'bg-red-50 text-red-700': appointment.status === 'Cancelled'
+                    appointment.status === 'Növbədədir',
+                  'bg-red-50 text-red-700': appointment.status === 'Gözləyir'
                 }"
               >
                 <span
                   class="w-1.5 h-1.5 rounded-full mr-2"
                   [ngClass]="{
-                    'bg-green-500': appointment.status === 'Confirmed',
-                    'bg-orange-500': appointment.status === 'Pending',
-                    'bg-red-500': appointment.status === 'Cancelled'
+                    'bg-green-500': appointment.status === 'Bitti',
+                    'bg-orange-500': appointment.status === 'Növbədədir',
+                    'bg-red-500': appointment.status === 'Gözləyir'
                   }"
                 ></span>
                 {{ appointment.status }}
@@ -82,17 +85,16 @@
               <div class="flex gap-2">
                 <button
                   pButton
-                  icon="pi pi-check"
+                  [icon]="
+                    appointment.status === 'Bitti'
+                      ? 'pi pi-check-circle'
+                      : appointment.status === 'Növbədədir'
+                      ? 'pi pi-pause'
+                      : 'pi pi-user-plus'
+                  "
                   class="p-2 text-green-600 hover:bg-green-50 rounded-full transition-all duration-200"
-                  (click)="updateStatus(appointment, 'Confirmed')"
-                  [disabled]="appointment.status === 'Confirmed'"
-                ></button>
-                <button
-                  pButton
-                  icon="pi pi-times"
-                  class="p-2 text-red-600 hover:bg-red-50 rounded-full transition-all duration-200"
-                  (click)="updateStatus(appointment, 'Cancelled')"
-                  [disabled]="appointment.status === 'Cancelled'"
+                  (click)="updateStatus(appointment)"
+                  [disabled]="appointment.status === 'Bitti'"
                 ></button>
               </div>
             </td>

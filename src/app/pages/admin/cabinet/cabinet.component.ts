@@ -50,7 +50,7 @@ export class CabinetComponent implements OnInit {
     { field: 'lastName', header: 'Soyad' },
     { field: 'sex', header: 'Cinsiyyet' },
     { field: 'phoneNumber', header: 'Telefon' },
-    { field: 'status', header: 'Status' },
+    { field: 'comment', header: 'Qeyd' },
   ];
 
   constructor(
@@ -60,6 +60,10 @@ export class CabinetComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loadAppointments();
+  }
+
+  private loadAppointments() {
     this.loading = true;
     this.crudService
       .readMany('appointments')
@@ -79,19 +83,31 @@ export class CabinetComponent implements OnInit {
             date: appointment.appointmentDate,
             time: appointment.timeSlot?.appointmentHour || 'N/A',
             appointmentNumber: appointment.appointmentNumber,
-            status: 'Pending', // Placeholder, should come from API
+            comment: appointment.comment || '',
+            status: !appointment.management
+              ? 'Gözləyir'
+              : appointment.management?.endDate
+              ? 'Bitti'
+              : 'Növbədədir',
           }));
       });
   }
 
-  updateStatus(appointment: Appointment, status: string) {
-    appointment.status = status;
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Uğurlu',
-      detail: `Görüş statusu ${status} olaraq dəyişdirildi`,
-      life: 3000,
-    });
+  updateStatus(appointment: Appointment) {
+    this.crudService
+      .createOne('appointments/call-patient', {
+        appointmentUid: appointment.id,
+      })
+      .subscribe((res: any) => {
+        const status = res.endDate ? 'Bitti' : 'Növbədədir';
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Uğurlu',
+          detail: `Görüş statusu "${status}" olaraq dəyişdirildi`,
+          life: 3000,
+        });
+        this.loadAppointments();
+      });
   }
 
   logout() {
