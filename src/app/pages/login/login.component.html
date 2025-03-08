@@ -1,0 +1,93 @@
+<div
+  class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8"
+>
+  <div class="w-full max-w-[440px] bg-white rounded-2xl shadow-lg p-8 md:p-12">
+    <div class="text-center mb-12">
+      <div
+        class="w-20 h-20 mx-auto mb-6 flex items-center justify-center rounded-full bg-primary-50"
+      >
+        <i class="pi pi-calendar text-5xl text-primary-500"></i>
+      </div>
+      <h1 class="text-2xl font-bold text-primary-700 mb-3">Daxil ol</h1>
+      <p class="text-gray-600 text-sm">
+        Növbə sistemini idarə etmək üçün daxil olun
+      </p>
+    </div>
+
+    <form (ngSubmit)="onSubmit()" class="space-y-6">
+      <div class="space-y-1">
+        <label for="username" class="block text-sm font-medium text-gray-700">
+          İstifadəçi adı <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
+          <i
+            class="pi pi-user absolute left-4 top-1/2 -translate-y-1/2 text-primary-500 z-10"
+          ></i>
+          <input
+            id="username"
+            type="text"
+            pInputText
+            [(ngModel)]="loginForm.username"
+            name="username"
+            class="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:border-primary-500 focus:ring focus:ring-primary-100 transition-all"
+            placeholder="İstifadəçi adınızı daxil edin"
+            [disabled]="isLoading"
+            required
+            #username="ngModel"
+          />
+        </div>
+        <small
+          class="text-red-500 text-xs"
+          *ngIf="username.invalid && username.touched"
+        >
+          İstifadəçi adı tələb olunur
+        </small>
+      </div>
+
+      <div class="space-y-1">
+        <label for="password" class="block text-sm font-medium text-gray-700">
+          Şifrə <span class="text-red-500">*</span>
+        </label>
+        <div class="relative">
+          <i
+            class="pi pi-lock absolute left-4 top-1/2 -translate-y-1/2 text-primary-500 z-10"
+          ></i>
+          <p-password
+            id="password"
+            [(ngModel)]="loginForm.password"
+            name="password"
+            [toggleMask]="true"
+            [feedback]="false"
+            styleClass="w-full custom-password"
+            [inputStyle]="{
+              padding: '0.75rem 3rem',
+              width: '100%',
+              'border-radius': '0.5rem'
+            }"
+            placeholder="Şifrənizi daxil edin"
+            [disabled]="isLoading"
+            required
+            #password="ngModel"
+          ></p-password>
+        </div>
+        <small
+          class="text-red-500 text-xs"
+          *ngIf="password.invalid && password.touched"
+        >
+          Şifrə tələb olunur
+        </small>
+      </div>
+
+      <button
+        pButton
+        type="submit"
+        label="Daxil ol"
+        class="w-full py-4 px-6 text-lg font-semibold rounded-lg bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-600 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+        [loading]="isLoading"
+        [disabled]="username.invalid || password.invalid"
+      ></button>
+    </form>
+  </div>
+</div>
+
+<p-toast position="top-center"></p-toast>

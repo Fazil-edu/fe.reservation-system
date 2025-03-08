@@ -1,0 +1,252 @@
+<div class="min-h-screen bg-gray-50 pb-20 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6 py-8">
+    <!-- Header with gradient background -->
+    <div
+      class="bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl shadow-lg p-8"
+    >
+      <div
+        class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+      >
+        <div class="text-white">
+          <h1 class="text-3xl font-bold">Xəstələr</h1>
+          <p class="text-blue-50 mt-2">Xəstə qeydlərini idarə edin</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+          <button
+            pButton
+            icon="pi pi-trash"
+            label="Sil"
+            class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow disabled:opacity-60 disabled:cursor-not-allowed"
+            (click)="deleteSelectedPatients()"
+            [disabled]="!selectedPatients || !selectedPatients.length"
+          ></button>
+          <button
+            pButton
+            icon="pi pi-plus"
+            label="Yeni Xəstə"
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow"
+            (click)="openNew()"
+          ></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Container -->
+    <div class="bg-white rounded-2xl shadow-lg p-6">
+      <p-table
+        #dt
+        id="dt"
+        [value]="patients"
+        [columns]="cols"
+        [loading]="loading"
+        [rows]="20"
+        [paginator]="true"
+        [globalFilterFields]="['firstName', 'lastName', 'birthday']"
+        [(selection)]="selectedPatients"
+        [rowHover]="true"
+        dataKey="uid"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="false"
+        styleClass="p-datatable-gridlines"
+      >
+        <ng-template pTemplate="caption">
+          <div
+            class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-4"
+          >
+            <span class="p-input-icon-left flex-1">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                #filter
+                (input)="dt.filterGlobal(filter.value, 'contains')"
+                placeholder="Xəstələri axtar..."
+                class="w-full p-3"
+              />
+            </span>
+            <div class="flex gap-3">
+              <button
+                pButton
+                label="Təmizlə"
+                class="px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg transition-all duration-200 flex items-center gap-2"
+                icon="pi pi-filter-slash"
+                (click)="clear(dt)"
+              ></button>
+
+              <button
+                type="button"
+                pButton
+                icon="pi pi-file"
+                class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center gap-2"
+                (click)="exportPDF()"
+                label="İxrac PDF"
+              ></button>
+            </div>
+          </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+          <tr class="bg-gray-50">
+            <th style="width: 4rem" class="text-center">
+              <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+            <th class="font-semibold text-gray-700" pSortableColumn="firstName">
+              Ad <p-sortIcon field="firstName"></p-sortIcon>
+            </th>
+            <th class="font-semibold text-gray-700" pSortableColumn="lastName">
+              Soyad <p-sortIcon field="lastName"></p-sortIcon>
+            </th>
+            <th class="font-semibold text-gray-700" pSortableColumn="birthday">
+              Doğum tarixi <p-sortIcon field="birthday"></p-sortIcon>
+            </th>
+            <th class="font-semibold text-gray-700" pSortableColumn="sex">
+              Cinsiyyət <p-sortIcon field="sex"></p-sortIcon>
+            </th>
+            <th
+              class="font-semibold text-gray-700"
+              pSortableColumn="phoneNumber"
+            >
+              Telfon <p-sortIcon field="phoneNumber"></p-sortIcon>
+            </th>
+            <th class="font-semibold text-gray-700">Əməliyyatlar</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-patient>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="text-center">
+              <p-tableCheckbox [value]="patient"></p-tableCheckbox>
+            </td>
+            <td class="font-medium text-gray-900">{{ patient.firstName }}</td>
+            <td class="text-gray-600">{{ patient.lastName }}</td>
+            <td class="text-gray-600">{{ patient.birthday }}</td>
+            <td class="text-gray-600">
+              {{ patient.sex == "male" ? "Kişi" : "Qadın" }}
+            </td>
+            <td class="text-gray-600">{{ patient.phoneNumber }}</td>
+            <td>
+              <div class="flex gap-2">
+                <button
+                  pButton
+                  icon="pi pi-external-link"
+                  class="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-200"
+                  (click)="viewPatientDetails(patient)"
+                ></button>
+                <button
+                  pButton
+                  icon="pi pi-pencil"
+                  class="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-all duration-200"
+                  (click)="editPatient(patient)"
+                ></button>
+                <button
+                  pButton
+                  icon="pi pi-trash"
+                  class="p-2 text-red-600 hover:bg-red-50 rounded-full transition-all duration-200"
+                  (click)="deletePatient(patient)"
+                ></button>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+</div>
+
+<!-- Patient Dialog -->
+<p-dialog
+  [(visible)]="patientDialog"
+  [style]="{ width: '500px' }"
+  header="Xəstə Məlumatları"
+  [modal]="true"
+  styleClass="p-fluid"
+  [contentStyle]="{ padding: '2rem' }"
+>
+  <ng-template pTemplate="content">
+    <div class="space-y-6">
+      <div class="field">
+        <label for="firstName" class="text-gray-700 font-medium mb-2 block"
+          >Ad</label
+        >
+        <input
+          type="text"
+          pInputText
+          id="firstName"
+          [(ngModel)]="patient.firstName"
+          required
+          autofocus
+          class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+          [ngClass]="{ 'ng-invalid ng-dirty': submitted && !patient.firstName }"
+        />
+        <small
+          class="text-red-500 mt-1 block"
+          *ngIf="submitted && !patient.firstName"
+          >Ad tələb olunur.</small
+        >
+      </div>
+
+      <div class="field">
+        <label for="lastName" class="text-gray-700 font-medium mb-2 block"
+          >Soyad</label
+        >
+        <input
+          type="text"
+          pInputText
+          id="lastName"
+          [(ngModel)]="patient.lastName"
+          required
+          class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+        />
+      </div>
+
+      <div class="field">
+        <label for="sex" class="text-gray-700 font-medium mb-2 block"
+          >Cinsiyyət</label
+        >
+
+        <p-dropdown
+          [options]="['Kişi', 'Qadın']"
+          [(ngModel)]="patient.sex"
+          [style]="{ width: '100%' }"
+          placeholder="Seçin"
+          class="w-full"
+        ></p-dropdown>
+      </div>
+
+      <div class="field">
+        <label for="phoneNumber" class="text-gray-700 font-medium mb-2 block"
+          >Telefon</label
+        >
+        <input
+          type="text"
+          pInputText
+          id="phoneNumber"
+          [(ngModel)]="patient.phoneNumber"
+          required
+          class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+        />
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-end gap-3">
+      <button
+        pButton
+        label="Ləğv et"
+        icon="pi pi-times"
+        class="px-4 py-2 bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 rounded-lg transition-all duration-200 flex items-center gap-2"
+        (click)="hideDialog()"
+      ></button>
+      <button
+        pButton
+        label="Yadda saxla"
+        icon="pi pi-check"
+        class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center gap-2"
+        (click)="savePatient()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-toast></p-toast>

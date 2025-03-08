@@ -1,0 +1,117 @@
+<div class="min-h-screen bg-gray-50 pb-20 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-7xl mx-auto space-y-6 py-8">
+    <!-- Header -->
+    <div
+      class="bg-gradient-to-r from-blue-600 to-blue-400 rounded-2xl shadow-lg p-8"
+    >
+      <div
+        class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+      >
+        <div class="text-white">
+          <h1 class="text-3xl font-bold">Tənzimləmələr</h1>
+          <p class="text-blue-50 mt-2">Tətbiq parametrlərini idarə edin</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Container -->
+    <div class="bg-white rounded-2xl shadow-lg p-6">
+      <div class="space-y-6">
+        <h1>comming soon</h1>
+        <!-- Notifications Section -->
+        <!-- <div class="border-b border-gray-200 pb-6">
+          <h2 class="text-xl font-semibold text-gray-800 mb-4">Bildirişlər</h2>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-gray-700 font-medium">Push Bildirişləri</h3>
+                <p class="text-gray-500 text-sm">
+                  Vacib yeniləmələr üçün push bildirişləri alın
+                </p>
+              </div>
+              <p-inputSwitch
+                [(ngModel)]="settings.notifications"
+              ></p-inputSwitch>
+            </div>
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-gray-700 font-medium">E-poçt Bildirişləri</h3>
+                <p class="text-gray-500 text-sm">
+                  Görüşlər üçün e-poçt bildirişləri alın
+                </p>
+              </div>
+              <p-inputSwitch
+                [(ngModel)]="settings.emailNotifications"
+              ></p-inputSwitch>
+            </div>
+          </div>
+        </div> -->
+
+        <!-- Appearance Section -->
+        <!-- <div class="border-b border-gray-200 pb-6">
+          <h2 class="text-xl font-semibold text-gray-800 mb-4">Görünüş</h2>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-gray-700 font-medium">Qaranlıq Rejim</h3>
+                <p class="text-gray-500 text-sm">
+                  Tətbiq üçün qaranlıq rejimi aktivləşdirin
+                </p>
+              </div>
+              <p-inputSwitch [(ngModel)]="settings.darkMode"></p-inputSwitch>
+            </div>
+          </div>
+        </div> -->
+
+        <!-- Preferences Section -->
+        <!-- <div class="border-b border-gray-200 pb-6">
+          <h2 class="text-xl font-semibold text-gray-800 mb-4">Üstünlüklər</h2>
+          <div class="space-y-4">
+            <div class="flex flex-col">
+              <label class="text-gray-700 font-medium mb-2">Dil</label>
+              <input
+                type="text"
+                pInputText
+                [(ngModel)]="settings.language"
+                class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+            <div class="flex flex-col">
+              <label class="text-gray-700 font-medium mb-2">Saat Qurşağı</label>
+              <input
+                type="text"
+                pInputText
+                [(ngModel)]="settings.timeZone"
+                class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+            <div class="flex flex-col">
+              <label class="text-gray-700 font-medium mb-2"
+                >Avtomatik Çıxış (dəqiqə)</label
+              >
+              <input
+                type="number"
+                pInputText
+                [(ngModel)]="settings.autoLogout"
+                class="w-full p-3 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+        </div> -->
+
+        <!-- Save Button -->
+        <!-- <div class="flex justify-end pt-4">
+          <button
+            pButton
+            label="Dəyişiklikləri Yadda Saxla"
+            icon="pi pi-check"
+            class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all duration-200 flex items-center gap-2 shadow-sm hover:shadow"
+            (click)="saveSettings()"
+          ></button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<p-toast></p-toast>
