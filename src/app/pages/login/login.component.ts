@@ -52,7 +52,7 @@ export class LoginComponent {
     this.isLoading = true;
     this.authService.login(this.loginForm).subscribe({
       next: () => {
-        this.router.navigate(['/booking']);
+        this.router.navigate(['/admin/cabinet']);
       },
       error: (error) => {
         this.messageService.add({
