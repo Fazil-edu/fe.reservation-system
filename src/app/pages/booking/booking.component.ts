@@ -263,7 +263,7 @@ export class BookingComponent implements OnInit, OnDestroy {
           } tarixində saat ${
             this.selectedTimeSlot?.appointmentHour || ''
           }-də təsdiqləndi. 
-          \n **Sıra nömrəniz:** ${response.appointmentNumber}`;
+          \n\n **Sıra nömrəniz:** ${response.appointmentOrder}`;
 
           this.showSuccessDialog = true;
           this.showBookingDialog = false;
