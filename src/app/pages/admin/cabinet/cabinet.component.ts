@@ -12,6 +12,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { CrudService } from '../../../core/services/crud.service';
 import { finalize } from 'rxjs';
+import { AuthService } from '../../../core/services/auth.service';
 
 interface Appointment {
   id: number;
@@ -56,7 +57,8 @@ export class CabinetComponent implements OnInit {
   constructor(
     private messageService: MessageService,
     private router: Router,
-    private crudService: CrudService
+    private crudService: CrudService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -111,6 +113,7 @@ export class CabinetComponent implements OnInit {
   }
 
   logout() {
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 

@@ -43,6 +43,7 @@ export const routes: Routes = [
       // },
       {
         path: 'cabinet',
+        canActivate: [authGuard],
         loadComponent: () =>
           import('./pages/admin/cabinet/cabinet.component').then(
             (m) => m.CabinetComponent

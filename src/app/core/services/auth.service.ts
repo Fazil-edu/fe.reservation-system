@@ -9,12 +9,7 @@ interface LoginCredentials {
 }
 
 interface AuthResponse {
-  token: string;
-  user: {
-    id: string;
-    username: string;
-    role: string;
-  };
+  authToken: string;
 }
 
 @Injectable({
@@ -34,8 +29,7 @@ export class AuthService {
       .post<AuthResponse>(`${environment.apiUrl}/auth/login`, credentials)
       .pipe(
         tap((response) => {
-          localStorage.setItem(this.TOKEN_KEY, response.token);
-          localStorage.setItem(this.USER_KEY, JSON.stringify(response.user));
+          localStorage.setItem(this.TOKEN_KEY, response.authToken);
           this.isAuthenticatedSubject.next(true);
         })
       );
@@ -43,7 +37,6 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USER_KEY);
     this.isAuthenticatedSubject.next(false);
   }
 
