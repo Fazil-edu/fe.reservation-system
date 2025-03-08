@@ -66,6 +66,9 @@ export class BookingComponent implements OnInit, OnDestroy {
   minDate: Date;
   maxDate: Date;
 
+  showSuccessDialog = false; // State for showing the success popup
+  successMessage = ''; // Stores the confirmation message
+
   currentAppointments: number = 0;
   totalAppointments: number = 0;
   completedAppointments: number = 0;
@@ -255,16 +258,14 @@ export class BookingComponent implements OnInit, OnDestroy {
       })
       .subscribe({
         next: (response: any) => {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Uğurlu!',
-            detail: `Növbəniz ${
-              this.date?.toLocaleDateString('az-AZ').split('T')[0]
-            } tarixində saat ${
-              this.selectedTimeSlot?.appointmentHour || ''
-            }-də təsdiqləndi \n Növbə nömrəniz: ${response.appointmentNumber}`,
-            life: 3000,
-          });
+          this.successMessage = `Növbəniz ${
+            this.date?.toLocaleDateString('az-AZ').split('T')[0]
+          } tarixində saat ${
+            this.selectedTimeSlot?.appointmentHour || ''
+          }-də təsdiqləndi. 
+          \n **Sıra nömrəniz:** ${response.appointmentNumber}`;
+
+          this.showSuccessDialog = true;
           this.showBookingDialog = false;
           this.closeTimeSlots();
           this.resetForm();

@@ -391,3 +391,25 @@ Fix: Refine phone number validation pattern and placeholder
 </div>
 
 <p-toast position="top-center"></p-toast>
+
+<p-dialog
+  [(visible)]="showSuccessDialog"
+  modal
+  header="Uğurlu!"
+  [closable]="false"
+>
+  <div class="p-4 text-center">
+    <i class="pi pi-check-circle text-green-500 text-4xl"></i>
+    <p class="mt-3 text-lg font-semibold">
+      {{ successMessage }}
+    </p>
+  </div>
+  <ng-template pTemplate="footer">
+    <button
+      pButton
+      label="Bağla"
+      icon="pi pi-check"
+      (click)="showSuccessDialog = false"
+    ></button>
+  </ng-template>
+</p-dialog>

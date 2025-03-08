@@ -8,9 +8,14 @@ import { providePrimeNG } from 'primeng/config';
 import { routes } from './app.routes';
 import Aura from '@primeng/themes/aura';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { provideHttpClient } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  provideHttpClient,
+  withInterceptors,
+} from '@angular/common/http';
 import { API_URL } from './tokens';
 import { environment } from '../environments/environment';
+import { authInterceptor } from './core/interceptors/http.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -31,5 +36,6 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(),
     { provide: API_URL, useValue: environment.apiUrl },
+    provideHttpClient(withInterceptors([authInterceptor])),
   ],
 };
