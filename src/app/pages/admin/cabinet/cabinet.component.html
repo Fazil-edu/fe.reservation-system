@@ -31,12 +31,13 @@
       >
         <ng-template pTemplate="header">
           <tr class="bg-gray-50">
-            <th class="font-semibold text-gray-700">Sıra nömrəsi</th>
+            <th class="font-semibold text-gray-700">Sıra</th>
             <th class="font-semibold text-gray-700">Saat</th>
             <th class="font-semibold text-gray-700">Tarix</th>
-            <th class="font-semibold text-gray-700">Xəstə Adı</th>
+            <th class="font-semibold text-gray-700">Adı</th>
             <th class="font-semibold text-gray-700">Soyad</th>
             <th class="font-semibold text-gray-700">Cinsiyyət</th>
+            <th class="font-semibold text-gray-700">Dogum tarixi</th>
             <th class="font-semibold text-gray-700">Telefon</th>
             <th class="font-semibold text-gray-700">Qeyd</th>
             <th class="font-semibold text-gray-700">Status</th>
@@ -65,6 +66,9 @@
               {{ appointment.sex == "male" ? "kişi" : "qadın" }}
             </td>
             <td class="text-gray-600">
+              {{ appointment.birthday }}
+            </td>
+            <td class="text-gray-600">
               {{ appointment.phoneNumber }}
             </td>
             <td class="text-gray-600">
@@ -76,17 +80,17 @@
                 [ngClass]="{
                   'px-3 py-1.5 rounded-full text-sm font-medium inline-flex items-center': true,
                   'bg-green-50 text-green-700': appointment.status === 'Bitti',
-                  'bg-orange-50 text-orange-700':
-                    appointment.status === 'Növbədədir',
-                  'bg-red-50 text-red-700': appointment.status === 'Gözləyir'
+                  'bg-blue-50 text-blue-700':
+                    appointment.status === 'Qəbuldadır',
+                  'bg-red-50 text-red-700': appointment.status === 'Növbədədir'
                 }"
               >
                 <span
                   class="w-1.5 h-1.5 rounded-full mr-2"
                   [ngClass]="{
                     'bg-green-500': appointment.status === 'Bitti',
-                    'bg-orange-500': appointment.status === 'Növbədədir',
-                    'bg-red-500': appointment.status === 'Gözləyir'
+                    'bg-blue-500': appointment.status === 'Qəbuldadır',
+                    'bg-red-500': appointment.status === 'Növbədədir'
                   }"
                 ></span>
                 {{ appointment.status }}
@@ -99,11 +103,16 @@
                   [icon]="
                     appointment.status === 'Bitti'
                       ? 'pi pi-check-circle'
-                      : appointment.status === 'Növbədədir'
+                      : appointment.status === 'Qəbuldadır'
                       ? 'pi pi-pause'
                       : 'pi pi-user-plus'
                   "
-                  class="p-2 text-green-600 hover:bg-green-50 rounded-full transition-all duration-200"
+                  class="p-2 rounded-full transition-all duration-200"
+                  [ngClass]="{
+                    'bg-green-500': appointment.status === 'Bitti',
+                    'bg-blue-500': appointment.status === 'Qəbuldadır',
+                    'bg-red-500': appointment.status === 'Növbədədir'
+                  }"
                   (click)="updateStatus(appointment)"
                   [disabled]="appointment.status === 'Bitti'"
                 ></button>
@@ -117,3 +126,4 @@
 </div>
 
 <p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>

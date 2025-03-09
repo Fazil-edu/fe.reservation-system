@@ -28,6 +28,7 @@ interface BookingForm {
   phoneNumber: string;
   comment: string;
   sex: string;
+  birthday: string;
   isNewPatient: boolean;
 }
 
@@ -94,6 +95,7 @@ export class BookingComponent implements OnInit, OnDestroy {
     phoneNumber: '',
     comment: '',
     sex: '',
+    birthday: '',
     isNewPatient: true,
   };
 
@@ -205,7 +207,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
     this.bookingService.getTimeSlots(formattedDate).subscribe({
       next: (slots: any) => {
-        let filteredSlots = slots.availableTimeSlots;
+        let filteredSlots = slots.availableTimeSlots || [];
 
         // Filter slots based on appointment order
         if (this.isNewPatient) {
@@ -291,6 +293,7 @@ export class BookingComponent implements OnInit, OnDestroy {
       lastName: '',
       phoneNumber: '',
       comment: '',
+      birthday: '',
       sex: '',
       isNewPatient: true,
     };

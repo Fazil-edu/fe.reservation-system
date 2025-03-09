@@ -191,6 +191,25 @@ Fix: Refine phone number validation pattern and placeholder
       </div>
 
       <div class="form-field mb-2">
+        <label for="birthday" class="mb-0.5 text-xs">Doğum tarixi *</label>
+        <input
+          id="birthday"
+          type="date"
+          pInputText
+          [(ngModel)]="bookingForm.birthday"
+          required
+          #birthday="ngModel"
+          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+        />
+        <small
+          class="text-red-500 text-xs"
+          *ngIf="birthday.invalid && (birthday.dirty || birthday.touched)"
+        >
+          Doğum tarixi daxil edilməlidir
+        </small>
+      </div>
+
+      <div class="form-field mb-2">
         <label for="phoneNumber" class="mb-0.5 text-xs">Əlaqə nömrəsi *</label>
         <div class="flex items-center">
           <span class="!p-1.5 text-sm text-gray-500 bg-gray-50">+994</span>
@@ -261,6 +280,7 @@ Fix: Refine phone number validation pattern and placeholder
           lastName.invalid ||
           phone.invalid ||
           !bookingForm.sex ||
+          birthday.invalid ||
           isSubmitting
         "
       ></p-button>
@@ -293,6 +313,7 @@ Fix: Refine phone number validation pattern and placeholder
           class="w-full"
         />
       </div>
+
       <div class="form-group mb-4">
         <label for="phoneNumber" class="block mb-1">Telefon</label>
         <div class="flex items-center">
