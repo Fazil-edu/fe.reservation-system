@@ -4,8 +4,8 @@
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",
-  "scope": "/admin",
-  "start_url": "/admin",
+  "scope": "/admin/cabinet",
+  "start_url": "/admin/cabinet",
   "icons": [
     {
       "src": "android-chrome-192x192.png",

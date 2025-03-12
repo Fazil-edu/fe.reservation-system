@@ -34,8 +34,9 @@
             <th class="font-semibold text-gray-700">Sıra</th>
             <th class="font-semibold text-gray-700">Saat</th>
             <th class="font-semibold text-gray-700">Tarix</th>
-            <th class="font-semibold text-gray-700">Adı</th>
+            <th class="font-semibold text-gray-700">Ad</th>
             <th class="font-semibold text-gray-700">Soyad</th>
+            <th class="font-semibold text-gray-700">Ata adi</th>
             <th class="font-semibold text-gray-700">Cinsiyyət</th>
             <th class="font-semibold text-gray-700">Dogum tarixi</th>
             <th class="font-semibold text-gray-700">Telefon</th>
@@ -61,6 +62,9 @@
             </td>
             <td class="font-medium text-gray-900">
               {{ appointment.lastName }}
+            </td>
+            <td class="font-medium text-gray-900">
+              {{ appointment.fatherName }}
             </td>
             <td class="text-gray-600">
               {{ appointment.sex == "male" ? "kişi" : "qadın" }}

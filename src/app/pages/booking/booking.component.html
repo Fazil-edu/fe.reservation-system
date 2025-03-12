@@ -191,6 +191,25 @@ Fix: Refine phone number validation pattern and placeholder
       </div>
 
       <div class="form-field mb-2">
+        <label for="fatherName" class="mb-0.5 text-xs">Ata adi *</label>
+        <input
+          id="fatherName"
+          type="text"
+          pInputText
+          [(ngModel)]="bookingForm.fatherName"
+          required
+          #fatherName="ngModel"
+          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+        />
+        <small
+          class="text-red-500 text-xs"
+          *ngIf="fatherName.invalid && (fatherName.dirty || fatherName.touched)"
+        >
+          Ad daxil edilməlidir
+        </small>
+      </div>
+
+      <div class="form-field mb-2">
         <label for="birthday" class="mb-0.5 text-xs">Doğum tarixi *</label>
         <input
           id="birthday"
@@ -281,6 +300,7 @@ Fix: Refine phone number validation pattern and placeholder
           phone.invalid ||
           !bookingForm.sex ||
           birthday.invalid ||
+          fatherName.invalid ||
           isSubmitting
         "
       ></p-button>
@@ -326,6 +346,7 @@ Fix: Refine phone number validation pattern and placeholder
             pattern="(?:50|51|55|70|77)[0-9]{7}"
             maxlength="9"
             placeholder="XXXXXXXXX"
+            type="tel"
           />
         </div>
       </div>

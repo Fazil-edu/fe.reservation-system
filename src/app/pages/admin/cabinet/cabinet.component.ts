@@ -52,6 +52,7 @@ export class CabinetComponent implements OnInit {
     { field: 'date', header: 'Tarix' },
     { field: 'firstName', header: 'Ad' },
     { field: 'lastName', header: 'Soyad' },
+    { field: 'fatherName', header: 'Ata adi' },
     { field: 'birthday', header: 'Dogum tarixi' },
     { field: 'sex', header: 'Cinsiyyet' },
     { field: 'phoneNumber', header: 'Telefon' },
@@ -98,6 +99,7 @@ export class CabinetComponent implements OnInit {
               date: appointment.appointmentDate,
               time: appointment.timeSlot?.appointmentHour || 'N/A',
               appointmentNumber: appointment.appointmentNumber,
+              fatherName: appointment.patient?.fatherName || 'N/A',
               comment: appointment.comment || '',
               status: !appointment.management
                 ? 'Növbədədir'
@@ -115,7 +117,10 @@ export class CabinetComponent implements OnInit {
       .sort((a, b) => a.order - b.order) // Sort in ascending order by 'order'
       .at(0)?.order; // Get the first patient's order
 
-    if (appointment.order === nextPatient) {
+    if (
+      appointment.order === nextPatient ||
+      appointment.status === 'Qəbuldadır'
+    ) {
       // If the appointment is the next in line, proceed with the API call
       this.callPatientAPI(appointment);
     } else {
@@ -169,9 +174,11 @@ export class CabinetComponent implements OnInit {
 
     const tableHeaders = this.cols.map((col) => col.header);
 
-    const tableRows = this.upcomingAppointments.map((appointment) =>
-      this.cols.map((col) => appointment[col.field as keyof Appointment])
-    );
+    const tableRows = this.upcomingAppointments
+      .map((appointment) =>
+        this.cols.map((col) => appointment[col.field as keyof Appointment])
+      )
+      .map((x) => ({ ...x, 2: x[2].split('T')[0] }));
 
     autoTable(doc, {
       head: [tableHeaders],

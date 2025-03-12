@@ -30,6 +30,7 @@ interface BookingForm {
   sex: string;
   birthday: string;
   isNewPatient: boolean;
+  fatherName: string;
 }
 
 interface SexOption {
@@ -96,6 +97,7 @@ export class BookingComponent implements OnInit, OnDestroy {
     comment: '',
     sex: '',
     birthday: '',
+    fatherName: '',
     isNewPatient: true,
   };
 
@@ -295,6 +297,7 @@ export class BookingComponent implements OnInit, OnDestroy {
       comment: '',
       birthday: '',
       sex: '',
+      fatherName: '',
       isNewPatient: true,
     };
   }
@@ -336,7 +339,7 @@ export class BookingComponent implements OnInit, OnDestroy {
           this.currentAppointmentOrder = data.currentAppointmentOrder;
         }
       },
-      error: (error) => {
+      error: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Xəta',
@@ -356,7 +359,7 @@ export class BookingComponent implements OnInit, OnDestroy {
         }
         this.isLoadingAppointments = false;
       },
-      error: (error) => {
+      error: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Xəta',
@@ -391,7 +394,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
         this.loadAppointmentCount();
       },
-      error: (error) => {
+      error: () => {
         this.messageService.add({
           severity: 'error',
           summary: 'Xəta',
