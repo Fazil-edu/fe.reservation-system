@@ -14,6 +14,7 @@ import { CrudService } from '../../../core/services/crud.service';
 import { finalize } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DatePickerModule } from 'primeng/datepicker';
 
 interface Appointment {
   order: number;
@@ -37,6 +38,7 @@ interface Appointment {
     FormsModule,
     ToastModule,
     ConfirmDialogModule,
+    DatePickerModule,
   ],
   providers: [MessageService, ConfirmationService],
   templateUrl: './cabinet.component.html',
@@ -45,6 +47,11 @@ interface Appointment {
 export class CabinetComponent implements OnInit {
   upcomingAppointments: any[] = [];
   loading: boolean = true;
+  now = new Date();
+  year = this.now.getFullYear();
+  month = String(this.now.getMonth() + 1).padStart(2, '0'); // Monate sind 0-basiert
+  day = String(this.now.getDate()).padStart(2, '0');
+  selectedDate = `${this.day}.${this.month}.${this.year}`;
 
   cols = [
     { field: 'order', header: 'Sira' },
@@ -189,5 +196,14 @@ export class CabinetComponent implements OnInit {
     });
 
     doc.save(`export_${Date.now()}.pdf`);
+  }
+
+  dateChange(event: any) {
+    const year = event.getFullYear();
+    const month = String(event.getMonth() + 1).padStart(2, '0'); // Monate sind 0-basiert
+    const day = String(event.getDate()).padStart(2, '0');
+    this.selectedDate = `${day}.${month}.${year}`;
+
+    // this.loadAppointments();
   }
 }
