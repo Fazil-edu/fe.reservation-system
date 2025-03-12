@@ -130,6 +130,8 @@ export class BookingComponent implements OnInit, OnDestroy {
   cancelForm = {
     firstName: '',
     lastName: '',
+    birthday: '',
+    fatherName: '',
     phoneNumber: '',
   };
 
@@ -252,12 +254,15 @@ export class BookingComponent implements OnInit, OnDestroy {
 
   submitBooking() {
     if (!this.selectedTimeSlot?.uid || !this.date) return;
+    const year = this.date.getFullYear();
+    const month = String(this.date.getMonth() + 1).padStart(2, '0'); // Monate sind 0-basiert
+    const day = String(this.date.getDate()).padStart(2, '0');
 
     this.isSubmitting = true;
     this.bookingService
       .createBooking({
         ...this.bookingForm,
-        appointmentDate: this.date.toLocaleDateString('az-AZ').split('T')[0],
+        appointmentDate: `${year}-${month}-${day}`,
         appointmentTimeSlotUid: this.selectedTimeSlot.uid,
       })
       .subscribe({
@@ -266,7 +271,7 @@ export class BookingComponent implements OnInit, OnDestroy {
             this.date?.toLocaleDateString('az-AZ').split('T')[0]
           } tarixində saat ${
             this.selectedTimeSlot?.appointmentHour || ''
-          }-də təsdiqləndi. 
+          }-də təsdiqləndi.
           \n\n **Sıra nömrəniz:** ${response.appointmentOrder}`;
 
           this.showSuccessDialog = true;
@@ -413,6 +418,8 @@ export class BookingComponent implements OnInit, OnDestroy {
       firstName: '',
       lastName: '',
       phoneNumber: '',
+      birthday: '',
+      fatherName: '',
     };
     this.userAppointments = [];
   }

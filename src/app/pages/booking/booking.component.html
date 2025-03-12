@@ -155,7 +155,6 @@ Fix: Refine phone number validation pattern and placeholder
       <div class="form-field mb-2">
         <label for="firstName" class="mb-0.5 text-xs">Ad *</label>
         <input
-          id="firstName"
           type="text"
           pInputText
           [(ngModel)]="bookingForm.firstName"
@@ -174,7 +173,6 @@ Fix: Refine phone number validation pattern and placeholder
       <div class="form-field mb-2">
         <label for="lastName" class="mb-0.5 text-xs">Soyad *</label>
         <input
-          id="lastName"
           type="text"
           pInputText
           [(ngModel)]="bookingForm.lastName"
@@ -193,7 +191,6 @@ Fix: Refine phone number validation pattern and placeholder
       <div class="form-field mb-2">
         <label for="fatherName" class="mb-0.5 text-xs">Ata adi *</label>
         <input
-          id="fatherName"
           type="text"
           pInputText
           [(ngModel)]="bookingForm.fatherName"
@@ -212,7 +209,6 @@ Fix: Refine phone number validation pattern and placeholder
       <div class="form-field mb-2">
         <label for="birthday" class="mb-0.5 text-xs">Doğum tarixi *</label>
         <input
-          id="birthday"
           type="date"
           pInputText
           [(ngModel)]="bookingForm.birthday"
@@ -233,7 +229,6 @@ Fix: Refine phone number validation pattern and placeholder
         <div class="flex items-center">
           <span class="!p-1.5 text-sm text-gray-500 bg-gray-50">+994</span>
           <input
-            id="phoneNumber"
             type="text"
             pInputText
             [(ngModel)]="bookingForm.phoneNumber"
@@ -257,7 +252,6 @@ Fix: Refine phone number validation pattern and placeholder
       <div class="field">
         <label for="sex" class="mb-0.5 text-xs">Cins*</label>
         <select
-          id="sex"
           [(ngModel)]="bookingForm.sex"
           required
           #sex="ngModel"
@@ -279,7 +273,6 @@ Fix: Refine phone number validation pattern and placeholder
       <div class="form-field mb-2">
         <label for="comment" class="mb-0.5 text-xs">Qeyd</label>
         <textarea
-          id="comment"
           pInputTextarea
           [(ngModel)]="bookingForm.comment"
           [rows]="2"
@@ -317,30 +310,31 @@ Fix: Refine phone number validation pattern and placeholder
     <div class="cancel-form" *ngIf="!userAppointments.length">
       <div class="form-group mb-3">
         <label for="firstName" class="block mb-1">Ad</label>
-        <input
-          pInputText
-          id="firstName"
-          [(ngModel)]="cancelForm.firstName"
-          class="w-full"
-        />
+        <input pInputText [(ngModel)]="cancelForm.firstName" class="w-full" />
       </div>
       <div class="form-group mb-3">
         <label for="lastName" class="block mb-1">Soyad</label>
+        <input pInputText [(ngModel)]="cancelForm.lastName" class="w-full" />
+      </div>
+      <div class="form-group mb-3">
+        <label for="fatherName" class="block mb-1">Ata adi</label>
+        <input pInputText [(ngModel)]="cancelForm.fatherName" class="w-full" />
+      </div>
+      <div class="form-group mb-3">
+        <label for="birthday" class="block mb-1">Dogum tarixi</label>
         <input
+          type="date"
           pInputText
-          id="lastName"
-          [(ngModel)]="cancelForm.lastName"
+          [(ngModel)]="cancelForm.birthday"
           class="w-full"
         />
       </div>
-
       <div class="form-group mb-4">
         <label for="phoneNumber" class="block mb-1">Telefon</label>
         <div class="flex items-center">
           <span class="!p-1.5 text-sm text-gray-500 bg-gray-50">+994</span>
           <input
             pInputText
-            id="phoneNumber"
             [(ngModel)]="cancelForm.phoneNumber"
             class="w-full"
             pattern="(?:50|51|55|70|77)[0-9]{7}"
@@ -350,13 +344,15 @@ Fix: Refine phone number validation pattern and placeholder
           />
         </div>
       </div>
-      <button
-        pButton
-        label="Növbələri axtar"
-        class="w-full"
-        [loading]="isLoadingAppointments"
-        (click)="submitCancellation()"
-      ></button>
+      <div class="form-group mb-3">
+        <button
+          pButton
+          label="Növbələri axtar"
+          class="w-full"
+          [loading]="isLoadingAppointments"
+          (click)="submitCancellation()"
+        ></button>
+      </div>
     </div>
 
     <div class="appointments-list p-3" *ngIf="userAppointments.length">
