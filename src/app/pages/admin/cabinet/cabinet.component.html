@@ -64,8 +64,18 @@
             <th class="font-semibold text-gray-700">Dogum tarixi</th>
             <th class="font-semibold text-gray-700">Telefon</th>
             <th class="font-semibold text-gray-700">Qeyd</th>
-            <th class="font-semibold text-gray-700">Status</th>
-            <th class="font-semibold text-gray-700">Əməliyyatlar</th>
+            <th
+              class="font-semibold text-gray-700"
+              *ngIf="today == selectedDate"
+            >
+              Status
+            </th>
+            <th
+              class="font-semibold text-gray-700"
+              *ngIf="today == selectedDate"
+            >
+              Əməliyyatlar
+            </th>
           </tr>
         </ng-template>
 
@@ -102,7 +112,7 @@
               {{ appointment.comment }}
             </td>
 
-            <td>
+            <td *ngIf="today == selectedDate">
               <span
                 [ngClass]="{
                   'px-3 py-1.5 rounded-full text-sm font-medium inline-flex items-center': true,
@@ -123,7 +133,7 @@
                 {{ appointment.status }}
               </span>
             </td>
-            <td>
+            <td *ngIf="today == selectedDate">
               <div class="flex gap-2">
                 <button
                   pButton

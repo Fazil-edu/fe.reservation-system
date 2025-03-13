@@ -51,7 +51,8 @@ export class CabinetComponent implements OnInit {
   year = this.now.getFullYear();
   month = String(this.now.getMonth() + 1).padStart(2, '0'); // Monate sind 0-basiert
   day = String(this.now.getDate()).padStart(2, '0');
-  selectedDate = `${this.day}.${this.month}.${this.year}`;
+  today = `${this.day}.${this.month}.${this.year}`;
+  selectedDate = this.today;
 
   cols = [
     { field: 'order', header: 'Sira' },
@@ -81,7 +82,7 @@ export class CabinetComponent implements OnInit {
   private loadAppointments() {
     this.loading = true;
     this.crudService
-      .readMany('appointments')
+      .readMany('appointments/by-date/' + this.selectedDate)
       .pipe(finalize(() => (this.loading = false)))
       .subscribe((data) => {
         this.upcomingAppointments = data
@@ -204,6 +205,6 @@ export class CabinetComponent implements OnInit {
     const day = String(event.getDate()).padStart(2, '0');
     this.selectedDate = `${day}.${month}.${year}`;
 
-    // this.loadAppointments();
+    this.loadAppointments();
   }
 }
