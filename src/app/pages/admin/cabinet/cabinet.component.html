@@ -38,6 +38,7 @@
         Gələcək Görüşlər - {{ selectedDate }}
       </h2>
       <button
+        *ngIf="today == selectedDate"
         type="button"
         pButton
         icon="pi pi-file"
