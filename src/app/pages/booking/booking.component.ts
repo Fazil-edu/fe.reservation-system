@@ -229,7 +229,7 @@ export class BookingComponent implements OnInit, OnDestroy {
         );
         this.isLoadingTimeSlots = false;
       },
-      error: (error) => {
+      error: () => {
         this.isLoadingTimeSlots = false;
         this.messageService.add({
           severity: 'error',
@@ -267,19 +267,29 @@ export class BookingComponent implements OnInit, OnDestroy {
       })
       .subscribe({
         next: (response: any) => {
-          this.successMessage = `Növbəniz ${
-            this.date?.toLocaleDateString('az-AZ').split('T')[0]
-          } tarixində saat ${
+          this.successMessage = `
+          <div class="border border-green-500 rounded-lg p-4 text-green-700 bg-green-100">
+            Növbəniz ${this.date
+              ?.toISOString()
+              .split('T')[0]
+              .split('-')
+              .reverse()
+              .join('.')} tarixində saat ${
             this.selectedTimeSlot?.appointmentHour || ''
           }-də təsdiqləndi.
-          \n\n **Sıra nömrəniz:** ${response.appointmentOrder}`;
+            <br /> 
+            Sıra nömrəniz: <u class="border border-green-500 rounded px-2 py-1 bg-white">${
+              response.appointmentOrder
+            }</u>
+          </div>
+        `;
 
           this.showSuccessDialog = true;
           this.showBookingDialog = false;
           this.closeTimeSlots();
           this.resetForm();
         },
-        error: (error) => {
+        error: () => {
           this.messageService.add({
             severity: 'error',
             summary: 'Xəta',
