@@ -269,14 +269,16 @@ export class BookingComponent implements OnInit, OnDestroy {
         next: (response: any) => {
           this.successMessage = `
           <div class="border border-green-500 rounded-lg p-4 text-green-700 bg-green-100">
-            Növbəniz ${this.date
+            Növbəniz <span class='border border-green-500 rounded px-2 py-1 bg-white'>${this.date
               ?.toISOString()
               .split('T')[0]
               .split('-')
               .reverse()
-              .join('.')} tarixində saat ${
+              .join(
+                '.'
+              )}</span> tarixində saat <span class='border border-green-500 rounded px-2 py-1 bg-white'>${
             this.selectedTimeSlot?.appointmentHour || ''
-          }-də təsdiqləndi.
+          }</span>-də təsdiqləndi.
             <br /> 
             Sıra nömrəniz: <u class="border border-green-500 rounded px-2 py-1 bg-white">${
               response.appointmentOrder
