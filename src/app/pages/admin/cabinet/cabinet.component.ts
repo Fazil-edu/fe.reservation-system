@@ -112,7 +112,7 @@ export class CabinetComponent implements OnInit {
               status: !appointment.management
                 ? 'Növbədədir'
                 : appointment.management?.endDate
-                ? 'Baxıldlı'
+                ? 'Baxıldı'
                 : 'Qəbuldadır',
             };
           });
@@ -161,7 +161,7 @@ export class CabinetComponent implements OnInit {
         appointmentUid: appointment.id,
       })
       .subscribe((res: any) => {
-        const status = res.endDate ? 'Baxıldl' : 'Qəbuldadır';
+        const status = res.endDate ? 'Baxıldı' : 'Qəbuldadır';
         this.messageService.add({
           severity: 'success',
           summary: 'Uğurlu',
