@@ -137,6 +137,10 @@ export class CabinetComponent implements OnInit {
         message: 'Bu görüşü çağırmaq istədiyinizə əminsinizmi?',
         header: 'Təsdiqləmə',
         icon: 'pi pi-exclamation-triangle',
+        acceptIcon: 'pi pi-check',
+        rejectIcon: 'pi pi-times',
+        acceptLabel: 'Bəli',
+        rejectLabel: 'Xeyir',
         accept: () => {
           // If user clicks "Yes", make the API call
           this.callPatientAPI(appointment);
@@ -186,7 +190,13 @@ export class CabinetComponent implements OnInit {
       .map((appointment) =>
         this.cols.map((col) => appointment[col.field as keyof Appointment])
       )
-      .map((x) => ({ ...x, 2: x[2].split('T')[0] }));
+      .map((x) => {
+        return {
+          ...x,
+          [2]: x[2] ? x[2].split('T')[0].split('-').reverse().join('.') : x[2],
+          7: x[7] === 'male' ? 'Kisi' : 'Qadin',
+        };
+      });
 
     autoTable(doc, {
       head: [tableHeaders],
