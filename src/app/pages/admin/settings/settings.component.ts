@@ -38,7 +38,7 @@ export class SettingsComponent {
     this.messageService.add({
       severity: 'success',
       summary: 'Uğurlu',
-      detail: 'Tənzimləmələr yadda saxlanıldı',
+      detail: 'Tənzimləmələr yadda saxlanıldı.',
       life: 3000,
     });
   }

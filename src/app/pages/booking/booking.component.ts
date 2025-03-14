@@ -169,7 +169,7 @@ export class BookingComponent implements OnInit, OnDestroy {
         'Cümə',
         'Şənbə',
       ],
-      dayNamesMin: ['Baz', 'B.e', 'Ç.a', 'Çər', 'C.a', 'Cüm', 'Şən'],
+      dayNamesMin: ['Baz.', 'B.e.', 'Ç.a.', 'Çər.', 'C.a.', 'Cüm.', 'Şən.'],
       monthNamesShort: this.monthNames,
       monthNames: this.monthNames,
       today: 'Bu gün',
@@ -234,7 +234,7 @@ export class BookingComponent implements OnInit, OnDestroy {
         this.messageService.add({
           severity: 'error',
           summary: 'Xəta',
-          detail: 'Vaxt slotlarını yükləmək mümkün olmadı',
+          detail: 'Vaxt slotlarını yükləmək mümkün olmadı.',
           life: 3000,
         });
       },
@@ -403,7 +403,7 @@ export class BookingComponent implements OnInit, OnDestroy {
         this.messageService.add({
           severity: 'error',
           summary: 'Xəta',
-          detail: 'Növbəni ləğv etmək mümkün olmadı',
+          detail: 'Növbəni ləğv etmək mümkün olmadı.',
           life: 3000,
         });
       },

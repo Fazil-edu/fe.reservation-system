@@ -55,14 +55,14 @@ export class CabinetComponent implements OnInit {
   selectedDate = this.today;
 
   cols = [
-    { field: 'order', header: 'Sira' },
+    { field: 'order', header: 'Sıra' },
     { field: 'time', header: 'Saat' },
     { field: 'date', header: 'Tarix' },
     { field: 'firstName', header: 'Ad' },
     { field: 'lastName', header: 'Soyad' },
-    { field: 'fatherName', header: 'Ata adi' },
-    { field: 'birthday', header: 'Dogum tarixi' },
-    { field: 'sex', header: 'Cinsiyyet' },
+    { field: 'fatherName', header: 'Ata adı' },
+    { field: 'birthday', header: 'Doğum tarixi' },
+    { field: 'sex', header: 'Cinsiyyət' },
     { field: 'phoneNumber', header: 'Telefon' },
     { field: 'comment', header: 'Qeyd' },
   ];
@@ -112,7 +112,7 @@ export class CabinetComponent implements OnInit {
               status: !appointment.management
                 ? 'Növbədədir'
                 : appointment.management?.endDate
-                ? 'Bitti'
+                ? 'Baxıldlı'
                 : 'Qəbuldadır',
             };
           });
@@ -145,8 +145,8 @@ export class CabinetComponent implements OnInit {
           // Handle rejection (optional)
           this.messageService.add({
             severity: 'info',
-            summary: 'Ləğv edildi',
-            detail: 'Əməliyyat ləğv olundu',
+            summary: 'Ləğv edildi.',
+            detail: 'Əməliyyat ləğv olundu.',
             life: 3000,
           });
         },
@@ -161,11 +161,11 @@ export class CabinetComponent implements OnInit {
         appointmentUid: appointment.id,
       })
       .subscribe((res: any) => {
-        const status = res.endDate ? 'Bitti' : 'Qəbuldadır';
+        const status = res.endDate ? 'Baxıldl' : 'Qəbuldadır';
         this.messageService.add({
           severity: 'success',
           summary: 'Uğurlu',
-          detail: `Görüş statusu "${status}" olaraq dəyişdirildi`,
+          detail: `Görüş statusu "${status}" olaraq dəyişdirildi.`,
           life: 3000,
         });
         this.loadAppointments();
