@@ -42,11 +42,12 @@ export class PatientsComponent implements OnInit {
   submitted: boolean = false;
   loading: boolean = true;
 
+  // ******* Burda ata adı əlavə etmək lazımdır !!! *******
   cols = [
     { field: 'firstName', header: 'Ad' },
     { field: 'lastName', header: 'Soyad' },
-    { field: 'birthday', header: 'Dogum Tarixi' },
-    { field: 'sex', header: 'Cinsiyyet' },
+    { field: 'birthday', header: 'Doğum Tarixi' },
+    { field: 'sex', header: 'Cinsiyyət' },
     { field: 'phoneNumber', header: 'Telefon' },
   ];
 
@@ -79,7 +80,7 @@ export class PatientsComponent implements OnInit {
     this.messageService.add({
       severity: 'success',
       summary: 'Uğurlu',
-      detail: 'Xəstələr Silindi',
+      detail: 'Xəstələr silindi.',
       life: 3000,
     });
   }
@@ -94,7 +95,7 @@ export class PatientsComponent implements OnInit {
     this.messageService.add({
       severity: 'success',
       summary: 'Uğurlu',
-      detail: 'Xəstə Silindi',
+      detail: 'Xəstə silindi.',
       life: 3000,
     });
   }
