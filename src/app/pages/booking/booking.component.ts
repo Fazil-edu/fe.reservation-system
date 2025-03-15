@@ -34,12 +34,7 @@ interface BookingForm {
   fatherName: string;
 }
 
-interface SexOption {
-  label: string;
-  value: string;
-}
-
-interface AppointmentInfo {
+export interface AppointmentInfo {
   id: string;
   appointmentDate: string;
   appointmentTimeSlot: string;
@@ -55,11 +50,11 @@ interface AppointmentInfo {
     CalendarModule,
     DropdownModule,
     ButtonModule,
-    DialogModule,
     InputTextModule,
     TextareaModule,
     ToastModule,
     PatientInfoFormComponent,
+    DialogModule,
   ],
   providers: [MessageService],
   templateUrl: './booking.component.html',
@@ -84,11 +79,7 @@ export class BookingComponent implements OnInit, OnDestroy {
   timeSlots: TimeSlot[] = [];
   isLoadingTimeSlots = false;
 
-  showBookingDialog: boolean = false;
-  sexOptions: SexOption[] = [
-    { label: 'Kişi', value: 'male' },
-    { label: 'Qadın', value: 'female' },
-  ];
+  showFormDialog: boolean = false;
 
   isSelectOpen = false;
 
@@ -251,10 +242,10 @@ export class BookingComponent implements OnInit, OnDestroy {
 
   selectTimeSlot(slot: TimeSlot) {
     this.selectedTimeSlot = slot;
-    this.showBookingDialog = true;
+    this.showFormDialog = true;
   }
 
-  submitBooking() {
+  submitPatientForm(form: any) {
     if (!this.selectedTimeSlot?.uid || !this.date) return;
     const year = this.date.getFullYear();
     const month = String(this.date.getMonth() + 1).padStart(2, '0'); // Monate sind 0-basiert
@@ -263,7 +254,7 @@ export class BookingComponent implements OnInit, OnDestroy {
     this.isSubmitting = true;
     this.bookingService
       .createBooking({
-        ...this.bookingForm,
+        ...form,
         appointmentDate: `${year}-${month}-${day}`,
         appointmentTimeSlotUid: this.selectedTimeSlot.uid,
       })
@@ -289,7 +280,7 @@ export class BookingComponent implements OnInit, OnDestroy {
         `;
 
           this.showSuccessDialog = true;
-          this.showBookingDialog = false;
+          this.showFormDialog = false;
           this.closeTimeSlots();
           this.resetForm();
         },
@@ -327,21 +318,8 @@ export class BookingComponent implements OnInit, OnDestroy {
     this.timeSlots = [];
   }
 
-  onlyNumbers(event: KeyboardEvent): boolean {
-    const charCode = event.which ? event.which : event.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      return false;
-    }
-    return true;
-  }
-
   toggleSelect() {
     this.isSelectOpen = !this.isSelectOpen;
-  }
-
-  selectSex(option: SexOption) {
-    this.bookingForm.sex = option.value;
-    this.isSelectOpen = false;
   }
 
   onPatientTypeChange() {
@@ -369,9 +347,9 @@ export class BookingComponent implements OnInit, OnDestroy {
     });
   }
 
-  submitCancellation() {
+  submitCancellation(cancelForm: any) {
     this.isLoadingAppointments = true;
-    this.bookingService.getAppointments(this.cancelForm).subscribe({
+    this.bookingService.getAppointments(cancelForm).subscribe({
       next: (response: any) => {
         if (response) {
           this.userAppointments = response;
@@ -382,7 +360,8 @@ export class BookingComponent implements OnInit, OnDestroy {
         this.messageService.add({
           severity: 'error',
           summary: 'Xəta',
-          detail: 'Növbələri yükləmək mümkün olmadı',
+          detail:
+            'Belə bir pasiyent tapılmadı. Məlumatların düzgünlüyünü zəhmət olmasa yoxlayın.',
           life: 3000,
         });
         this.isLoadingAppointments = false;
@@ -436,5 +415,14 @@ export class BookingComponent implements OnInit, OnDestroy {
       fatherName: '',
     };
     this.userAppointments = [];
+  }
+
+  closeCancelPopup(e: boolean) {
+    this.showCancelDialog = e;
+    this.resetCancelForm();
+  }
+  closeBookingPopup(e: boolean) {
+    this.showFormDialog = e;
+    this.resetForm();
   }
 }

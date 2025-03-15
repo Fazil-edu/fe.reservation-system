@@ -63,27 +63,21 @@
 
       <!-- Add this after the patient type selector and before the calendar section -->
       <!-- Conditional message for new patients -->
-      <div class="info-banner mb-6" *ngIf="isNewPatient === true">
+      <div class="info-banner mb-6">
         <div class="flex items-center gap-2 text-blue-700">
           <i class="pi pi-info-circle"></i>
           <p class="text-sm">
-            Hamilə qadınlar və əlil arabası istifadəçiləri növbəsiz qəbul edilir.<br>
-            <span class="text-red-500">Yeni pasiyentlərin 45 dəqiqə əvvəl gəlməsi xahiş olunur.</span>
+            Hamilə qadınlar və əlil arabası istifadəçiləri növbəsiz qəbul
+            edilir.<br />
+            <span class="text-red-500" *ngIf="isNewPatient === true">
+              Yeni pasiyentlərin 45 dəqiqə əvvəl gəlməsi xahiş olunur.
+            </span>
+            <span class="text-red-500" *ngIf="isNewPatient === false"
+              >Mövcud pasiyentlərin 30 dəqiqə əvvəl gəlməsi xahiş olunur.</span
+            >
           </p>
         </div>
       </div>
-
-      <!-- Conditional message for existing patients -->
-      <div class="info-banner mb-6" *ngIf="isNewPatient === false">
-        <div class="flex items-center gap-2 text-blue-700">
-          <i class="pi pi-info-circle"></i>
-          <p class="text-sm">
-            Hamilə qadınlar və əlil arabası istifadəçiləri növbəsiz qəbul edilir.<br>
-            <span class="text-red-500">Mövcud pasiyentlərin 30 dəqiqə əvvəl gəlməsi xahiş olunur.</span>
-          </p>
-        </div>
-      </div>
-
 
       <!-- Calendar Section -->
       <div class="calendar-section">
@@ -112,7 +106,9 @@
         <div class="close-button" (click)="closeTimeSlots()">
           <i class="pi pi-times"></i>
         </div>
-        <h2 class="text-lg font-semibold text-primary-500">{{ date | date: 'dd.MM.yyyy' }} üçün mümkün vaxtlar </h2>
+        <h2 class="text-lg font-semibold text-primary-500">
+          {{ date | date : "dd.MM.yyyy" }} üçün mümkün vaxtlar
+        </h2>
         <div class="handle"></div>
       </div>
       <ng-container *ngIf="!isLoadingTimeSlots; else loadingSlots">
@@ -145,99 +141,6 @@
       </ng-template>
     </div>
   </div>
-
-  <!-- Add this after the time slots bottom sheet -->
-  <p-dialog
-    [(visible)]="showBookingDialog"
-    [modal]="true"
-    header="Növbəni təsdiqlə - {{ date | date: 'dd.MM.yyyy' }} - {{ selectedTimeSlot?.appointmentHour }}"
-    [closeOnEscape]="true"
-    [dismissableMask]="true"
-    styleClass="booking-dialog"
-    [draggable]="false"
-  >
-    <div class="booking-form p-3 overflow-y-auto max-h-[60vh]">
-      <app-patient-info-form [patientForm]="bookingForm" ></app-patient-info-form>
-    </div>
-
-    <div class="flex justify-end gap-4 px-4 pb-4">
-      <p-button
-        label="Təsdiqlə"
-        styleClass="!bg-green-700 hover:!bg-green-800 !border-green-700 hover:!border-green-800 !text-white !px-6 !py-2 !rounded-lg"
-        (click)="submitBooking()"
-        [loading]="isSubmitting"
-        [disabled]="
-          firstName.invalid ||
-          lastName.invalid ||
-          phone.invalid ||
-          !bookingForm.sex ||
-          birthday.invalid ||
-          fatherName.invalid ||
-          isSubmitting
-        "
-      ></p-button>
-    </div>
-  </p-dialog>
-
-  <!-- Add this at the bottom of the page, next to the other dialog -->
-  <p-dialog
-    [(visible)]="showCancelDialog"
-    [style]="{ width: '450px' }"
-    header="Növbəni ləğv et"
-    [modal]="true"
-  >
-    <div class="cancel-form" *ngIf="!userAppointments.length">
-      <app-patient-info-form [patientForm]="cancelForm" ></app-patient-info-form>
-      <div class="form-group mb-3">
-        <button
-          pButton
-          label="Növbələri axtar"
-          class="w-full"
-          [loading]="isLoadingAppointments"
-          (click)="submitCancellation()"
-        ></button>
-      </div>
-    </div>
-
-    <div class="appointments-list p-3" *ngIf="userAppointments.length">
-      <div class="mb-4">
-        <h3 class="text-lg font-semibold mb-2">Tapılan növbələr:</h3>
-        <p class="text-sm text-gray-600">
-          {{ cancelForm.firstName }} {{ cancelForm.lastName }} adına olan
-          növbələr
-        </p>
-      </div>
-      <div class="flex flex-col gap-3">
-        <div
-          class="appointment-item flex justify-between items-center p-3 border rounded-lg"
-          *ngFor="let appointment of userAppointments"
-        >
-          <div class="appointment-info">
-            <div class="font-medium">{{ appointment.patientName }}</div>
-            <div class="text-sm text-gray-600">
-              {{ appointment.appointmentDate | date : "dd.MM.yyyy" }} -
-              {{ appointment.appointmentTimeSlot }}
-            </div>
-          </div>
-          <button
-            pButton
-            icon="pi pi-trash"
-            class="p-button-danger p-button-rounded"
-            [loading]="isCancelling"
-            (click)="cancelAppointment(appointment.id)"
-          ></button>
-        </div>
-      </div>
-      <div class="mt-4 flex justify-end">
-        <button
-          pButton
-          label="Yeni axtarış"
-          class="p-button-outlined"
-          (click)="resetCancelForm()"
-        ></button>
-      </div>
-    </div>
-  </p-dialog>
 
   <!-- Add this near your other dialogs -->
   <p-dialog
@@ -292,3 +195,28 @@
     ></button>
   </ng-template>
 </p-dialog>
+
+<app-patient-info-form
+  [patientForm]="bookingForm"
+  [showDialog]="showFormDialog"
+  header="Növbəni təsdiqlə - {{ date | date : 'dd.MM.yyyy' }} - {{
+    this.selectedTimeSlot?.appointmentHour
+  }}"
+  [isSubmitting]="isSubmitting"
+  (closePopup)="closeBookingPopup($event)"
+  (submitForm)="submitPatientForm($event)"
+></app-patient-info-form>
+
+<app-patient-info-form
+  [patientForm]="cancelForm"
+  [showDialog]="showCancelDialog"
+  [isLoadingAppointments]="isLoadingAppointments"
+  [isCancelForm]="true"
+  [isCancelling]="isCancelling"
+  [userAppointments]="userAppointments"
+  header="Növbəni ləğv et"
+  (closePopup)="closeCancelPopup($event)"
+  (submitForm)="submitCancellation($event)"
+  (resetCancelForm)="resetCancelForm()"
+  (onCancelAppointment)="cancelAppointment($event)"
+></app-patient-info-form>
