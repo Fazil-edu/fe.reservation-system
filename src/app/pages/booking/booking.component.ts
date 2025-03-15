@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { PrimeNG } from 'primeng/config';
 import { BookingService } from '../../core/services/booking.service';
+import { PatientInfoFormComponent } from '../../components/patient-info-form/patient-info-form.component';
 
 interface TimeSlot {
   appointmentHour: string;
@@ -58,6 +59,7 @@ interface AppointmentInfo {
     InputTextModule,
     TextareaModule,
     ToastModule,
+    PatientInfoFormComponent,
   ],
   providers: [MessageService],
   templateUrl: './booking.component.html',

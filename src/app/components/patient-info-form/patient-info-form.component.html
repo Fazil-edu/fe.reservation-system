@@ -1,0 +1,129 @@
+<div class="patient-info-form">
+  <div class="form-field mb-2">
+    <label for="firstName" class="mb-0.5 text-xs">Ad *</label>
+    <input
+      type="text"
+      pInputText
+      [(ngModel)]="patientForm.firstName"
+      required
+      #firstName="ngModel"
+      class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+    />
+    <small
+      class="text-red-500 text-xs"
+      *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+    >
+      Ad daxil edilməlidir.
+    </small>
+  </div>
+
+  <div class="form-field mb-2">
+    <label for="lastName" class="mb-0.5 text-xs">Soyad *</label>
+    <input
+      type="text"
+      pInputText
+      [(ngModel)]="patientForm.lastName"
+      required
+      #lastName="ngModel"
+      class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+    />
+    <small
+      class="text-red-500 text-xs"
+      *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
+    >
+      Soyad daxil edilməlidir.
+    </small>
+  </div>
+
+  <div class="form-field mb-2">
+    <label for="fatherName" class="mb-0.5 text-xs">Ata adı *</label>
+    <input
+      type="text"
+      pInputText
+      [(ngModel)]="patientForm.fatherName"
+      required
+      #fatherName="ngModel"
+      class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+    />
+    <small
+      class="text-red-500 text-xs"
+      *ngIf="fatherName.invalid && (fatherName.dirty || fatherName.touched)"
+    >
+      Ata adı daxil edilməlidir.
+    </small>
+  </div>
+
+  <div class="form-field mb-2">
+    <label for="birthday" class="mb-0.5 text-xs">Doğum tarixi *</label>
+    <input
+      pInputText
+      type="date"
+      pInputText
+      [(ngModel)]="patientForm.birthday"
+      required
+      #birthday="ngModel"
+      class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+    />
+    <small
+      class="text-red-500 text-xs"
+      *ngIf="birthday.invalid && (birthday.dirty || birthday.touched)"
+    >
+      Doğum tarixi daxil edilməlidir.
+    </small>
+  </div>
+
+  <div class="form-field mb-2">
+    <label for="phoneNumber" class="mb-0.5 text-xs">Əlaqə nömrəsi *</label>
+    <div class="flex items-center">
+      <span class="!p-1.5 text-sm text-gray-500 bg-gray-50">+994</span>
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="patientForm.phoneNumber"
+        required
+        #phone="ngModel"
+        class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+        pattern="(?:50|51|55|70|77)[0-9]{7}"
+        maxlength="9"
+        (keypress)="onlyNumbers($event)"
+        placeholder="XX XXX XX XX"
+      />
+    </div>
+    <small
+      class="text-red-500 text-xs"
+      *ngIf="phone.invalid && (phone.dirty || phone.touched)"
+    >
+      Əlaqə nömrəsi daxil edilməlidir.
+    </small>
+  </div>
+
+  <div class="form-field mb-2">
+    <label for="sex" class="mb-0.5 text-xs">Cinsiyyət*</label>
+    <select
+      [(ngModel)]="patientForm.sex"
+      required
+      #sex="ngModel"
+      class="w-full p-2 border border-gray-300 rounded-md focus:border-primary-500 focus:ring-2 focus:ring-primary-500"
+    >
+      <option value="">.-.-.-.</option>
+      <option value="male">Kişi</option>
+      <option value="female">Qadın</option>
+    </select>
+    <small
+      class="text-red-500 text-xs"
+      *ngIf="sex.invalid && (sex.dirty || sex.touched)"
+    >
+      Cins seçilməlidir.
+    </small>
+  </div>
+
+  <div class="form-field mb-2">
+    <label for="comment" class="mb-0.5 text-xs">Qeyd</label>
+    <textarea
+      pInputTextarea
+      [(ngModel)]="patientForm.comment"
+      [rows]="2"
+      class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500 resize-none"
+    ></textarea>
+  </div>
+</div>
