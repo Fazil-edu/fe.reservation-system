@@ -269,65 +269,6 @@
 }
 
 :host ::ng-deep {
-  .booking-dialog {
-    max-width: 90vw;
-    width: 500px;
-
-    .p-dialog-content {
-      min-height: 400px;
-    }
-
-    .p-dialog-header {
-      cursor: default;
-      @apply bg-primary-50 py-4 px-6 rounded-t-lg;
-
-      .p-dialog-title {
-        @apply text-xl font-semibold text-primary-700;
-      }
-    }
-
-    .p-dialog-content {
-      @apply p-0; // Remove default padding as we're handling it in the form
-    }
-
-    .form-field {
-      label {
-        @apply block text-sm font-medium text-gray-700;
-      }
-
-      input,
-      textarea {
-        @apply shadow-sm border-gray-300 focus:ring-2 focus:ring-primary-500 focus:border-primary-500;
-
-        &:hover {
-          @apply border-primary-400;
-        }
-      }
-    }
-  }
-
-  .cancel-dialog {
-    max-width: 90vw;
-    width: 500px;
-
-    .p-dialog-content {
-      min-height: 300px;
-    }
-
-    .p-dialog-header {
-      cursor: default;
-      @apply bg-primary-50 py-4 px-6 rounded-t-lg;
-
-      .p-dialog-title {
-        @apply text-xl font-semibold text-primary-700;
-      }
-    }
-
-    .p-dialog-content {
-      @apply p-0; // Remove default padding as we're handling it in the form
-    }
-  }
-
   .welcome-dialog {
     max-width: 90vw;
     width: 400px;
@@ -353,47 +294,6 @@
   @media screen and (min-width: 768px) {
     .p-calendar {
       margin-bottom: 4rem; // Increased to 4rem for desktop
-    }
-  }
-}
-
-.booking-form {
-  @apply flex flex-col gap-4;
-
-  .form-field {
-    @apply flex flex-col gap-1;
-
-    label {
-      @apply text-sm font-medium text-primary-600;
-    }
-  }
-}
-
-.cancel-form {
-  @apply flex flex-col gap-4 overflow-y-auto max-h-[60vh];
-}
-
-// Style PrimeNG input components
-:host ::ng-deep {
-  .p-inputtext {
-    @apply border-primary-200;
-
-    &:enabled:focus {
-      @apply border-primary-500 shadow-none;
-    }
-
-    &:enabled:hover {
-      @apply border-primary-400;
-    }
-  }
-
-  .p-button {
-    &.p-button-text {
-      @apply text-primary-500;
-
-      &:enabled:hover {
-        @apply bg-primary-50;
-      }
     }
   }
 }
@@ -430,12 +330,6 @@
     }
   }
 }
-
-.info-banner {
-  @apply bg-blue-50 rounded-xl p-4 shadow-sm border border-blue-100;
-  @apply animate-fadeIn;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -446,27 +340,11 @@
     transform: translateY(0);
   }
 }
-
 .animate-fadeIn {
   animation: fadeIn 0.3s ease-in-out;
 }
 
-.appointments-list {
-  .appointment-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    border-bottom: 1px solid #eee;
-
-    &:last-child {
-      border-bottom: none;
-    }
-
-    .appointment-info {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-  }
+.info-banner {
+  @apply bg-blue-50 rounded-xl p-4 shadow-sm border border-blue-100;
+  @apply animate-fadeIn;
 }

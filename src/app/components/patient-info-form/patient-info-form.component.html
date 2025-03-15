@@ -1,0 +1,225 @@
+<p-dialog
+  [(visible)]="showDialog"
+  [modal]="true"
+  [header]="header"
+  [closeOnEscape]="true"
+  [dismissableMask]="true"
+  styleClass="booking-dialog"
+  [draggable]="false"
+  (onHide)="onPopUpclose($event)"
+>
+  <div class="booking-form p-3 overflow-y-auto max-h-[60vh]">
+    <div class="patient-info-form">
+      <ng-container *ngIf="!userAppointments.length">
+        <div class="form-field mb-2">
+          <label for="firstName" class="mb-0.5 text-xs">Ad *</label>
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="patientForm.firstName"
+            required
+            #firstName="ngModel"
+            class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+          />
+          <small
+            class="text-red-500 text-xs"
+            *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+          >
+            Ad daxil edilməlidir.
+          </small>
+        </div>
+
+        <div class="form-field mb-2">
+          <label for="lastName" class="mb-0.5 text-xs">Soyad *</label>
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="patientForm.lastName"
+            required
+            #lastName="ngModel"
+            class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+          />
+          <small
+            class="text-red-500 text-xs"
+            *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
+          >
+            Soyad daxil edilməlidir.
+          </small>
+        </div>
+
+        <div class="form-field mb-2">
+          <label for="fatherName" class="mb-0.5 text-xs">Ata adı *</label>
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="patientForm.fatherName"
+            required
+            #fatherName="ngModel"
+            class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+          />
+          <small
+            class="text-red-500 text-xs"
+            *ngIf="
+              fatherName.invalid && (fatherName.dirty || fatherName.touched)
+            "
+          >
+            Ata adı daxil edilməlidir.
+          </small>
+        </div>
+
+        <div class="form-field mb-2">
+          <label for="birthday" class="mb-0.5 text-xs">Doğum tarixi *</label>
+          <input
+            pInputText
+            type="date"
+            pInputText
+            [(ngModel)]="patientForm.birthday"
+            required
+            #birthday="ngModel"
+            class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+          />
+          <small
+            class="text-red-500 text-xs"
+            *ngIf="birthday.invalid && (birthday.dirty || birthday.touched)"
+          >
+            Doğum tarixi daxil edilməlidir.
+          </small>
+        </div>
+
+        <div class="form-field mb-2">
+          <label for="phoneNumber" class="mb-0.5 text-xs"
+            >Əlaqə nömrəsi *</label
+          >
+          <div class="flex items-center">
+            <span class="!p-1.5 text-sm text-gray-500 bg-gray-50">+994</span>
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="patientForm.phoneNumber"
+              required
+              #phone="ngModel"
+              class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+              pattern="(?:50|51|55|70|77)[0-9]{7}"
+              maxlength="9"
+              (keypress)="onlyNumbers($event)"
+              placeholder="XX XXX XX XX"
+            />
+          </div>
+          <small
+            class="text-red-500 text-xs"
+            *ngIf="phone.invalid && (phone.dirty || phone.touched)"
+          >
+            Əlaqə nömrəsi daxil edilməlidir.
+          </small>
+        </div>
+
+        <div class="form-field mb-2" *ngIf="!isCancelForm">
+          <label for="sex" class="mb-0.5 text-xs">Cinsiyyət*</label>
+          <select
+            [(ngModel)]="patientForm.sex"
+            required
+            #sex="ngModel"
+            class="w-full p-2 border border-gray-300 rounded-md focus:border-primary-500 focus:ring-2 focus:ring-primary-500"
+          >
+            <option value="">.-.-.-.</option>
+            <option value="male">Kişi</option>
+            <option value="female">Qadın</option>
+          </select>
+          <small
+            class="text-red-500 text-xs"
+            *ngIf="sex.invalid && (sex.dirty || sex.touched)"
+          >
+            Cins seçilməlidir.
+          </small>
+        </div>
+
+        <div class="form-field mb-2" *ngIf="!isCancelForm">
+          <label for="comment" class="mb-0.5 text-xs">Qeyd</label>
+          <textarea
+            pInputTextarea
+            [(ngModel)]="patientForm.comment"
+            [rows]="2"
+            class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500 resize-none"
+          ></textarea>
+        </div>
+
+        <div class="flex justify-end gap-4 px-4 pb-4" *ngIf="!isCancelForm">
+          <p-button
+            label="Təsdiqlə"
+            styleClass="!bg-green-700 hover:!bg-green-800 !border-green-700 hover:!border-green-800 !text-white !px-6 !py-2 !rounded-lg"
+            (click)="submitPatientForm()"
+            [loading]="isSubmitting"
+            [disabled]="
+              firstName.invalid ||
+              lastName.invalid ||
+              phone.invalid ||
+              !patientForm.sex ||
+              birthday.invalid ||
+              fatherName.invalid ||
+              isSubmitting
+            "
+          ></p-button>
+        </div>
+
+        <div class="form-group mb-3" *ngIf="isCancelForm">
+          <p-button
+            label="Növbələri axtar"
+            styleClass="!bg-green-700 hover:!bg-green-800 !border-green-700 hover:!border-green-800 !text-white !px-6 !py-2 !rounded-lg w-full mt-5"
+            [loading]="isLoadingAppointments"
+            (click)="submitPatientForm()"
+            [disabled]="
+              firstName.invalid ||
+              lastName.invalid ||
+              phone.invalid ||
+              birthday.invalid ||
+              fatherName.invalid ||
+              isLoadingAppointments
+            "
+          ></p-button>
+        </div>
+      </ng-container>
+
+      <div
+        class="appointments-list p-3"
+        *ngIf="userAppointments.length && isCancelForm"
+      >
+        <div class="mb-4">
+          <h3 class="text-lg font-semibold mb-2">Tapılan növbələr:</h3>
+          <p class="text-sm text-gray-600">
+            {{ patientForm.firstName }} {{ patientForm.lastName }} adına olan
+            növbələr
+          </p>
+        </div>
+        <div class="flex flex-col gap-3">
+          <div
+            class="appointment-item flex justify-between items-center p-3 border rounded-lg"
+            *ngFor="let appointment of userAppointments"
+          >
+            <div class="appointment-info">
+              <div class="font-medium">{{ appointment.patientName }}</div>
+              <div class="text-sm text-gray-600">
+                {{ appointment.appointmentDate | date : "dd.MM.yyyy" }} -
+                {{ appointment.appointmentTimeSlot }}
+              </div>
+            </div>
+            <p-button
+              icon="pi pi-trash"
+              styleClass="p-button-danger p-button-rounded"
+              [loading]="isCancelling"
+              (click)="cancelAppointment(appointment.id)"
+            ></p-button>
+          </div>
+        </div>
+        <div class="mt-4">
+          <p-button
+            label="Yeni axtarış"
+            styleClass="!bg-green-700 hover:!bg-green-800 !border-green-700 hover:!border-green-800 !text-white !px-6 !py-2 !rounded-lg w-full mt-5"
+            (click)="resetForm()"
+          ></p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-confirmDialog></p-confirmDialog>

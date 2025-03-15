@@ -1,11 +1,3 @@
-<!-- 
- Issue: The connection number should be formed into regular expression for local phone provider.
-
-Fix: Refine phone number validation pattern and placeholder
-
-- Updated the regex pattern to ensure phone numbers start with a country code, followed by the correct number of digits.
-- Changed the placeholder text in the phone number input field to guide users to enter the phone number in the correct format. 
--->
 <div class="page-container">
   <!-- Main Content -->
   <div class="mobile-container">
@@ -71,27 +63,16 @@ Fix: Refine phone number validation pattern and placeholder
 
       <!-- Add this after the patient type selector and before the calendar section -->
       <!-- Conditional message for new patients -->
-      <div class="info-banner mb-6" *ngIf="isNewPatient === true">
+      <div class="info-banner mb-6">
         <div class="flex items-center gap-2 text-blue-700">
           <i class="pi pi-info-circle"></i>
           <p class="text-sm">
             Hamilə qadınlar və əlil arabası istifadəçiləri növbəsiz qəbul
             edilir.<br />
-            <span class="text-red-500"
-              >Yeni pasiyentlərin 45 dəqiqə əvvəl gəlməsi xahiş olunur.</span
-            >
-          </p>
-        </div>
-      </div>
-
-      <!-- Conditional message for existing patients -->
-      <div class="info-banner mb-6" *ngIf="isNewPatient === false">
-        <div class="flex items-center gap-2 text-blue-700">
-          <i class="pi pi-info-circle"></i>
-          <p class="text-sm">
-            Hamilə qadınlar və əlil arabası istifadəçiləri növbəsiz qəbul
-            edilir.<br />
-            <span class="text-red-500"
+            <span class="text-red-500" *ngIf="isNewPatient === true">
+              Yeni pasiyentlərin 45 dəqiqə əvvəl gəlməsi xahiş olunur.
+            </span>
+            <span class="text-red-500" *ngIf="isNewPatient === false"
               >Mövcud pasiyentlərin 30 dəqiqə əvvəl gəlməsi xahiş olunur.</span
             >
           </p>
@@ -161,263 +142,6 @@ Fix: Refine phone number validation pattern and placeholder
     </div>
   </div>
 
-  <!-- Add this after the time slots bottom sheet -->
-  <p-dialog
-    [(visible)]="showBookingDialog"
-    [modal]="true"
-    header="Növbəni təsdiqlə - {{ date | date : 'dd.MM.yyyy' }} - {{
-      selectedTimeSlot?.appointmentHour
-    }}"
-    [closeOnEscape]="true"
-    [dismissableMask]="true"
-    styleClass="booking-dialog"
-    [draggable]="false"
-  >
-    <div class="booking-form p-3 overflow-y-auto max-h-[60vh]">
-      <div class="form-field mb-2">
-        <label for="firstName" class="mb-0.5 text-xs">Ad *</label>
-        <input
-          type="text"
-          pInputText
-          [(ngModel)]="bookingForm.firstName"
-          required
-          #firstName="ngModel"
-          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
-        />
-        <small
-          class="text-red-500 text-xs"
-          *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
-        >
-          Ad daxil edilməlidir.
-        </small>
-      </div>
-
-      <div class="form-field mb-2">
-        <label for="lastName" class="mb-0.5 text-xs">Soyad *</label>
-        <input
-          type="text"
-          pInputText
-          [(ngModel)]="bookingForm.lastName"
-          required
-          #lastName="ngModel"
-          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
-        />
-        <small
-          class="text-red-500 text-xs"
-          *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)"
-        >
-          Soyad daxil edilməlidir.
-        </small>
-      </div>
-
-      <div class="form-field mb-2">
-        <label for="fatherName" class="mb-0.5 text-xs">Ata adı *</label>
-        <input
-          type="text"
-          pInputText
-          [(ngModel)]="bookingForm.fatherName"
-          required
-          #fatherName="ngModel"
-          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
-        />
-        <small
-          class="text-red-500 text-xs"
-          *ngIf="fatherName.invalid && (fatherName.dirty || fatherName.touched)"
-        >
-          Ata adı daxil edilməlidir.
-        </small>
-      </div>
-
-      <div class="form-field mb-2">
-        <label for="birthday" class="mb-0.5 text-xs">Doğum tarixi *</label>
-        <input
-          pInputText
-          type="date"
-          pInputText
-          [(ngModel)]="bookingForm.birthday"
-          required
-          #birthday="ngModel"
-          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
-        />
-        <small
-          class="text-red-500 text-xs"
-          *ngIf="birthday.invalid && (birthday.dirty || birthday.touched)"
-        >
-          Doğum tarixi daxil edilməlidir.
-        </small>
-      </div>
-
-      <div class="form-field mb-2">
-        <label for="phoneNumber" class="mb-0.5 text-xs">Əlaqə nömrəsi *</label>
-        <div class="flex items-center">
-          <span class="!p-1.5 text-sm text-gray-500 bg-gray-50">+994</span>
-          <input
-            type="text"
-            pInputText
-            [(ngModel)]="bookingForm.phoneNumber"
-            required
-            #phone="ngModel"
-            class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
-            pattern="(?:50|51|55|70|77)[0-9]{7}"
-            maxlength="9"
-            (keypress)="onlyNumbers($event)"
-            placeholder="XX XXX XX XX"
-          />
-        </div>
-        <small
-          class="text-red-500 text-xs"
-          *ngIf="phone.invalid && (phone.dirty || phone.touched)"
-        >
-          Əlaqə nömrəsi daxil edilməlidir.
-        </small>
-      </div>
-
-      <div class="form-field mb-2">
-        <label for="sex" class="mb-0.5 text-xs">Cinsiyyət*</label>
-        <select
-          [(ngModel)]="bookingForm.sex"
-          required
-          #sex="ngModel"
-          class="w-full p-2 border border-gray-300 rounded-md focus:border-primary-500 focus:ring-2 focus:ring-primary-500"
-        >
-          <option value="">.-.-.-.</option>
-          <option *ngFor="let option of sexOptions" [value]="option.value">
-            {{ option.label }}
-          </option>
-        </select>
-        <small
-          class="text-red-500 text-xs"
-          *ngIf="sex.invalid && (sex.dirty || sex.touched)"
-        >
-          Cins seçilməlidir.
-        </small>
-      </div>
-
-      <div class="form-field mb-2">
-        <label for="comment" class="mb-0.5 text-xs">Qeyd</label>
-        <textarea
-          pInputTextarea
-          [(ngModel)]="bookingForm.comment"
-          [rows]="2"
-          class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500 resize-none"
-        ></textarea>
-      </div>
-    </div>
-
-    <div class="flex justify-end gap-4 px-4 pb-4">
-      <p-button
-        label="Təsdiqlə"
-        styleClass="!bg-green-700 hover:!bg-green-800 !border-green-700 hover:!border-green-800 !text-white !px-6 !py-2 !rounded-lg"
-        (click)="submitBooking()"
-        [loading]="isSubmitting"
-        [disabled]="
-          firstName.invalid ||
-          lastName.invalid ||
-          phone.invalid ||
-          !bookingForm.sex ||
-          birthday.invalid ||
-          fatherName.invalid ||
-          isSubmitting
-        "
-      ></p-button>
-    </div>
-  </p-dialog>
-
-  <!-- Add this at the bottom of the page, next to the other dialog -->
-  <p-dialog
-    [(visible)]="showCancelDialog"
-    [style]="{ width: '450px' }"
-    header="Növbəni ləğv et"
-    [modal]="true"
-  >
-    <div class="cancel-form" *ngIf="!userAppointments.length">
-      <div class="form-group mb-3">
-        <label for="firstName" class="block mb-1">Ad</label>
-        <input pInputText [(ngModel)]="cancelForm.firstName" class="w-full" />
-      </div>
-      <div class="form-group mb-3">
-        <label for="lastName" class="block mb-1">Soyad</label>
-        <input pInputText [(ngModel)]="cancelForm.lastName" class="w-full" />
-      </div>
-      <div class="form-group mb-3">
-        <label for="fatherName" class="block mb-1">Ata adı</label>
-        <input pInputText [(ngModel)]="cancelForm.fatherName" class="w-full" />
-      </div>
-      <div class="form-group mb-3">
-        <label for="birthday" class="block mb-1">Doğum tarixi</label>
-        <input
-          type="date"
-          pInputText
-          [(ngModel)]="cancelForm.birthday"
-          class="w-full"
-        />
-      </div>
-      <div class="form-group mb-4">
-        <label for="phoneNumber" class="block mb-1">Telefon</label>
-        <div class="flex items-center">
-          <span class="!p-1.5 text-sm text-gray-500 bg-gray-50">+994</span>
-          <input
-            pInputText
-            [(ngModel)]="cancelForm.phoneNumber"
-            class="w-full"
-            pattern="(?:50|51|55|70|77)[0-9]{7}"
-            maxlength="9"
-            placeholder="XX XXX XX XX"
-            type="tel"
-          />
-        </div>
-      </div>
-      <div class="form-group mb-3">
-        <button
-          pButton
-          label="Növbələri axtar"
-          class="w-full"
-          [loading]="isLoadingAppointments"
-          (click)="submitCancellation()"
-        ></button>
-      </div>
-    </div>
-
-    <div class="appointments-list p-3" *ngIf="userAppointments.length">
-      <div class="mb-4">
-        <h3 class="text-lg font-semibold mb-2">Tapılan növbələr:</h3>
-        <p class="text-sm text-gray-600">
-          {{ cancelForm.firstName }} {{ cancelForm.lastName }} adına olan
-          növbələr
-        </p>
-      </div>
-      <div class="flex flex-col gap-3">
-        <div
-          class="appointment-item flex justify-between items-center p-3 border rounded-lg"
-          *ngFor="let appointment of userAppointments"
-        >
-          <div class="appointment-info">
-            <div class="font-medium">{{ appointment.patientName }}</div>
-            <div class="text-sm text-gray-600">
-              {{ appointment.appointmentDate | date : "dd.MM.yyyy" }} -
-              {{ appointment.appointmentTimeSlot }}
-            </div>
-          </div>
-          <button
-            pButton
-            icon="pi pi-trash"
-            class="p-button-danger p-button-rounded"
-            [loading]="isCancelling"
-            (click)="cancelAppointment(appointment.id)"
-          ></button>
-        </div>
-      </div>
-      <div class="mt-4 flex justify-end">
-        <button
-          pButton
-          label="Yeni axtarış"
-          class="p-button-outlined"
-          (click)="resetCancelForm()"
-        ></button>
-      </div>
-    </div>
-  </p-dialog>
-
   <!-- Add this near your other dialogs -->
   <p-dialog
     [(visible)]="showWelcomeDialog"
@@ -471,3 +195,28 @@ Fix: Refine phone number validation pattern and placeholder
     ></button>
   </ng-template>
 </p-dialog>
+
+<app-patient-info-form
+  [patientForm]="bookingForm"
+  [showDialog]="showFormDialog"
+  header="Növbəni təsdiqlə - {{ date | date : 'dd.MM.yyyy' }} - {{
+    this.selectedTimeSlot?.appointmentHour
+  }}"
+  [isSubmitting]="isSubmitting"
+  (closePopup)="closeBookingPopup($event)"
+  (submitForm)="submitPatientForm($event)"
+></app-patient-info-form>
+
+<app-patient-info-form
+  [patientForm]="cancelForm"
+  [showDialog]="showCancelDialog"
+  [isLoadingAppointments]="isLoadingAppointments"
+  [isCancelForm]="true"
+  [isCancelling]="isCancelling"
+  [userAppointments]="userAppointments"
+  header="Növbəni ləğv et"
+  (closePopup)="closeCancelPopup($event)"
+  (submitForm)="submitCancellation($event)"
+  (resetCancelForm)="resetCancelForm()"
+  (onCancelAppointment)="cancelAppointment($event)"
+></app-patient-info-form>
