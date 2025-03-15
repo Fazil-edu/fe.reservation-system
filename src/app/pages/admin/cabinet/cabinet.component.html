@@ -58,7 +58,6 @@
             <th class="font-semibold text-gray-700">Sıra</th>
             <th class="font-semibold text-gray-700">Saat</th>
             <th class="font-semibold text-gray-700">Tarix</th>
-            <th class="font-semibold text-gray-700">Yeni pasiyent</th>
             <th class="font-semibold text-gray-700">Ad</th>
             <th class="font-semibold text-gray-700">Soyad</th>
             <th class="font-semibold text-gray-700">Ata adı</th>
@@ -91,9 +90,6 @@
             </td>
             <td class="text-gray-600">
               {{ appointment.date | date : "dd.MM.yyyy" }}
-            </td>
-            <td class="text-gray-600">
-              {{ appointment.isNewPatient ? "Yeni" : "Mövcud" }}
             </td>
             <td class="font-medium text-gray-900">
               {{ appointment.firstName }}
