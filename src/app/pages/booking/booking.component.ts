@@ -264,14 +264,14 @@ export class BookingComponent implements OnInit, OnDestroy {
         ...this.bookingForm,
         appointmentDate: `${year}-${month}-${day}`,
         appointmentTimeSlotUid: this.selectedTimeSlot.uid,
+        isNewPatient: this.isNewPatient,
       })
       .subscribe({
         next: (response: any) => {
           this.successMessage = `
           <div class="border border-green-500 rounded-lg p-4 text-green-700 bg-green-100">
-            Növbəniz <span class='border border-green-500 rounded px-2 py-1 bg-white'>${this.date
-              ?.toISOString()
-              .split('T')[0]
+            Növbəniz <span class='border border-green-500 rounded px-2 py-1 bg-white'>${response.appointmentDate
+              ?.split('T')[0]
               .split('-')
               .reverse()
               .join(
