@@ -22,6 +22,7 @@ export class BookingService {
     phoneNumber: string;
     sex: string;
     appointmentTimeSlotUid: string;
+    isNewPatient: boolean;
   }) {
     return this.crud.createOne('appointments/create', data);
   }
