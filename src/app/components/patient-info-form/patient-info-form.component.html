@@ -69,15 +69,16 @@
 
         <div class="form-field mb-2">
           <label for="birthday" class="mb-0.5 text-xs">Doğum tarixi *</label>
-          <input
-            pInputText
-            type="date"
-            pInputText
+          <p-inputmask
+            mask="99.99.9999"
+            placeholder="gün.ay.il"
+            slotChar="mm/dd/yyyy"
             [(ngModel)]="patientForm.birthday"
-            required
             #birthday="ngModel"
-            class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+            required
+            styleClass="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
           />
+
           <small
             class="text-red-500 text-xs"
             *ngIf="birthday.invalid && (birthday.dirty || birthday.touched)"
@@ -90,21 +91,19 @@
           <label for="phoneNumber" class="mb-0.5 text-xs"
             >Əlaqə nömrəsi *</label
           >
-          <div class="flex items-center">
-            <span class="!p-1.5 text-sm text-gray-500 bg-gray-50">+994</span>
-            <input
-              type="text"
-              pInputText
+          <p-inputGroup styleClass="w-full">
+            <p-inputGroupAddon>+994</p-inputGroupAddon>
+            <p-inputMask
+              mask="99 999 99 99"
               [(ngModel)]="patientForm.phoneNumber"
-              required
+              placeholder="50 555 55 55"
+              slotChar=" "
+              styleClass="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
+              [autoClear]="false"
               #phone="ngModel"
-              class="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
-              pattern="(?:50|51|55|70|77)[0-9]{7}"
-              maxlength="9"
-              (keypress)="onlyNumbers($event)"
-              placeholder="XX XXX XX XX"
+              required
             />
-          </div>
+          </p-inputGroup>
           <small
             class="text-red-500 text-xs"
             *ngIf="phone.invalid && (phone.dirty || phone.touched)"
@@ -143,10 +142,10 @@
           ></textarea>
         </div>
 
-        <div class="flex justify-end gap-4 px-4 pb-4" *ngIf="!isCancelForm">
+        <div class="px-4 pb-4" *ngIf="!isCancelForm">
           <p-button
             label="Təsdiqlə"
-            styleClass="!bg-green-700 hover:!bg-green-800 !border-green-700 hover:!border-green-800 !text-white !px-6 !py-2 !rounded-lg"
+            styleClass="!bg-green-700 hover:!bg-green-800 !border-green-700 hover:!border-green-800 !text-white !px-6 !py-2 !rounded-lg w-full mt-5"
             (click)="submitPatientForm()"
             [loading]="isSubmitting"
             [disabled]="

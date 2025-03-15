@@ -258,6 +258,9 @@ export class BookingComponent implements OnInit, OnDestroy {
         appointmentDate: `${year}-${month}-${day}`,
         appointmentTimeSlotUid: this.selectedTimeSlot.uid,
         isNewPatient: this.isNewPatient,
+        birthday: `${form.birthday.split('-')[2]}-${
+          form.birthday.split('-')[1]
+        }-${form.birthday.split('-')[0]}`,
       })
       .subscribe({
         next: (response: any) => {

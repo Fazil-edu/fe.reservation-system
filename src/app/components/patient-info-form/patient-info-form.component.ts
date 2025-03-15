@@ -6,6 +6,9 @@ import { DialogModule } from 'primeng/dialog';
 import { AppointmentInfo } from '../../pages';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { InputMaskModule } from 'primeng/inputmask';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 interface SexOption {
   label: string;
@@ -20,6 +23,9 @@ interface SexOption {
     ButtonModule,
     DialogModule,
     ConfirmDialogModule,
+    InputMaskModule,
+    InputGroupModule,
+    InputGroupAddonModule,
   ],
   templateUrl: './patient-info-form.component.html',
   styleUrls: ['./patient-info-form.component.scss'],
