@@ -1,3 +1,4 @@
+import { disabledDays } from './../../interfaces/calendar.interdace';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -12,6 +13,7 @@ import { MessageService } from 'primeng/api';
 import { PrimeNG } from 'primeng/config';
 import { BookingService } from '../../core/services/booking.service';
 import { PatientInfoFormComponent } from '../../components/patient-info-form/patient-info-form.component';
+import { calendarConfig } from '../../interfaces/calendar.interdace';
 
 interface TimeSlot {
   appointmentHour: string;
@@ -76,7 +78,7 @@ export class BookingComponent implements OnInit, OnDestroy {
   selectedTimeSlot: TimeSlot | null = null;
   timeSlots: TimeSlot[] = [];
   isLoadingTimeSlots = false;
-
+  disabledDays = disabledDays;
   showFormDialog: boolean = false;
 
   isSelectOpen = false;
@@ -93,23 +95,6 @@ export class BookingComponent implements OnInit, OnDestroy {
   };
 
   bookings: Booking[] = [];
-
-  disabledDays: number[] = []; // [0]
-
-  private monthNames = [
-    'Yanvar',
-    'Fevral',
-    'Mart',
-    'Aprel',
-    'May',
-    'İyun',
-    'İyul',
-    'Avqust',
-    'Sentyabr',
-    'Oktyabr',
-    'Noyabr',
-    'Dekabr',
-  ];
 
   isSubmitting = false;
 
@@ -149,23 +134,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadAppointmentCount();
-    this.primengConfig.setTranslation({
-      firstDayOfWeek: 1,
-      dayNames: [
-        'Bazar',
-        'Bazar ertəsi',
-        'Çərşənbə axşamı',
-        'Çərşənbə',
-        'Cümə axşamı',
-        'Cümə',
-        'Şənbə',
-      ],
-      dayNamesMin: ['Baz.', 'B.e.', 'Ç.a.', 'Çər.', 'C.a.', 'Cüm.', 'Şən.'],
-      monthNamesShort: this.monthNames,
-      monthNames: this.monthNames,
-      today: 'Bu gün',
-      clear: 'Təmizlə',
-    });
+    this.primengConfig.setTranslation(calendarConfig);
     this.updateTime();
     this.timeInterval = setInterval(() => this.updateTime(), 1000);
     this.showWelcomeDialog = true;

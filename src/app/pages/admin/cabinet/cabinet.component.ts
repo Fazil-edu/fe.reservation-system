@@ -15,6 +15,8 @@ import { finalize } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DatePickerModule } from 'primeng/datepicker';
+import { PrimeNG } from 'primeng/config';
+import { calendarConfig } from '../../../interfaces/calendar.interdace';
 
 interface Appointment {
   order: number;
@@ -72,11 +74,13 @@ export class CabinetComponent implements OnInit {
     private router: Router,
     private crudService: CrudService,
     private authService: AuthService,
-    private confimationService: ConfirmationService
+    private confimationService: ConfirmationService,
+    private primengConfig: PrimeNG
   ) {}
 
   ngOnInit() {
     this.loadAppointments();
+    this.primengConfig.setTranslation(calendarConfig);
   }
 
   private loadAppointments() {
