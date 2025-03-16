@@ -30,7 +30,7 @@
               }
             ],
             "styles": ["src/styles.scss"],
-            "scripts": [],
+            "scripts": ["core-js", "html2canvas"],
             "stylePreprocessorOptions": {
               "sass": {
                 "silenceDeprecations": [

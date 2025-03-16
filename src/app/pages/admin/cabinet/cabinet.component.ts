@@ -109,6 +109,7 @@ export class CabinetComponent implements OnInit {
               appointmentNumber: appointment.appointmentNumber,
               fatherName: appointment.patient?.fatherName || 'N/A',
               comment: appointment.comment || '',
+              isNewPatient: appointment.isNewPatient,
               status: !appointment.management
                 ? 'Növbədədir'
                 : appointment.management?.endDate
@@ -141,6 +142,10 @@ export class CabinetComponent implements OnInit {
         rejectIcon: 'pi pi-times',
         acceptLabel: 'Bəli',
         rejectLabel: 'Xeyir',
+        acceptButtonStyleClass:
+          'text-green-500 hover:text-green-600 transition-colors duration-200 drop-shadow-[0_2px_4px_rgba(52,211,153,0.3)] hover:drop-shadow-[0_2px_6px_rgba(16,185,129,0.4)]',
+        rejectButtonStyleClass:
+          'text-red-500 hover:text-red-600 transition-colors duration-200 drop-shadow-[0_2px_4px_rgba(239,68,68,0.3)] hover:drop-shadow-[0_2px_6px_rgba(220,38,38,0.4)]',
         accept: () => {
           // If user clicks "Yes", make the API call
           this.callPatientAPI(appointment);

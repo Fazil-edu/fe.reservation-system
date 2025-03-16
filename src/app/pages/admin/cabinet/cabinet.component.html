@@ -84,6 +84,7 @@
           <tr class="hover:bg-gray-50 transition-colors">
             <td class="font-medium text-gray-900">
               {{ appointment.order }}
+              {{ appointment.isNewPatient ? "Y" : "M" }}
             </td>
             <td class="text-gray-600">
               {{ appointment.time }}
@@ -117,7 +118,8 @@
               <span
                 [ngClass]="{
                   'px-3 py-1.5 rounded-full text-sm font-medium inline-flex items-center': true,
-                  'bg-green-50 text-green-700': appointment.status === 'Bitti',
+                  'bg-green-50 text-green-700':
+                    appointment.status === 'Baxıldı',
                   'bg-blue-50 text-blue-700':
                     appointment.status === 'Qəbuldadır',
                   'bg-red-50 text-red-700': appointment.status === 'Növbədədir'
@@ -126,7 +128,7 @@
                 <span
                   class="w-1.5 h-1.5 rounded-full mr-2"
                   [ngClass]="{
-                    'bg-green-500': appointment.status === 'Bitti',
+                    'bg-green-500': appointment.status === 'Baxıldı',
                     'bg-blue-500': appointment.status === 'Qəbuldadır',
                     'bg-red-500': appointment.status === 'Növbədədir'
                   }"
@@ -139,7 +141,7 @@
                 <button
                   pButton
                   [icon]="
-                    appointment.status === 'Bitti'
+                    appointment.status === 'Baxıldı'
                       ? 'pi pi-check-circle'
                       : appointment.status === 'Qəbuldadır'
                       ? 'pi pi-pause'
@@ -147,12 +149,12 @@
                   "
                   class="p-2 rounded-full transition-all duration-200"
                   [ngClass]="{
-                    'bg-green-500': appointment.status === 'Bitti',
+                    'bg-green-500': appointment.status === 'Baxıldı',
                     'bg-blue-500': appointment.status === 'Qəbuldadır',
                     'bg-red-500': appointment.status === 'Növbədədir'
                   }"
                   (click)="updateStatus(appointment)"
-                  [disabled]="appointment.status === 'Bitti'"
+                  [disabled]="appointment.status === 'Baxıldı'"
                 ></button>
               </div>
             </td>

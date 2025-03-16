@@ -73,8 +73,6 @@ export class BookingComponent implements OnInit, OnDestroy {
   completedAppointments: number = 0;
   currentAppointmentOrder: number = 0;
 
-  maxDailyAppointments: number = 8; // Maximum appointments per day
-
   selectedTimeSlot: TimeSlot | null = null;
   timeSlots: TimeSlot[] = [];
   isLoadingTimeSlots = false;
@@ -96,7 +94,7 @@ export class BookingComponent implements OnInit, OnDestroy {
 
   bookings: Booking[] = [];
 
-  disabledDays: number[] = [0];
+  disabledDays: number[] = []; // [0]
 
   private monthNames = [
     'Yanvar',
@@ -279,6 +277,10 @@ export class BookingComponent implements OnInit, OnDestroy {
             Sıra nömrəniz: <u class="border border-green-500 rounded px-2 py-1 bg-white">${
               response.appointmentOrder
             }</u>
+            <br />
+            <span class="text-red-500">Xahiş olunur
+            ${this.isNewPatient ? '45' : '30'} dəqiqə tez gəlin.
+            </span>
           </div>
         `;
 

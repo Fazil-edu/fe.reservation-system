@@ -97,7 +97,6 @@
             <p-inputMask
               mask="99 999 99 99"
               [(ngModel)]="patientForm.phoneNumber"
-              (ngModelChange)="validatePhoneNumber()"
               placeholder="XX XX XX XX"
               slotChar=" "
               styleClass="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
@@ -112,10 +111,10 @@
           >
             Əlaqə nömrəsi daxil edilməlidir.
           </small>
-          <small class="text-red-500 text-xs" *ngIf="phoneError">
+          <!-- <small class="text-red-500 text-xs" *ngIf="phoneError">
             Yanlış telefon nömrəsi formatı. İcazə verilən prefikslər:
             10,50,51,55,99,77,70,60.
-          </small>
+          </small> -->
         </div>
 
         <div class="form-field mb-2" *ngIf="!isCancelForm">
@@ -161,7 +160,6 @@
               !patientForm.sex ||
               birthday.invalid ||
               fatherName.invalid ||
-              phoneError ||
               isSubmitting
             "
           ></p-button>
