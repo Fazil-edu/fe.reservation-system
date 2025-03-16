@@ -50,6 +50,7 @@ export class PatientInfoFormComponent {
     { label: 'Kişi', value: 'male' },
     { label: 'Qadın', value: 'female' },
   ];
+  phoneError: boolean = false;
 
   constructor(private readonly confimationService: ConfirmationService) {}
 
@@ -61,6 +62,7 @@ export class PatientInfoFormComponent {
   }
 
   submitPatientForm() {
+    console.log(this.patientForm);
     this.submitForm.emit(this.patientForm);
   }
 
@@ -89,5 +91,11 @@ export class PatientInfoFormComponent {
 
   onPopUpclose(e: any) {
     this.closePopup.emit(false);
+  }
+
+  validatePhoneNumber() {
+    const regex = /^(10|50|51|55|60|70|77)\s\d{3}\s\d{2}\s\d{2}$/;
+
+    this.phoneError = !regex.test(this.patientForm.phoneNumber);
   }
 }

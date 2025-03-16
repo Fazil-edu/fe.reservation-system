@@ -6,6 +6,7 @@
   [dismissableMask]="true"
   styleClass="booking-dialog"
   [draggable]="false"
+  [resizable]="false"
   (onHide)="onPopUpclose($event)"
 >
   <div class="booking-form p-3 overflow-y-auto max-h-[60vh]">
@@ -96,6 +97,7 @@
             <p-inputMask
               mask="99 999 99 99"
               [(ngModel)]="patientForm.phoneNumber"
+              (ngModelChange)="validatePhoneNumber()"
               placeholder="XX XX XX XX"
               slotChar=" "
               styleClass="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
@@ -109,6 +111,10 @@
             *ngIf="phone.invalid && (phone.dirty || phone.touched)"
           >
             Əlaqə nömrəsi daxil edilməlidir.
+          </small>
+          <small class="text-red-500 text-xs" *ngIf="phoneError">
+            Yanlış telefon nömrəsi formatı. İcazə verilən prefikslər:
+            10,50,51,55,99,77,70,60.
           </small>
         </div>
 
@@ -155,6 +161,7 @@
               !patientForm.sex ||
               birthday.invalid ||
               fatherName.invalid ||
+              phoneError ||
               isSubmitting
             "
           ></p-button>

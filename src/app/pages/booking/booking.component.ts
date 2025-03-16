@@ -258,9 +258,9 @@ export class BookingComponent implements OnInit, OnDestroy {
         appointmentDate: `${year}-${month}-${day}`,
         appointmentTimeSlotUid: this.selectedTimeSlot.uid,
         isNewPatient: this.isNewPatient,
-        birthday: `${form.birthday.split('-')[2]}-${
-          form.birthday.split('-')[1]
-        }-${form.birthday.split('-')[0]}`,
+        birthday: `${form.birthday.split('.')[2]}-${
+          form.birthday.split('.')[1]
+        }-${form.birthday.split('.')[0]}`,
       })
       .subscribe({
         next: (response: any) => {
@@ -275,7 +275,7 @@ export class BookingComponent implements OnInit, OnDestroy {
               )}</span> tarixində saat <span class='border border-green-500 rounded px-2 py-1 bg-white'>${
             this.selectedTimeSlot?.appointmentHour || ''
           }</span>-də təsdiqləndi.
-            <br /> 
+            <br />
             Sıra nömrəniz: <u class="border border-green-500 rounded px-2 py-1 bg-white">${
               response.appointmentOrder
             }</u>
@@ -352,24 +352,35 @@ export class BookingComponent implements OnInit, OnDestroy {
 
   submitCancellation(cancelForm: any) {
     this.isLoadingAppointments = true;
-    this.bookingService.getAppointments(cancelForm).subscribe({
-      next: (response: any) => {
-        if (response) {
-          this.userAppointments = response;
-        }
-        this.isLoadingAppointments = false;
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Xəta',
-          detail:
-            'Belə bir pasiyent tapılmadı. Məlumatların düzgünlüyünü zəhmət olmasa yoxlayın.',
-          life: 3000,
-        });
-        this.isLoadingAppointments = false;
-      },
-    });
+
+    this.bookingService
+      .getAppointments({
+        ...cancelForm,
+        birthday:
+          cancelForm.birthday.split('.')[2] +
+          '-' +
+          cancelForm.birthday.split('.')[1] +
+          '-' +
+          cancelForm.birthday.split('.')[0],
+      })
+      .subscribe({
+        next: (response: any) => {
+          if (response) {
+            this.userAppointments = response;
+          }
+          this.isLoadingAppointments = false;
+        },
+        error: () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Xəta',
+            detail:
+              'Belə bir pasiyent tapılmadı. Məlumatların düzgünlüyünü zəhmət olmasa yoxlayın.',
+            life: 3000,
+          });
+          this.isLoadingAppointments = false;
+        },
+      });
   }
 
   cancelAppointment(appointmentId: string) {
