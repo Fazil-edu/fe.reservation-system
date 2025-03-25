@@ -57,15 +57,14 @@ export class CabinetComponent implements OnInit {
   selectedDate = this.today;
 
   cols = [
-    { field: 'order', header: 'Sıra' },
+    { field: 'order', header: 'Sira' },
     { field: 'time', header: 'Saat' },
     { field: 'date', header: 'Tarix' },
     { field: 'firstName', header: 'Ad' },
     { field: 'lastName', header: 'Soyad' },
-    { field: 'fatherName', header: 'Ata adı' },
-    { field: 'birthday', header: 'Doğum tarixi' },
-    { field: 'sex', header: 'Cinsiyyət' },
-    { field: 'phoneNumber', header: 'Telefon' },
+    { field: 'fatherName', header: 'Ata adi' },
+    { field: 'birthday', header: 'Dogum tarixi' },
+    { field: 'sex', header: 'Cinsiyyet' },
     { field: 'comment', header: 'Qeyd' },
   ];
 

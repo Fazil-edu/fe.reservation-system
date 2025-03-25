@@ -88,35 +88,6 @@
           </small>
         </div>
 
-        <div class="form-field mb-2">
-          <label for="phoneNumber" class="mb-0.5 text-xs"
-            >Əlaqə nömrəsi *</label
-          >
-          <p-inputGroup styleClass="w-full">
-            <p-inputGroupAddon>+994</p-inputGroupAddon>
-            <p-inputMask
-              mask="99 999 99 99"
-              [(ngModel)]="patientForm.phoneNumber"
-              placeholder="XX XX XX XX"
-              slotChar=" "
-              styleClass="w-full !p-1.5 !rounded-none !text-sm !border-0 !border-b-2 !border-gray-200 focus:!border-primary-500"
-              [autoClear]="false"
-              #phone="ngModel"
-              required
-            />
-          </p-inputGroup>
-          <small
-            class="text-red-500 text-xs"
-            *ngIf="phone.invalid && (phone.dirty || phone.touched)"
-          >
-            Əlaqə nömrəsi daxil edilməlidir.
-          </small>
-          <!-- <small class="text-red-500 text-xs" *ngIf="phoneError">
-            Yanlış telefon nömrəsi formatı. İcazə verilən prefikslər:
-            10,50,51,55,99,77,70,60.
-          </small> -->
-        </div>
-
         <div class="form-field mb-2" *ngIf="!isCancelForm">
           <label for="sex" class="mb-0.5 text-xs">Cinsiyyət*</label>
           <select
@@ -156,7 +127,6 @@
             [disabled]="
               firstName.invalid ||
               lastName.invalid ||
-              phone.invalid ||
               !patientForm.sex ||
               birthday.invalid ||
               fatherName.invalid ||
@@ -174,7 +144,6 @@
             [disabled]="
               firstName.invalid ||
               lastName.invalid ||
-              phone.invalid ||
               birthday.invalid ||
               fatherName.invalid ||
               isLoadingAppointments

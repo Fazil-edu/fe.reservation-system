@@ -6,7 +6,6 @@ export interface Patient {
   lastName: number;
   birthday?: string;
   sex: Date;
-  phoneNumber: string;
 }
 
 export type FullPatient = Patient & {
