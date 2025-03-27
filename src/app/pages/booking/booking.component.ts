@@ -119,6 +119,9 @@ export class BookingComponent implements OnInit, OnDestroy {
   userAppointments: AppointmentInfo[] = [];
   isLoadingAppointments = false;
 
+  private today = new Date();
+  private isFriday = this.today.getDay() === 5;
+
   constructor(
     private messageService: MessageService,
     private bookingService: BookingService,
@@ -184,6 +187,12 @@ export class BookingComponent implements OnInit, OnDestroy {
           );
         }
 
+        if (this.isFriday) {
+          filteredSlots = filteredSlots.filter(
+            (slot: TimeSlot) => slot.appointmentOrder > 19
+          );
+        }
+
         this.timeSlots = filteredSlots.sort(
           (a: TimeSlot, b: TimeSlot) => a.appointmentOrder - b.appointmentOrder
         );
@@ -205,6 +214,8 @@ export class BookingComponent implements OnInit, OnDestroy {
     this.date = event;
     this.selectedTimeSlot = null;
     this.loadTimeSlots();
+
+    this.isFriday = this.date.getDay() === 5;
   }
 
   selectTimeSlot(slot: TimeSlot) {

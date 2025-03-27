@@ -1,4 +1,4 @@
-export const disabledDays: number[] = []; // [0]
+export const disabledDays: number[] = [0]; // [0]
 
 const monthNames = [
   'Yanvar',
