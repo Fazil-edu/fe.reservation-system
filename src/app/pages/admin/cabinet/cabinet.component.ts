@@ -9,7 +9,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import autoTable, { RowInput } from 'jspdf-autotable';
 import { CrudService } from '../../../core/services/crud.service';
 import { finalize } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
@@ -57,14 +57,14 @@ export class CabinetComponent implements OnInit {
   selectedDate = this.today;
 
   cols = [
-    { field: 'order', header: 'Sira' },
+    { field: 'order', header: 'Sıra' },
     { field: 'time', header: 'Saat' },
     { field: 'date', header: 'Tarix' },
     { field: 'firstName', header: 'Ad' },
     { field: 'lastName', header: 'Soyad' },
-    { field: 'fatherName', header: 'Ata adi' },
-    { field: 'birthday', header: 'Dogum tarixi' },
-    { field: 'sex', header: 'Cinsiyyet' },
+    { field: 'fatherName', header: 'Ata adı' },
+    { field: 'birthday', header: 'Doğum tarixi' },
+    { field: 'sex', header: 'Cinsiyyət' },
     { field: 'comment', header: 'Qeyd' },
   ];
 
@@ -189,12 +189,32 @@ export class CabinetComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  exportPDF() {
+  async exportPDF() {
     const doc = new jsPDF();
+
+    const fontPath = '/fonts/NotoSans-Regular.ttf';
+    const fontData = await fetch(fontPath)
+      .then((res) => res.arrayBuffer())
+      .then((buf) => {
+        // Convert ArrayBuffer to Base64 (browser-compatible)
+        const bytes = new Uint8Array(buf);
+        let binary = '';
+        bytes.forEach((byte) => (binary += String.fromCharCode(byte)));
+        return btoa(binary);
+      });
+    doc.addFileToVFS('NotoSans-Regular.ttf', fontData);
+    doc.addFont('NotoSans-Regular.ttf', 'NotoSans', 'normal');
+    doc.setFont('NotoSans');
 
     const tableHeaders = this.cols.map((col) => col.header);
 
-    const tableRows = this.upcomingAppointments
+    const filtered = this.upcomingAppointments.filter(
+      (x) => x.status === 'Baxıldı'
+    );
+    const newPatients = filtered.filter((x) => x.isNewPatient).length;
+    const oldPatients = filtered.length - newPatients;
+
+    const tableRows = filtered
       .map((appointment) =>
         this.cols.map((col) => appointment[col.field as keyof Appointment])
       )
@@ -202,17 +222,28 @@ export class CabinetComponent implements OnInit {
         return {
           ...x,
           [2]: x[2] ? x[2].split('T')[0].split('-').reverse().join('.') : x[2],
-          7: x[7] === 'male' ? 'Kisi' : 'Qadin',
+          7: x[7] === 'male' ? 'Kişi' : 'Qadın',
         };
       });
 
+    const tableData = [tableHeaders, ...tableRows] as RowInput[];
+
     autoTable(doc, {
-      head: [tableHeaders],
-      body: tableRows as any[],
+      body: tableData,
       theme: 'striped',
-      styles: { fontSize: 10 },
-      headStyles: { fillColor: [58, 134, 255] },
+      styles: {
+        fontSize: 10,
+        font: 'NotoSans',
+      },
     });
+
+    const finalY = (doc as any).lastAutoTable.finalY || 10;
+
+    doc.text(
+      `Yeni pasiyent sayı: ${newPatients}, mövcud pasiyent sayı: ${oldPatients}`,
+      10,
+      finalY + 10
+    );
 
     doc.save(`export_${Date.now()}.pdf`);
   }
